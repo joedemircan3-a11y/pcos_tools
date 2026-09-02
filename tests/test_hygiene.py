@@ -26,7 +26,8 @@ def ids(result, check):
 
 
 def write_vocab(path, **overrides):
-    payload = {"status": STATUS_VOCAB, "priority": PRIORITIES, "room": ROOMS, "stale_days": 90}
+    payload = {"status": STATUS_VOCAB, "priority": PRIORITIES, "room": ROOMS, "stale_days": 90,
+               "aged_days": 7, "done_candidate_days": 7}
     payload.update(overrides)
     path.write_text(json.dumps(payload), encoding="utf-8")
     return path
@@ -45,6 +46,8 @@ def test_fixture_shape(rows):
 def test_vocab_loaded_from_packaged_json():
     assert VOCAB.source == "packaged vocab.json"
     assert VOCAB.stale_days == 90
+    assert VOCAB.aged_days == 7
+    assert VOCAB.done_candidate_days == 7
     assert {"Active-Low", "Done-Candidate"} <= set(STATUS_VOCAB)
     assert VOCAB.priority_rank("CRITICAL") == 0
     assert VOCAB.priority_rank("LOW") < VOCAB.priority_rank("RECURRING")
@@ -67,10 +70,10 @@ def test_empty_sources(result):
 
 
 def test_empty_confidence(result):
-    assert ids(result, "EMPTY_CONFIDENCE") == {"T-006", "T-008", "T-016"}
+    assert ids(result, "EMPTY_CONFIDENCE") == {"T-006", "T-008", "T-016", "T-027"}
 
 
-def test_skip_closed_drops_closed_rows(rows, today):
+def test_skip_closed_drops_closed_rows_including_done_candidate(rows, today):
     result = run_hygiene(rows, today=today, skip_closed=True)
     assert ids(result, "EMPTY_CONFIDENCE") == {"T-006", "T-008"}
 
@@ -79,6 +82,46 @@ def test_duplicate_title_pair(result):
     dups = [f for f in result.findings if f.check == "DUPLICATE_TITLE"]
     assert [f.task_id for f in dups] == ["T-017"]
     assert "T-005" in dups[0].reason
+
+
+def test_duplicate_title_skipped_when_both_rows_are_closed(today):
+    base = {"Title": "Renew the office lease", "Room": "1", "Priority": "MED", "Owner": "Joe",
+            "Waiting On": "", "Sources": "s", "Next Action": "", "Updated": "2026-08-30",
+            "Confidence": "High", "Notes": ""}
+    closed_pair = [dict(base, **{"Task ID": "T-200", "Status": "Done", "_row": 2}),
+                   dict(base, **{"Task ID": "T-201", "Status": "Done-Candidate", "_row": 3})]
+    assert ids(run_hygiene(closed_pair, today=today), "DUPLICATE_TITLE") == set()
+    open_pair = [dict(base, **{"Task ID": "T-200", "Status": "Done", "_row": 2}),
+                 dict(base, **{"Task ID": "T-201", "Status": "Active", "_row": 3})]
+    assert ids(run_hygiene(open_pair, today=today), "DUPLICATE_TITLE") == {"T-201"}
+
+
+def test_done_promote_uses_vocab_default_of_7_days(result):
+    promote = [f for f in result.findings if f.check == "DONE_PROMOTE"]
+    assert [f.task_id for f in promote] == ["T-027"]  # 12 days; T-024 is 2 days old
+    assert promote[0].proposed == "Done"
+    assert result.done_candidate_days == 7
+
+
+def test_done_candidate_days_argument_overrides_vocab(rows, today):
+    assert ids(run_hygiene(rows, today=today, done_candidate_days=1), "DONE_PROMOTE") == {"T-024", "T-027"}
+    assert ids(run_hygiene(rows, today=today, done_candidate_days=30), "DONE_PROMOTE") == set()
+
+
+def test_aged_days_comes_from_vocab_and_can_be_overridden(rows, today, tmp_path):
+    assert run_hygiene(rows, today=today).aged_days == 7
+    assert ids(run_hygiene(rows, today=today, aged_days=15), "AGED_WAITING") == {"T-005", "T-006"}
+    vocab = load_vocab(write_vocab(tmp_path / "vocab.json", aged_days=20))
+    assert ids(run_hygiene(rows, today=today, vocab=vocab), "AGED_WAITING") == {"T-006"}
+    assert ids(run_hygiene(rows, today=today, vocab=vocab, aged_days=10), "AGED_WAITING") == {"T-005", "T-006", "T-019"}
+
+
+def test_vocab_without_the_new_keys_falls_back_to_7(tmp_path):
+    bare = tmp_path / "bare.json"
+    bare.write_text(json.dumps({"status": STATUS_VOCAB, "priority": PRIORITIES, "room": ROOMS, "stale_days": 90}),
+                    encoding="utf-8")
+    vocab = load_vocab(bare)
+    assert (vocab.aged_days, vocab.done_candidate_days) == (7, 7)
 
 
 def test_invalid_vocabulary(result):
@@ -113,7 +156,7 @@ def test_stale_days_argument_overrides_vocab(rows, today):
 
 
 def test_next_free_task_id(result):
-    assert result.next_id == "T-027"
+    assert result.next_id == "T-028"
 
 
 def test_duplicate_id_detected(today):
@@ -131,13 +174,15 @@ def test_outputs_written(worklist_path, tmp_path):
     with (tmp_path / CHANGES_NAME).open(newline="", encoding="utf-8") as handle:
         records = list(csv.DictReader(handle))
     assert records[-1]["Check"] == "NEXT_FREE_ID"
-    assert records[-1]["Proposed"] == "T-027"
+    assert records[-1]["Proposed"] == "T-028"
     assert any(r["Check"] == "STALE_ARCHIVE" and r["Proposed"] == "Archived-Auto" for r in records)
+    assert any(r["Check"] == "DONE_PROMOTE" and r["Proposed"] == "Done" and r["Task ID"] == "T-027" for r in records)
     report = (tmp_path / REPORT_NAME).read_text(encoding="utf-8")
     assert "DRAFT ONLY" in report
-    assert "T-027" in report
+    assert "T-028" in report
     assert "## AGED_WAITING (3)" in report
-    assert "stale >= 90 days" in report
+    assert "## DONE_PROMOTE (1)" in report
+    assert "stale >= 90 days" in report and "done-candidate >= 7 days" in report
     assert "Vocabulary: packaged vocab.json" in report
     assert "C:\\" not in report and "/Users/" not in report
 
@@ -165,6 +210,9 @@ def test_custom_vocab_file(rows, today, tmp_path):
     '{"status": ["A"], "priority": ["x"], "room": ["1"], "stale_days": "90"}',
     '{"status": ["A"], "priority": ["x"], "room": ["1"], "stale_days": 0}',
     '{"status": ["A", 3], "priority": ["x"], "room": ["1"], "stale_days": 90}',
+    '{"status": ["A"], "priority": ["x"], "room": ["1"], "stale_days": 90, "aged_days": -1}',
+    '{"status": ["A"], "priority": ["x"], "room": ["1"], "stale_days": 90, "done_candidate_days": 0}',
+    '{"status": ["A"], "priority": ["x"], "room": ["1"], "stale_days": 90, "aged_days": true}',
 ])
 def test_malformed_vocab_rejected(tmp_path, payload):
     bad = tmp_path / "bad.json"

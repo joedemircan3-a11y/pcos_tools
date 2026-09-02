@@ -31,12 +31,15 @@ PACKAGED_VOCAB_LABEL = "packaged vocab.json"
 # must also appear in the vocabulary's status list.
 ACTIVE_STATUSES = ("Active", "Active-Low", "Active-Recurring", "Needs-Decision", "Blocked")
 AGED_STATUSES = ("Waiting", "Blocked")
-CLOSED_STATUSES = ("Done", "Expired", "Superseded", "Archived-Auto")
+CLOSED_STATUSES = ("Done", "Done-Candidate", "Expired", "Superseded", "Archived-Auto")
 ACTIVE_LOW_STATUS = "Active-Low"
+DONE_CANDIDATE_STATUS = "Done-Candidate"
 STALE_STATUS = "Stale-Triage"
 WAITING_STATUS = "Waiting"
 PERSONAL_ROOM = "PERSONAL"
+# Fallbacks used only when a vocab file omits the key.
 DEFAULT_AGED_DAYS = 7
+DEFAULT_DONE_CANDIDATE_DAYS = 7
 
 TASK_ID_RE = re.compile(r"^T-\d{3,4}$")
 TASK_ID_FIND_RE = re.compile(r"\bT-\d{3,4}\b")
@@ -64,6 +67,8 @@ class Vocab:
     room: tuple
     stale_days: int
     source: str
+    aged_days: int = DEFAULT_AGED_DAYS
+    done_candidate_days: int = DEFAULT_DONE_CANDIDATE_DAYS
 
     @property
     def priority_order(self):
@@ -101,11 +106,17 @@ def load_vocab(path=None):
     status = _require_list(data, "status", path)
     priority = _require_list(data, "priority", path)
     room = _require_list(data, "room", path)
-    stale_days = data.get("stale_days")
-    if isinstance(stale_days, bool) or not isinstance(stale_days, int) or stale_days < 1:
-        raise WorklistError(f"vocab file {path}: 'stale_days' must be a positive integer")
+    def days(key, default, minimum):
+        value = data.get(key, default)
+        if isinstance(value, bool) or not isinstance(value, int) or value < minimum:
+            raise WorklistError(f"vocab file {path}: '{key}' must be an integer of at least {minimum}")
+        return value
+
+    stale_days = days("stale_days", None, 1)
+    aged_days = days("aged_days", DEFAULT_AGED_DAYS, 0)
+    done_candidate_days = days("done_candidate_days", DEFAULT_DONE_CANDIDATE_DAYS, 1)
     source = PACKAGED_VOCAB_LABEL if path == VOCAB_PATH else str(path)
-    return Vocab(status, priority, room, stale_days, source)
+    return Vocab(status, priority, room, stale_days, source, aged_days, done_candidate_days)
 
 
 _PACKAGED_VOCAB = None
@@ -128,6 +139,8 @@ _LAZY_ATTRS = {
     "ROOM_VOCAB": lambda vocab: list(vocab.room),
     "PRIORITY_ORDER": lambda vocab: list(vocab.priority_order),
     "DEFAULT_STALE_DAYS": lambda vocab: vocab.stale_days,
+    "AGED_DAYS": lambda vocab: vocab.aged_days,
+    "DONE_CANDIDATE_DAYS": lambda vocab: vocab.done_candidate_days,
 }
 
 

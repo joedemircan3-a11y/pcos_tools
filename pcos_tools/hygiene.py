@@ -10,7 +10,7 @@ from . import __version__
 from .common import (
     AGED_STATUSES,
     CLOSED_STATUSES,
-    DEFAULT_AGED_DAYS,
+    DONE_CANDIDATE_STATUS,
     STALE_STATUS,
     TASK_ID_RE,
     WorklistError,
@@ -25,6 +25,7 @@ from .common import (
 
 CHECKS = {
     "STALE_ARCHIVE": "Stale-Triage row past the stale threshold; propose Archived-Auto",
+    "DONE_PROMOTE": "Done-Candidate row unchanged past the done-candidate threshold; propose Done",
     "AGED_WAITING": "Waiting or Blocked row not updated within the aged threshold",
     "MALFORMED_ID": "Task ID does not match T-### or T-####",
     "DUPLICATE_ID": "Task ID used on more than one row",
@@ -32,7 +33,7 @@ CHECKS = {
     "INVALID_PRIORITY": "Priority outside the vocabulary",
     "INVALID_ROOM": "Room outside the vocabulary",
     "BAD_DATE": "Updated is empty or not YYYY-MM-DD (age checks skipped for the row)",
-    "DUPLICATE_TITLE": "Title duplicates or nearly duplicates an earlier row",
+    "DUPLICATE_TITLE": "Title duplicates or nearly duplicates an earlier row (skipped when both rows are closed)",
     "EMPTY_SOURCES": "Sources is empty",
     "EMPTY_CONFIDENCE": "Confidence is empty",
 }
@@ -72,6 +73,7 @@ class HygieneResult:
     stale_days: int
     dup_threshold: float
     vocab_source: str = ""
+    done_candidate_days: int = 7
 
     def by_check(self):
         grouped = {check: [] for check in CHECKS}
@@ -83,17 +85,21 @@ class HygieneResult:
         return [finding.task_id for finding in self.findings if finding.check == check]
 
 
-def run_hygiene(rows, today=None, aged_days=DEFAULT_AGED_DAYS, stale_days=None,
-                dup_threshold=0.8, skip_closed=False, vocab=None):
+def run_hygiene(rows, today=None, aged_days=None, stale_days=None, dup_threshold=0.8,
+                skip_closed=False, vocab=None, done_candidate_days=None):
     """Run every check over the rows. Pure: never touches the file system.
 
-    ``stale_days`` defaults to the vocabulary's ``stale_days``; ``vocab``
-    defaults to the packaged vocab.json.
+    ``aged_days``, ``stale_days`` and ``done_candidate_days`` default to the
+    vocabulary's values; ``vocab`` defaults to the packaged vocab.json.
     """
     vocab = vocab or get_vocab()
     today = today or date.today()
+    if aged_days is None:
+        aged_days = vocab.aged_days
     if stale_days is None:
         stale_days = vocab.stale_days
+    if done_candidate_days is None:
+        done_candidate_days = vocab.done_candidate_days
     findings = []
     seen_ids = {}
 
@@ -147,12 +153,18 @@ def run_hygiene(rows, today=None, aged_days=DEFAULT_AGED_DAYS, stale_days=None,
             flag(row, "STALE_ARCHIVE", "Status", STALE_STATUS, "Archived-Auto", "set-status",
                  f"{STALE_STATUS} for {age} days (threshold {stale_days})")
 
+        if row["Status"] == DONE_CANDIDATE_STATUS and age is not None and age >= done_candidate_days:
+            flag(row, "DONE_PROMOTE", "Status", DONE_CANDIDATE_STATUS, "Done", "set-status",
+                 f"{DONE_CANDIDATE_STATUS} for {age} days with no change (threshold {done_candidate_days})")
+
     token_sets = [title_tokens(row["Title"]) for row in rows]
     for later in range(len(rows)):
         for earlier in range(later):
+            other = rows[earlier]
+            if rows[later]["Status"] in CLOSED_STATUSES and other["Status"] in CLOSED_STATUSES:
+                continue  # two closed rows with the same title are history, not a duplicate
             score = title_similarity(token_sets[later], token_sets[earlier])
             if score >= dup_threshold:
-                other = rows[earlier]
                 flag(rows[later], "DUPLICATE_TITLE", "Title", rows[later]["Title"], "",
                      "merge-or-rename",
                      f"overlap {score:.2f} with {other['Task ID']} '{other['Title']}' "
@@ -160,7 +172,7 @@ def run_hygiene(rows, today=None, aged_days=DEFAULT_AGED_DAYS, stale_days=None,
 
     findings.sort(key=lambda finding: (finding.row, CHECK_ORDER[finding.check]))
     return HygieneResult(findings, next_free_task_id(rows), len(rows), today,
-                         aged_days, stale_days, dup_threshold, vocab.source)
+                         aged_days, stale_days, dup_threshold, vocab.source, done_candidate_days)
 
 
 def write_proposed_changes(result, path):
@@ -188,11 +200,12 @@ def render_report(result, source_name):
         f"- Findings: {len(result.findings)}",
         f"- Next free Task ID: **{result.next_id}**",
         f"- Thresholds: aged >= {result.aged_days} days, stale >= {result.stale_days} days, "
+        f"done-candidate >= {result.done_candidate_days} days, "
         f"duplicate title overlap >= {result.dup_threshold:.2f}",
         f"- Vocabulary: {result.vocab_source or 'packaged vocab.json'}",
         "",
-        "> DRAFT ONLY. The input worklist was not modified. A human or a Claude session "
-        "reviews proposed_changes.csv and applies what is accepted.",
+        "> DRAFT ONLY. The input worklist was not modified. The weekly AI pass applies STALE_ARCHIVE "
+        "and DONE_PROMOTE rows; a human reviews the rest of proposed_changes.csv.",
         "",
         "## Summary",
         "",
@@ -229,7 +242,8 @@ def hygiene_command(args):
     source = Path(args.worklist)
     rows = read_worklist(source, use_pandas=args.pandas)
     result = run_hygiene(rows, today=today, aged_days=args.aged_days, stale_days=args.stale_days,
-                         dup_threshold=args.dup_threshold, skip_closed=args.skip_closed, vocab=vocab)
+                         dup_threshold=args.dup_threshold, skip_closed=args.skip_closed, vocab=vocab,
+                         done_candidate_days=args.done_candidate_days)
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     changes_path = out_dir / CHANGES_NAME
@@ -241,7 +255,8 @@ def hygiene_command(args):
     report_path.write_text(render_report(result, source.name), encoding="utf-8", newline="\n")
     grouped = result.by_check()
     print(f"hygiene: {len(rows)} rows, {len(result.findings)} findings, "
-          f"next free Task ID {result.next_id} (stale >= {result.stale_days} d, vocab {vocab.source})")
+          f"next free Task ID {result.next_id} (aged >= {result.aged_days} d, stale >= {result.stale_days} d, "
+          f"done-candidate >= {result.done_candidate_days} d, vocab {vocab.source})")
     for check in CHECKS:
         if grouped.get(check):
             print(f"  {check}: {len(grouped[check])}")

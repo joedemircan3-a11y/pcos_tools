@@ -21,7 +21,7 @@ def test_version():
     completed = run("--version")
     assert completed.returncode == 0
     assert f"pcos_tools {__version__}" in completed.stdout
-    assert __version__ == "0.2.0"
+    assert __version__ == "0.2.1"
 
 
 def test_help_lists_commands():
@@ -39,7 +39,8 @@ def test_missing_file_is_a_clean_error(tmp_path):
 
 
 def test_stale_and_aged_days_are_range_checked(tmp_path):
-    for flags in (["--stale-days", "0"], ["--stale-days", "-5"], ["--aged-days", "-1"], ["--stale-days", "x"]):
+    for flags in (["--stale-days", "0"], ["--stale-days", "-5"], ["--aged-days", "-1"], ["--stale-days", "x"],
+                  ["--done-candidate-days", "0"]):
         completed = run("hygiene", str(FIXTURE_CSV), "--out-dir", str(tmp_path), *flags)
         assert completed.returncode == 2, flags
         assert "Traceback" not in completed.stderr

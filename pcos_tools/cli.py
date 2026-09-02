@@ -7,7 +7,7 @@ import sys
 from datetime import date
 
 from . import __version__
-from .common import DEFAULT_AGED_DAYS, WorklistError
+from .common import WorklistError
 from .hygiene import hygiene_command
 from .now_build import now_build_command
 from .recon_parse import recon_parse_command
@@ -43,6 +43,8 @@ def _add_vocab_flags(parser):
     parser.add_argument("--stale-days", type=positive_int, default=None,
                         help="Stale-Triage age in days, 1 or more; overrides stale_days from the vocab file "
                              "(packaged file: pcos_tools/vocab.json)")
+    parser.add_argument("--aged-days", type=non_negative_int, default=None,
+                        help="Waiting/Blocked age in days, 0 or more; overrides aged_days from the vocab file")
 
 
 def build_parser():
@@ -58,9 +60,9 @@ def build_parser():
     hygiene.add_argument("worklist", help="path to the Worklist CSV export")
     hygiene.add_argument("--out-dir", default=".", help="directory for the two output files (default: current)")
     hygiene.add_argument("--today", type=iso_date, default=None, help="reference date YYYY-MM-DD (default: today)")
-    hygiene.add_argument("--aged-days", type=non_negative_int, default=DEFAULT_AGED_DAYS,
-                         help=f"Waiting/Blocked age threshold in days (default {DEFAULT_AGED_DAYS})")
     _add_vocab_flags(hygiene)
+    hygiene.add_argument("--done-candidate-days", type=positive_int, default=None,
+                         help="Done-Candidate age in days before DONE_PROMOTE, 1 or more; overrides the vocab file")
     hygiene.add_argument("--dup-threshold", type=float, default=0.8,
                          help="title token overlap that counts as duplicate (default 0.8)")
     hygiene.add_argument("--skip-closed", action="store_true",
@@ -84,8 +86,6 @@ def build_parser():
     now.add_argument("--prev", required=True, help="previous PCOS_NOW markdown")
     now.add_argument("--out-dir", default=".", help="directory for PCOS_NOW_draft.md (default: current)")
     now.add_argument("--today", type=iso_date, default=None, help="reference date YYYY-MM-DD (default: today)")
-    now.add_argument("--aged-days", type=non_negative_int, default=DEFAULT_AGED_DAYS,
-                     help=f"days before a waiting item gets the [AGED] mark (default {DEFAULT_AGED_DAYS})")
     _add_vocab_flags(now)
     now.add_argument("--people", default=None, help="comma-separated known names (only used when --recon is a .md)")
     now.add_argument("--pandas", action="store_true", help="read the CSV with pandas (optional dependency)")

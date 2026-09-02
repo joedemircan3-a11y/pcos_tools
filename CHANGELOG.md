@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.2.1 - 2026-09-02
+
+Applies the answers in PCOS_DISPATCH_2026-09-02.
+
+- `Done-Candidate` counts as closed for `--skip-closed` and stays out of
+  PCOS_NOW sections 2, 3 and 6. New hygiene check `DONE_PROMOTE` proposes
+  `Done` when a Done-Candidate row has not changed for `done_candidate_days`
+  (7, in `vocab.json`; `--done-candidate-days` overrides). The weekly AI pass
+  applies `DONE_PROMOTE` alongside `STALE_ARCHIVE`.
+- `aged_days` (7) moved into `vocab.json`; `--aged-days` still overrides it.
+  A vocab file without the two new keys falls back to 7 for both.
+- `DUPLICATE_TITLE` is skipped when both rows are closed.
+- Section 2 shows `[BAD DATE]` in the Age column for rows whose Updated is
+  empty or not `YYYY-MM-DD`, instead of a blank cell.
+- Commit author switched to a GitHub noreply address.
+
 ## 0.2.0 - 2026-09-02
 
 - Status, Priority and Room vocabularies plus `stale_days` moved to

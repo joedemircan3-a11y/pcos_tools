@@ -10,7 +10,6 @@ from . import __version__
 from .common import (
     ACTIVE_LOW_STATUS,
     ACTIVE_STATUSES,
-    DEFAULT_AGED_DAYS,
     PERSONAL_ROOM,
     STALE_STATUS,
     WAITING_STATUS,
@@ -110,9 +109,13 @@ def _append_block(body, new_lines):
     return (body + "\n" if body else "") + "\n".join(new_lines)
 
 
+BAD_DATE_MARK = "[BAD DATE]"
+
+
 def _age_text(today, value):
+    """Age in days, or a visible mark when Updated is empty or not YYYY-MM-DD."""
     age = age_days(today, value)
-    return "" if age is None else str(age)
+    return BAD_DATE_MARK if age is None else str(age)
 
 
 def _work_rows(rows):
@@ -171,7 +174,9 @@ def active_table(rows, today, vocab=None):
     )
 
 
-def waiting_table(rows, recon, today, aged_days=DEFAULT_AGED_DAYS):
+def waiting_table(rows, recon, today, aged_days=None, vocab=None):
+    if aged_days is None:
+        aged_days = (vocab or get_vocab()).aged_days
     waiting_rows = [row for row in _work_rows(rows) if row["Status"] == WAITING_STATUS]
     waiting_ids = {row["Task ID"] for row in waiting_rows}
     personal_ids = {row["Task ID"] for row in rows if row["Room"] == PERSONAL_ROOM}
@@ -231,15 +236,18 @@ def stale_list(rows, today, stale_days=None, vocab=None):
 
 # --------------------------------------------------------------- build --
 
-def build_now(rows, recon, prev_text, today, aged_days=DEFAULT_AGED_DAYS, stale_days=None, vocab=None):
+def build_now(rows, recon, prev_text, today, aged_days=None, stale_days=None, vocab=None):
     """Return (draft_markdown, warnings).
 
     Section 0 is carried through unchanged when the previous file has it and is
     never created. Sections 2, 3, 6 are regenerated; 1 and 5 are carried and
     appended from the RECON; 4, 7, 8 are carried unchanged. Missing sections
-    1 to 8 get a default heading in the previous file's style.
+    1 to 8 get a default heading in the previous file's style. ``aged_days``
+    and ``stale_days`` default to the vocabulary's values.
     """
     vocab = vocab or get_vocab()
+    if aged_days is None:
+        aged_days = vocab.aged_days
     if stale_days is None:
         stale_days = vocab.stale_days
     prev = parse_now(prev_text)
@@ -270,7 +278,7 @@ def build_now(rows, recon, prev_text, today, aged_days=DEFAULT_AGED_DAYS, stale_
         elif number == 2:
             body = active_table(rows, today, vocab)
         elif number == 3:
-            body = waiting_table(rows, recon, today, aged_days)
+            body = waiting_table(rows, recon, today, aged_days, vocab)
         elif number == 5:
             body = append_candidates(body, recon)
         elif number == 6:

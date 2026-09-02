@@ -74,6 +74,26 @@ def test_active_table_order_and_exclusions(parsed):
         assert absent not in body
 
 
+def test_bad_date_rows_are_marked_in_section_2(parsed):
+    body = section_body(parsed, 2)
+    row = [line for line in body.splitlines() if "| T-021 |" in line][0]
+    assert row.endswith("| 31/08/2026 | [BAD DATE] |")
+    assert body.count("[BAD DATE]") == 1
+
+
+def test_aged_days_from_vocab_drives_the_aged_mark(inputs, today, tmp_path):
+    rows, recon, prev = inputs
+    custom = tmp_path / "vocab.json"
+    custom.write_text(json.dumps({
+        "status": STATUS_VOCAB, "room": ["1", "2", "3", "4", "10", "13", "PERSONAL"],
+        "priority": ["CRITICAL", "HIGH-TODAY", "HIGH", "MED-HIGH", "MED", "LOW", "RECURRING", ""],
+        "stale_days": 90, "aged_days": 20}), encoding="utf-8")
+    body = section_body(parse_now(build_now(rows, recon, prev, today, vocab=load_vocab(custom))[0]), 3)
+    assert "[AGED]" not in body  # T-005 is 17 days old, below the custom 20
+    body = section_body(parse_now(build_now(rows, recon, prev, today, vocab=load_vocab(custom), aged_days=10)[0]), 3)
+    assert "[AGED]" in [line for line in body.splitlines() if "| T-005 |" in line][0]
+
+
 def test_active_low_ranks_low_even_with_high_priority(parsed):
     body = section_body(parsed, 2)
     order = table_ids(body)
