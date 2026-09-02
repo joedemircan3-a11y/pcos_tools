@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pcos-tools"
+dynamic = ["version"]
+description = "Draft-only helpers for the PCOS worklist: hygiene checks, RECON parsing, PCOS_NOW drafting"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+pandas = ["pandas>=2.0"]
+test = ["pytest>=7"]
+
+[project.scripts]
+pcos-tools = "pcos_tools.cli:main"
+
+[tool.setuptools]
+packages = ["pcos_tools"]
+
+[tool.setuptools.dynamic]
+version = {attr = "pcos_tools.__version__"}
+
+[tool.setuptools.package-data]
+pcos_tools = ["vocab.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

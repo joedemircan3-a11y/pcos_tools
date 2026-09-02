@@ -1,0 +1,40 @@
+{
+  "_comment": "Runtime vocabulary for pcos_tools. Lists are ordered: the priority list order is the sort rank (first = highest); an empty string means a blank priority is allowed. stale_days is the Stale-Triage age (days) before Archived-Auto is proposed; --stale-days on the command line overrides it. Pass --vocab PATH to use a different file.",
+  "status": [
+    "Active",
+    "Active-Low",
+    "Active-Recurring",
+    "Waiting",
+    "Blocked",
+    "Needs-Decision",
+    "Candidate",
+    "Backlog",
+    "Open",
+    "Done",
+    "Done-Candidate",
+    "Expired",
+    "Superseded",
+    "Stale-Triage",
+    "Archived-Auto"
+  ],
+  "priority": [
+    "CRITICAL",
+    "HIGH-TODAY",
+    "HIGH",
+    "MED-HIGH",
+    "MED",
+    "LOW",
+    "RECURRING",
+    ""
+  ],
+  "room": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "10",
+    "13",
+    "PERSONAL"
+  ],
+  "stale_days": 90
+}

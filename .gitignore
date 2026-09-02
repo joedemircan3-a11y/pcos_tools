@@ -1,0 +1,23 @@
+# build and test residue
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+*.zip
+out/
+.venv/
+venv/
+.env
+
+# real exports and generated drafts must never be committed
+# (the synthetic fixtures live under tests/fixtures/ and stay tracked)
+/Worklist*.csv
+/worklist*.csv
+/RECON*.md
+/RECON*.json
+/PCOS_NOW*.md
+/proposed_changes.csv
+/hygiene_report.md
+/PCOS_NOW_draft.md
