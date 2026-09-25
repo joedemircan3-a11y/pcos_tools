@@ -1,5 +1,62 @@
 # Changelog
 
+## 0.3.0 - 2026-09-25
+
+Why: on 2026-09-25 v0.2.1 was run against the live PCOS files (102-row
+Worklist, the Sep 24 PCOS_NOW, the Sep 23 RECON, nine unapplied DELTAs).
+`hygiene` worked, but three things no longer matched how PCOS runs since v3:
+PCOS_NOW is hand-written narrative, the RECON runbook moved to v1.4, and
+automatic status proposals ignored evidence waiting in the inbox. Asked for by
+Joe on 2026-09-25 ("yes" to: fix what does not match, then wire the tools into
+the closeout and scheduled tasks). Built by Claude (Cowork chat,
+session_01Gs556kSndwU6XuZNVztAhj).
+
+- New command `now_check`: cross-checks PCOS_NOW against the Worklist and
+  reports CITED_MISSING, CITED_CLOSED, STATUS_MISMATCH, OPEN_NOT_CITED,
+  ROW_COUNT, PENDING_DELTA and PENDING_NEW_ID. Why: the audits keep finding
+  drift between the state file and the sheet (stale row counts, closed rows
+  described as live), and nothing checked it mechanically. Task ID ranges
+  ("T-067 to T-071 unchanged") count as cited; without that, the live file
+  produced two false OPEN_NOT_CITED lines.
+- `hygiene --pending PATH ...`: a STALE_ARCHIVE or DONE_PROMOTE proposal for a
+  row named in an unapplied DELTA gets Action `hold`. Why: on the live data
+  v0.2.1 proposed a Done-Candidate row -> Done while an unapplied DELTA said new
+  work had started on that row.
+- `now_build` no longer regenerates sections 2, 3 and 6 of a narrative (v3)
+  PCOS_NOW (titles "Current work and stopping points", "Dependencies", "Stale
+  matters") and appends nothing from the RECON to it; every section is carried
+  unchanged and a warning points to `now_check`. `--carry-all` forces this on
+  any file. Why: on the live file v0.2.1 would have replaced the hand-written
+  current-work narrative with a table. The old layout behaves exactly as before.
+- `now_check --now` also takes a Google Docs `.html` export (stdlib HTML
+  parser, headings keep their level, table rows become `|` lines). Why: large
+  Drive exports reach a scheduled session as files, and the HTML export is the
+  one large enough to arrive that way; no pandoc needed.
+- PCOS_NOW headings from a Google Docs Markdown export (`# 0\. Joe today`) are
+  recognised; `common.unescape_md` removes the export's backslash escapes. Why:
+  v0.2.1 found no section at all in the exported live file.
+- `recon_parse` reads the runbook 01-EM-02 v1.4 layout (`SECTION n —`
+  headings, `**3.1**` item blocks with `- **Field:** value` bullets) and
+  reports `layout` (`runbook-v1.4` or `legacy`). Follow-ups map to
+  `action_on_joe`. ISO timestamps (`2026-09-23T16:08Z`) now count as dates, so
+  `as_of` is filled. Why: v0.2.1 read the latest RECON as 94 coverage items and
+  74 "action on Joe" items, the sensitive section included; a legacy
+  `now_build` run would have appended them to the decisions section.
+- Hardened after an independent review of the first draft: ranges never span
+  lines, plain or spaced dashes and "from X to Y" are not ranges, and range
+  members are never reported closed or missing; a status word counts only in
+  the same clause or table cell; CITED_CLOSED is skipped when PCOS_NOW writes
+  the closed status itself; a numbered sub-heading is not a section; narrative
+  carry copies the file exactly (order, CRLF, final newline); a legacy RECON
+  with "Section n:" headings stays legacy; v1.4 sub-headings do not switch
+  sections; `--pending` expands ranges, skips this package's own reports and
+  warns when it finds no file; `now_check` warns when PCOS_NOW has no sections.
+- Tests: 117 (was 88). New synthetic fixtures `PCOS_NOW_v3_gdocs.md`,
+  `RECON_v14_sample.md` and `pending/DELTA_2026-09-01_sample.md`; nothing from
+  the real files was added to the repository.
+- `.gitignore` also ignores `DELTA*.md`, `inbox/`, `pending/` and the
+  `now_check` outputs at the repo root.
+
 ## 0.2.1 - 2026-09-02
 
 Applies the answers in PCOS_DISPATCH_2026-09-02.

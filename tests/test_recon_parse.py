@@ -113,3 +113,66 @@ def test_cli_writes_json(recon_path, tmp_path):
     data = json.loads(out.read_text(encoding="utf-8"))
     assert data["source"] == recon_path.name
     assert len(data["sections"]["action_on_joe"]["items"]) == 3
+
+
+# ------------------------------------------------------ v0.3.0: runbook v1.4 --
+
+def test_runbook_v14_layout():
+    from .conftest import FIXTURES
+
+    text = (FIXTURES / "RECON_v14_sample.md").read_text(encoding="utf-8")
+    parsed = parse_recon(text, source="RECON_v14_sample.md")
+    assert parsed["layout"] == "runbook-v1.4"
+    sections = parsed["sections"]
+    assert all(section["found"] for section in sections.values())
+    assert [len(sections[key]["items"]) for key in sections] == [0, 1, 1, 1, 1, 0, 0]
+    new = sections["new_task_candidates"]["items"][0]
+    assert new["ref"] == "1.1" and new["text"] == "Parking permit renewal for the office garage"
+    assert new["fields"]["Urgency"] == "MED"
+    update = sections["task_updates"]["items"][0]
+    assert update["text"].startswith("T-005 (Invoice from Ahmet Yilmaz)") and update["task_ids"] == ["T-005"]
+    assert {d["iso"] for d in update["dates"]} == {"2026-09-03"}
+    follow = sections["action_on_joe"]["items"][0]
+    assert follow["text"].startswith("An answer on the CRM vendor") and follow["task_ids"] == ["T-007"]
+    assert sections["sensitive"]["items"][0]["task_ids"] == ["T-001"]
+    assert sections["coverage"]["fields"]["Channel used"] == "Connector, read-only."
+    assert parsed["as_of"] == "2026-09-01"  # from the ISO timestamps in the coverage table
+    assert parsed["task_ids"] == ["T-001", "T-005", "T-007"]
+    assert parsed["warnings"] == []
+
+
+def test_legacy_layout_is_unchanged(recon_path):
+    parsed = parse_recon(recon_path.read_text(encoding="utf-8"))
+    assert parsed["layout"] == "legacy"
+    assert list(parsed["sections"]) == SECTION_KEYS
+
+
+def test_v14_recon_feeds_legacy_now_build_decisions(worklist_path, prev_now_path, today):
+    from pcos_tools.common import read_worklist
+    from pcos_tools.now_build import build_now
+    from .conftest import FIXTURES
+
+    recon = parse_recon((FIXTURES / "RECON_v14_sample.md").read_text(encoding="utf-8"))
+    text, _ = build_now(read_worklist(worklist_path), recon, prev_now_path.read_text(encoding="utf-8"), today)
+    assert "[NEW from RECON 2026-09-01] An answer on the CRM vendor (T-007)" in text
+    assert "Parking permit" not in text  # candidates are not decisions
+
+
+def test_legacy_file_with_section_word_headings_stays_legacy(recon_path):
+    text = recon_path.read_text(encoding="utf-8")
+    for number in range(1, 7):
+        text = text.replace(f"## {number}. ", f"## Section {number}: ")
+    parsed = parse_recon(text)
+    assert parsed["layout"] == "legacy"
+    assert len(parsed["sections"]["action_on_joe"]["items"]) == 3
+
+
+def test_v14_sub_heading_does_not_switch_section():
+    from .conftest import FIXTURES
+
+    text = (FIXTURES / "RECON_v14_sample.md").read_text(encoding="utf-8")
+    text = text.replace("- **Suggested next action:** Chase", "### Follow-up context\n- **Suggested next action:** Chase")
+    parsed = parse_recon(text)
+    assert len(parsed["sections"]["task_updates"]["items"]) == 1
+    assert len(parsed["sections"]["action_on_joe"]["items"]) == 1
+    assert "Item" not in parsed["sections"]["coverage"]["fields"]  # table header row skipped

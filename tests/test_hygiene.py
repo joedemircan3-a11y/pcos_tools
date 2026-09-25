@@ -241,3 +241,38 @@ def test_cli_vocab_flag_and_stale_days_override(worklist_path, tmp_path):
 def test_pandas_reader_matches_csv_reader(worklist_path):
     pytest.importorskip("pandas")
     assert read_worklist(worklist_path, use_pandas=True) == read_worklist(worklist_path)
+
+
+# ------------------------------------------------------------ v0.3.0: pending --
+
+def test_rows_named_in_a_pending_delta_are_held(rows, today):
+    from pcos_tools.hygiene import HOLD_ACTION
+    from pcos_tools.pending import load_pending
+    from .conftest import FIXTURES
+
+    pending, files = load_pending([FIXTURES / "pending"])
+    held = run_hygiene(rows, today=today, pending=pending, pending_files=files)
+    actions = {(f.check, f.task_id): f.action for f in held.findings}
+    assert actions[("DONE_PROMOTE", "T-027")] == HOLD_ACTION
+    assert actions[("STALE_ARCHIVE", "T-014")] == HOLD_ACTION
+    assert actions[("STALE_ARCHIVE", "T-026")] == "set-status"  # not named, still applied
+    assert {f.task_id for f in held.held()} == {"T-014", "T-027"}
+    reason = next(f.reason for f in held.findings if f.task_id == "T-014" and f.check == "STALE_ARCHIVE")
+    assert "HOLD: named in unapplied DELTA DELTA_2026-09-01_sample.md" in reason
+    plain = run_hygiene(rows, today=today)
+    assert not plain.held()
+    assert [f.check for f in plain.findings] == [f.check for f in held.findings]
+
+
+def test_cli_pending_flag(worklist_path, tmp_path, capsys):
+    from .conftest import FIXTURES
+
+    code = main(["hygiene", str(worklist_path), "--out-dir", str(tmp_path), "--today", "2026-09-01",
+                 "--pending", str(FIXTURES / "pending")])
+    assert code == 0
+    assert "proposals on hold: 2" in capsys.readouterr().out
+    with (tmp_path / CHANGES_NAME).open(newline="", encoding="utf-8") as handle:
+        holds = {r["Task ID"] for r in csv.DictReader(handle) if r["Action"] == "hold"}
+    assert holds == {"T-014", "T-027"}
+    report = (tmp_path / REPORT_NAME).read_text(encoding="utf-8")
+    assert "Pending DELTAs read: 1 (DELTA_2026-09-01_sample.md); proposals on hold: 2" in report

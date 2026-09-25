@@ -10,6 +10,7 @@ from . import __version__
 from .common import WorklistError
 from .hygiene import hygiene_command
 from .now_build import now_build_command
+from .now_check import now_check_command
 from .recon_parse import recon_parse_command
 
 
@@ -68,6 +69,9 @@ def build_parser():
     hygiene.add_argument("--skip-closed", action="store_true",
                          help="do not flag empty Sources/Confidence on Done, Expired, Superseded, Archived-Auto rows")
     hygiene.add_argument("--pandas", action="store_true", help="read the CSV with pandas (optional dependency)")
+    hygiene.add_argument("--pending", nargs="+", default=None, metavar="PATH",
+                         help="unapplied DELTA files or folders (.md/.txt); STALE_ARCHIVE and DONE_PROMOTE "
+                              "proposals for rows they name are put on hold")
     hygiene.set_defaults(func=hygiene_command)
 
     recon = commands.add_parser("recon_parse", aliases=["recon-parse"], help="parse a RECON markdown into JSON")
@@ -89,7 +93,22 @@ def build_parser():
     _add_vocab_flags(now)
     now.add_argument("--people", default=None, help="comma-separated known names (only used when --recon is a .md)")
     now.add_argument("--pandas", action="store_true", help="read the CSV with pandas (optional dependency)")
+    now.add_argument("--carry-all", action="store_true",
+                     help="carry every section unchanged (automatic when PCOS_NOW uses the v3 narrative titles)")
     now.set_defaults(func=now_build_command)
+
+    check = commands.add_parser("now_check", aliases=["now-check"],
+                                help="cross-check PCOS_NOW against the Worklist; write now_check_report.md")
+    check.add_argument("--csv", required=True, help="Worklist CSV")
+    check.add_argument("--now", required=True, help="current PCOS_NOW: Markdown, or a Google Docs .md or .html export")
+    check.add_argument("--pending", nargs="+", default=None, metavar="PATH",
+                       help="unapplied DELTA files or folders (.md/.txt) to list against the Worklist")
+    check.add_argument("--out-dir", default=".", help="directory for the report (default: current)")
+    check.add_argument("--today", type=iso_date, default=None, help="reference date YYYY-MM-DD (default: today)")
+    check.add_argument("--vocab", default=None,
+                       help="alternative vocab JSON (default: the packaged pcos_tools/vocab.json)")
+    check.add_argument("--pandas", action="store_true", help="read the CSV with pandas (optional dependency)")
+    check.set_defaults(func=now_check_command)
     return parser
 
 

@@ -17,6 +17,7 @@ import json
 import re
 from dataclasses import dataclass
 from datetime import date, datetime
+from html.parser import HTMLParser
 from pathlib import Path
 
 COLUMNS = [
@@ -32,6 +33,8 @@ PACKAGED_VOCAB_LABEL = "packaged vocab.json"
 ACTIVE_STATUSES = ("Active", "Active-Low", "Active-Recurring", "Needs-Decision", "Blocked")
 AGED_STATUSES = ("Waiting", "Blocked")
 CLOSED_STATUSES = ("Done", "Done-Candidate", "Expired", "Superseded", "Archived-Auto")
+# Closed for good: a row in one of these should no longer be cited as live work.
+FINAL_STATUSES = ("Done", "Expired", "Superseded", "Archived-Auto")
 ACTIVE_LOW_STATUS = "Active-Low"
 DONE_CANDIDATE_STATUS = "Done-Candidate"
 STALE_STATUS = "Stale-Triage"
@@ -43,6 +46,26 @@ DEFAULT_DONE_CANDIDATE_DAYS = 7
 
 TASK_ID_RE = re.compile(r"^T-\d{3,4}$")
 TASK_ID_FIND_RE = re.compile(r"\bT-\d{3,4}\b")
+# "T-067 to T-071", "T-067 through T-071", "T-090..T-100", "T-067\u2013T-071" (en dash,
+# no spaces): every ID in between is meant. Only spaces or tabs may separate the
+# parts, so two IDs on consecutive lines never form a range; a plain hyphen and a
+# spaced dash are clause breaks, not ranges; "from T-001 to T-020" is a move.
+TASK_ID_RANGE_RE = re.compile(
+    r"(?<!from )\bT-(\d{3,4})(?:[ \t]+(?:to|through|thru)[ \t]+|[ \t]*\.\.[ \t]*|\u2013)T-(\d{3,4})\b",
+    re.IGNORECASE)
+MAX_RANGE_SPAN = 60
+
+
+def task_id_ranges(text):
+    """Task IDs implied by ranges in the text, excluding the two endpoints."""
+    implied = set()
+    for match in TASK_ID_RANGE_RE.finditer(text):
+        first, last = int(match.group(1)), int(match.group(2))
+        if 0 < last - first <= MAX_RANGE_SPAN:
+            width = len(match.group(1))
+            implied.update(f"T-{number:0{width}d}" for number in range(first + 1, last))
+    return implied
+
 
 STOPWORDS = {
     "a", "an", "the", "of", "for", "to", "and", "or", "in", "on", "at", "with",
@@ -298,6 +321,82 @@ def next_free_task_id(rows):
 
 
 # --------------------------------------------------------------- markdown --
+
+# Google Docs escapes Markdown punctuation when a Doc is downloaded as .md
+# ("# 0\. Joe today", "PCOS\_NOW", "\[LIVE\]", "\$45"). Undo it before matching.
+MD_ESCAPE_RE = re.compile(r"\\([\\`*_{}\[\]()#+\-.!|<>~=:$])")
+
+
+def unescape_md(text):
+    """Remove the backslash escapes Google Docs adds to exported Markdown."""
+    return MD_ESCAPE_RE.sub(r"\1", text)
+
+
+class _HtmlToMarkdown(HTMLParser):
+    """Just enough HTML to Markdown for a Google Docs HTML export: headings,
+    paragraphs, list items and table rows become lines; everything else is text."""
+
+    BLOCKS = {"p", "div", "li", "tr", "h1", "h2", "h3", "h4", "h5", "h6", "br", "table", "ul", "ol"}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.lines, self.buffer, self.cells, self.prefix, self.skip = [], [], None, "", 0
+
+    def _flush(self):
+        text = " ".join("".join(self.buffer).split())
+        self.buffer = []
+        if text:
+            self.lines.append(self.prefix + text)
+        self.prefix = ""
+
+    def handle_starttag(self, tag, attrs):
+        if tag in ("style", "script", "head", "title"):
+            self.skip += 1
+        elif tag == "tr":
+            self._flush()
+            self.cells = []
+        elif tag in ("td", "th") and self.cells is not None:
+            self.buffer = []
+        elif tag in self.BLOCKS and self.cells is None:
+            self._flush()
+            if len(tag) == 2 and tag[0] == "h" and tag[1].isdigit():
+                self.prefix = "#" * int(tag[1]) + " "
+            elif tag == "li":
+                self.prefix = "- "
+
+    def handle_endtag(self, tag):
+        if tag in ("style", "script", "head", "title"):
+            self.skip = max(0, self.skip - 1)
+        elif tag in ("td", "th") and self.cells is not None:
+            self.cells.append(" ".join("".join(self.buffer).split()))
+            self.buffer = []
+        elif tag == "tr" and self.cells is not None:
+            self.lines.append("| " + " | ".join(self.cells) + " |")
+            self.cells = None
+        elif tag in self.BLOCKS and self.cells is None:
+            self._flush()
+
+    def handle_data(self, data):
+        if not self.skip:
+            self.buffer.append(data)
+
+
+def html_to_markdown(html):
+    """Convert a Google Docs HTML export into Markdown-like lines (headings keep their level)."""
+    parser = _HtmlToMarkdown()
+    parser.feed(html)
+    parser.close()
+    parser._flush()
+    return "\n".join(parser.lines) + "\n"
+
+
+def read_markdown_or_html(path, what="input file"):
+    """Read a Markdown file, or an .html/.htm export converted to Markdown lines."""
+    text = read_text_file(path, what)
+    if Path(path).suffix.lower() in (".html", ".htm"):
+        return html_to_markdown(text)
+    return text
+
 
 def md_cell(value):
     text = "" if value is None else str(value)

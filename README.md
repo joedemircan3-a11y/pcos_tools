@@ -1,14 +1,38 @@
-# pcos_tools v0.2.1
+# pcos_tools v0.3.0
 
 Small, standard-library-only Python 3.11 toolkit for Joe Demircan's PCOS system.
-It reads hand-exported files (a Worklist CSV, a RECON markdown, the previous
-PCOS_NOW markdown) and writes **draft** files next to them.
+It reads exported files (a Worklist CSV, a RECON markdown, the current PCOS_NOW
+markdown, unapplied DELTA files) and writes **draft** files and reports next to
+them.
 
 > **The rule: these scripts only produce drafts.** Nothing here edits the
 > Worklist, the RECON or the live PCOS_NOW. Every output (`proposed_changes.csv`,
-> `hygiene_report.md`, `RECON.json`, `PCOS_NOW_draft.md`) is a proposal that a
-> human or a Claude session reviews and then applies. No network calls, no
-> Google API, no email.
+> `hygiene_report.md`, `RECON.json`, `PCOS_NOW_draft.md`, `now_check_report.md`)
+> is a proposal that a human or a Claude session reviews and then applies. No
+> network calls, no Google API, no email. Tool output is advisory: when it
+> disagrees with a live read of the source, the live read wins.
+
+## Quick start for a PCOS session
+
+The repository is public at https://github.com/joedemircan3-a11y/pcos_tools.
+A Claude session with code execution gets it in seconds, without spending
+tokens on the code itself:
+
+```bash
+git clone --depth 1 https://github.com/joedemircan3-a11y/pcos_tools.git
+cd pcos_tools
+# Save the live Worklist as Worklist.csv (Drive export text/csv), PCOS_NOW as
+# PCOS_NOW.html (Drive export text/html; .md works too) and the unapplied
+# business DELTA files from _PCOS_INBOX into a folder inbox/ (a small .txt per
+# DELTA listing the Task IDs it names is enough).
+python -m pcos_tools hygiene Worklist.csv --pending inbox --skip-closed --out-dir out
+python -m pcos_tools now_check --csv Worklist.csv --now PCOS_NOW.html --pending inbox --out-dir out
+```
+
+Use `git clone` or raw files
+(`https://raw.githubusercontent.com/joedemircan3-a11y/pcos_tools/main/...`); the
+GitHub zip download is blocked by the Claude session proxy. If the clone fails,
+skip the tools and work by hand: a run never stops for them.
 
 ## Install
 
@@ -20,7 +44,7 @@ cd pcos_tools
 python -m pcos_tools --help
 ```
 
-The same folder layout is shipped as `pcos_tools_v0.2.zip` (built with
+The same folder layout can be shipped as `pcos_tools_v0.3.zip` (built with
 `python scripts/build_zip.py`, kept in the PCOS Drive folder, not in git). On
 Windows, use a short path (for example `C:\pcos\`) so fixture paths stay under
 the 260-character limit.
@@ -78,11 +102,17 @@ joins no group until the code says so.
 
 ## Commands
 
-`hygiene` and `now_build` accept `--today YYYY-MM-DD` to fix the reference
-date for ages (useful for reproducible runs); it defaults to the current date.
+`hygiene`, `now_build` and `now_check` accept `--today YYYY-MM-DD` to fix the
+reference date (useful for reproducible runs); it defaults to the current date.
 `recon_parse` has no reference date; it takes `--year` for dates written
 without one. Each command also answers to a dashed alias (`recon-parse`,
-`now-build`).
+`now-build`, `now-check`).
+
+`hygiene` and `now_check` take `--pending PATH [PATH ...]`: unapplied DELTA
+files, or folders whose `.md`, `.markdown` and `.txt` files are read (not
+recursive; this package's own report files are skipped). Every Task ID named in
+them, ranges included, counts as having unapplied evidence. A warning is
+printed when the paths hold no such file.
 
 ### 1. `hygiene` - check the Worklist CSV
 
@@ -113,7 +143,13 @@ looks at every row, PERSONAL included.
 
 `proposed_changes.csv` columns: `Task ID, Title, Check, Field, Current, Proposed,
 Action, Reason, Row`. `Action` is one of `set-status`, `fix-id`, `fix-value`,
-`fix-date`, `fill`, `chase-or-close`, `merge-or-rename`, `review`, `info`.
+`fix-date`, `fill`, `chase-or-close`, `merge-or-rename`, `review`, `hold`, `info`.
+
+With `--pending`, a `STALE_ARCHIVE` or `DONE_PROMOTE` proposal for a row named in
+an unapplied DELTA gets Action `hold` instead of `set-status`, and its Reason
+names the DELTA file. The weekly pass applies only `set-status` rows. Example:
+a Done-Candidate row whose DELTA says new work started must not be promoted to
+Done before that DELTA is applied.
 `Proposed` is only filled where the tool can suggest a concrete value (today: the
 `Archived-Auto` status and the next free ID).
 
@@ -121,7 +157,7 @@ Options: `--today YYYY-MM-DD`, `--aged-days N` (0 or more), `--stale-days N`
 (1 or more), `--done-candidate-days N` (1 or more), `--vocab PATH`,
 `--dup-threshold 0.0-1.0`, `--skip-closed` (do not flag empty
 Sources/Confidence on Done, Done-Candidate, Expired, Superseded, Archived-Auto
-rows), `--pandas` (read with pandas; optional), `--out-dir DIR`.
+rows), `--pending PATH ...`, `--pandas` (read with pandas; optional), `--out-dir DIR`.
 
 Title similarity is the Sorensen-Dice overlap of the two titles' token sets after
 lower-casing, stripping punctuation and dropping short stop words ("the", "for",
@@ -152,6 +188,24 @@ with `iso: null`), `people` (with a `confidence` of `known`, `mention`,
 
 People detection is heuristic. Pass `--people "Name One,Name Two"` for names that
 must always be recognised. Treat the `heuristic` entries as suggestions.
+
+**Runbook v1.4 layout.** A RECON written by runbook 01-EM-02 v1.4 uses
+`## COVERAGE DISCLOSURE`, `## SECTION 1 — NEW TASK CANDIDATES`,
+`## SECTION 2 — UPDATES TO EXISTING TASKS`,
+`## SECTION 3 — FOLLOW-UPS REQUIRING OPERATOR ACTION`,
+`## SECTION 4 — SENSITIVE / LEADERSHIP-WATCH`, `## SECTION 5 — IGNORE / NO-ACTION`
+and `## RUN LOG`. A `SECTION n —` heading whose title only v1.4 uses (new task,
+updates to existing, follow-up, sensitive, ignore) switches the parser to this layout
+(`"layout": "runbook-v1.4"` in the JSON; the old layout reports `"legacy"`). Its
+section keys are `coverage`, `new_task_candidates`, `task_updates`,
+`action_on_joe` (the follow-ups), `sensitive`, `ignore` and `run_log`; only
+those headings change the section, so a `### sub-heading` stays in place. Items are
+the `**3.1**` / `**2.1 — title**` blocks; their `- **Field:** value` bullets go
+into the item's `fields` (not separate items), and an item with no header text
+takes its `text` from Title, What is needed, What changed, Subject (verbatim) or
+Contact. Dates, people and Task IDs are read from the header and all fields.
+The coverage table becomes `fields`, and `as_of` comes from its dates (ISO
+timestamps such as `2026-09-23T16:08Z` count).
 
 Options: `--out PATH` (default: the RECON path with `.json`; `-` prints to
 stdout), `--people "A,B"`, `--year YYYY` (year for dates written without one;
@@ -186,6 +240,15 @@ printed.
 | 7 POINTERS AND ROOM SOURCE MAPS | copied verbatim from the previous file |
 | 8 SYSTEM STATUS | carried unchanged |
 
+**Narrative (v3) PCOS_NOW.** Since September 2026 the live PCOS_NOW is written
+by hand: section 2 is "Current work and stopping points", 3 "Dependencies", 6
+"Stale matters". Regenerating those from the Worklist would delete the
+narrative. When the previous file uses any of those titles (or with
+`--carry-all`), every section is carried unchanged, nothing is appended from
+the RECON, and a warning points to `now_check`. The table above applies only to
+the older layout. Headings from a Google Docs Markdown export (`# 2\. Current
+work`) are recognised.
+
 Appends are idempotent: re-running with the draft as `--prev` does not add the
 same RECON items twice. The preamble above the first section (title line, date)
 is carried as-is; update the date by hand when you apply the draft. A generator
@@ -194,7 +257,48 @@ written with LF line endings.
 
 Options: `--today YYYY-MM-DD`, `--aged-days N` (0 or more), `--stale-days N`
 (1 or more), `--vocab PATH`, `--people "A,B"` (only used when `--recon` is a
-`.md`), `--pandas`, `--out-dir DIR`.
+`.md`), `--carry-all`, `--pandas`, `--out-dir DIR`.
+
+### 4. `now_check` - cross-check PCOS_NOW against the Worklist
+
+```bash
+python -m pcos_tools now_check --csv Worklist.csv --now PCOS_NOW.md --pending inbox --out-dir out
+```
+
+The state file and the Worklist are written by different runs and drift apart.
+`now_check` reads both (a Google Docs Markdown export, or an `.html` export, is fine) and writes
+`out/now_check_report.md` and `out/now_check.csv` (`Check, Task ID, Worklist
+Status, Section, Detail`). It never edits either file.
+
+| Check | Meaning |
+| --- | --- |
+| `CITED_MISSING` | Task ID cited in a live section (0 to 3) but not in the Worklist |
+| `CITED_CLOSED` | Task ID cited in a live section but Done, Expired, Superseded or Archived-Auto in the Worklist |
+| `STATUS_MISMATCH` | A Status word written within 60 characters after the Task ID (before the next ID) differs from the Worklist Status, e.g. PCOS_NOW says "T-006 (Active)", the sheet says Blocked |
+| `OPEN_NOT_CITED` | Active, Needs-Decision, Blocked or Waiting row with CRITICAL, HIGH-TODAY or HIGH priority that PCOS_NOW never mentions (Room PERSONAL excluded) |
+| `ROW_COUNT` | The "N rows" written next to the Worklist pointer in section 7 differs from the CSV |
+| `PENDING_DELTA` | Task ID named in an unapplied DELTA (`--pending`) |
+| `PENDING_NEW_ID` | Task ID named in an unapplied DELTA but not in the Worklist (a new row, or one kept elsewhere such as the private sheet) |
+
+Ranges count: "T-067 to T-071 unchanged" cites T-068, T-069 and T-070 too.
+A range is `to`, `through`, `thru` or `..` between two IDs on the same line, or
+an en dash with no spaces (`T-067–T-071`); spans over 60 are ignored. A spaced
+hyphen or em dash is a clause break, and "from T-001 to T-020" is a move, so
+neither is a range. Range members are only marked as cited: a range naturally
+spans gaps and closed rows, so they are never reported as missing or closed.
+
+`CITED_CLOSED` is skipped when PCOS_NOW itself writes the closed status right
+after the ID ("T-011 Done yesterday"). Status words match the vocabulary
+exactly and case-sensitively, longest first, so "Done-Candidate" is not read as
+"Done" and a lowercase "blocked" in prose is not a status; the search stops at
+the end of the clause or table cell (`.`, `;`, `!`, `?`, `|`). Sections are the
+numbered headings at the level of the first one, so a sub-heading such as
+`## 7 vendors to call` inside `# 2.` stays body text. For `ROW_COUNT` the line
+with "Live Worklist" wins over other worklist lines. A warning is printed when
+PCOS_NOW has no numbered sections at all.
+
+Options: `--pending PATH ...`, `--today YYYY-MM-DD`, `--vocab PATH`, `--pandas`,
+`--out-dir DIR`.
 
 ## Worked example
 
@@ -206,6 +310,10 @@ python -m pcos_tools recon_parse tests/fixtures/RECON_sample.md --out out/RECON_
 python -m pcos_tools now_build --csv tests/fixtures/worklist_fixture.csv \
     --recon out/RECON_sample.json --prev tests/fixtures/PCOS_NOW_prev.md \
     --out-dir out --today 2026-09-01
+python -m pcos_tools now_check --csv tests/fixtures/worklist_fixture.csv \
+    --now tests/fixtures/PCOS_NOW_v3_gdocs.md --pending tests/fixtures/pending \
+    --out-dir out --today 2026-09-01
+python -m pcos_tools recon_parse tests/fixtures/RECON_v14_sample.md --out out/RECON_v14.json
 ```
 
 ## Input schema
@@ -231,34 +339,47 @@ The fixture worklist has 27 rows covering every Status value in `vocab.json`,
 one malformed ID, one invalid-vocabulary row, one bad date, one near-duplicate
 title pair, PERSONAL rows in every regenerated section, an `Active-Low` row with
 a HIGH priority and a `Done-Candidate` row. The sample RECON has all six
-sections. All fixture people, tasks, dates and paths are invented.
+sections; `RECON_v14_sample.md` has the runbook v1.4 layout;
+`PCOS_NOW_v3_gdocs.md` is a narrative PCOS_NOW as Google Docs exports it, with
+one example of every `now_check` finding; `pending/` holds one DELTA. All
+fixture people, tasks, dates and paths are invented. Never add real business
+data to this public repository.
 
 ## Build the zip
 
 ```bash
-python scripts/build_zip.py     # writes dist/pcos_tools_v0.2.zip
+python scripts/build_zip.py     # writes dist/pcos_tools_v0.3.zip
 ```
 
 ## Workflow
 
-1. Export the Worklist to CSV, save the RECON markdown, keep the current PCOS_NOW.
-2. Run `hygiene`; the weekly AI pass applies the `STALE_ARCHIVE` and
-   `DONE_PROMOTE` rows; a human reviews the rest of `proposed_changes.csv`.
-3. Run `recon_parse`, then `now_build`; review `PCOS_NOW_draft.md`; paste the
-   accepted sections into the live PCOS_NOW.
-4. Nothing is applied by these scripts. They never write to their inputs and
+1. Export the Worklist to CSV and the current PCOS_NOW to Markdown; copy the
+   unapplied business DELTA files into a folder.
+2. Run `hygiene --pending`; the weekly AI pass applies the `STALE_ARCHIVE` and
+   `DONE_PROMOTE` rows whose Action is `set-status`; `hold` rows wait for their
+   DELTA; a human reviews the rest of `proposed_changes.csv`.
+3. Run `now_check`; the closeout writer resolves each finding in the same pass
+   (fix PCOS_NOW, fix the row, or leave it and record why).
+4. Old layout only: run `recon_parse`, then `now_build`; review
+   `PCOS_NOW_draft.md`; paste the accepted sections into the live PCOS_NOW.
+5. Nothing is applied by these scripts. They never write to their inputs and
    refuse to write an output over an input path.
-5. Keep real exports and drafts out of git: run with `--out-dir out` (ignored)
+6. Keep real exports and drafts out of git: run with `--out-dir out` (ignored)
    and note that `.gitignore` also ignores `Worklist*.csv`, `RECON*.md`,
-   `RECON*.json`, `PCOS_NOW*.md` and the three draft file names at the repo
-   root, so a real file dropped next to the code cannot be committed by
-   accident. Output is safe to pipe or redirect: non-ASCII text is written as
+   `RECON*.json`, `PCOS_NOW*.md`, `DELTA*.md`, the `inbox/` and `pending/`
+   folders and the draft and report file names at the repo root, so a real
+   file dropped next to the code cannot be committed by accident. Output is safe to pipe or redirect: non-ASCII text is written as
    UTF-8.
 
-## Limitations (v0.2)
+## Limitations (v0.3)
 
 - People and date extraction are regex heuristics; check them.
 - `dd/mm/yyyy` dates are kept raw because the day/month order is ambiguous.
 - Duplicate detection is pairwise over titles only (fine up to a few thousand rows).
-- The previous PCOS_NOW must use numbered headings (`## 1 ...`) or bold
-  numbered lines (`**1. ...**`) for its sections.
+- The previous PCOS_NOW must use numbered headings (`## 1 ...`, `# 1\. ...`)
+  or bold numbered lines (`**1. ...**`) for its sections.
+- `now_check` reads Task IDs, not meaning: it cannot tell that a paragraph is
+  out of date if it cites no ID. `STATUS_MISMATCH` can misfire when a status
+  word right after an ID describes something else; check the quoted line.
+- `--pending` holds a row for any mention of its ID in a DELTA, including a
+  passing reference.

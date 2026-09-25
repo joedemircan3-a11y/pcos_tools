@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pcos-tools"
 dynamic = ["version"]
-description = "Draft-only helpers for the PCOS worklist: hygiene checks, RECON parsing, PCOS_NOW drafting"
+description = "Draft-only helpers for the PCOS worklist: hygiene checks, RECON parsing, PCOS_NOW drafting and cross-checks"
 requires-python = ">=3.11"
 dependencies = []
 

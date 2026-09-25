@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import csv
+import sys
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -22,6 +23,7 @@ from .common import (
     title_similarity,
     title_tokens,
 )
+from .pending import load_pending
 
 CHECKS = {
     "STALE_ARCHIVE": "Stale-Triage row past the stale threshold; propose Archived-Auto",
@@ -40,6 +42,10 @@ CHECKS = {
 CHECK_ORDER = {check: index for index, check in enumerate(CHECKS)}
 PROPOSED_COLUMNS = ["Task ID", "Title", "Check", "Field", "Current", "Proposed", "Action", "Reason", "Row"]
 CHANGES_NAME = "proposed_changes.csv"
+# Status proposals the weekly pass may apply on its own; a row named in an
+# unapplied DELTA gets HOLD_ACTION instead of set-status.
+AUTO_APPLY_CHECKS = ("STALE_ARCHIVE", "DONE_PROMOTE")
+HOLD_ACTION = "hold"
 REPORT_NAME = "hygiene_report.md"
 
 
@@ -74,6 +80,7 @@ class HygieneResult:
     dup_threshold: float
     vocab_source: str = ""
     done_candidate_days: int = 7
+    pending_files: tuple = ()
 
     def by_check(self):
         grouped = {check: [] for check in CHECKS}
@@ -84,13 +91,18 @@ class HygieneResult:
     def task_ids(self, check):
         return [finding.task_id for finding in self.findings if finding.check == check]
 
+    def held(self):
+        return [finding for finding in self.findings if finding.action == HOLD_ACTION]
+
 
 def run_hygiene(rows, today=None, aged_days=None, stale_days=None, dup_threshold=0.8,
-                skip_closed=False, vocab=None, done_candidate_days=None):
+                skip_closed=False, vocab=None, done_candidate_days=None, pending=None, pending_files=()):
     """Run every check over the rows. Pure: never touches the file system.
 
     ``aged_days``, ``stale_days`` and ``done_candidate_days`` default to the
     vocabulary's values; ``vocab`` defaults to the packaged vocab.json.
+    ``pending`` maps Task ID -> DELTA file names (see pending.load_pending);
+    STALE_ARCHIVE and DONE_PROMOTE proposals for those rows are put on hold.
     """
     vocab = vocab or get_vocab()
     today = today or date.today()
@@ -170,9 +182,16 @@ def run_hygiene(rows, today=None, aged_days=None, stale_days=None, dup_threshold
                      f"overlap {score:.2f} with {other['Task ID']} '{other['Title']}' "
                      f"[{other['Status']}] on row {other['_row']}")
 
+    for finding in findings:
+        if finding.check in AUTO_APPLY_CHECKS and pending and finding.task_id in pending:
+            finding.action = HOLD_ACTION
+            finding.reason += (f"; HOLD: named in unapplied DELTA {', '.join(pending[finding.task_id])}; "
+                               "apply that DELTA first, then re-run")
+
     findings.sort(key=lambda finding: (finding.row, CHECK_ORDER[finding.check]))
     return HygieneResult(findings, next_free_task_id(rows), len(rows), today,
-                         aged_days, stale_days, dup_threshold, vocab.source, done_candidate_days)
+                         aged_days, stale_days, dup_threshold, vocab.source, done_candidate_days,
+                         tuple(pending_files))
 
 
 def write_proposed_changes(result, path):
@@ -203,9 +222,13 @@ def render_report(result, source_name):
         f"done-candidate >= {result.done_candidate_days} days, "
         f"duplicate title overlap >= {result.dup_threshold:.2f}",
         f"- Vocabulary: {result.vocab_source or 'packaged vocab.json'}",
+        f"- Pending DELTAs read: {len(result.pending_files)}"
+        + (f" ({', '.join(result.pending_files)}); proposals on hold: {len(result.held())}"
+           if result.pending_files else " (nothing held)"),
         "",
         "> DRAFT ONLY. The input worklist was not modified. The weekly AI pass applies STALE_ARCHIVE "
-        "and DONE_PROMOTE rows; a human reviews the rest of proposed_changes.csv.",
+        "and DONE_PROMOTE rows whose Action is set-status; rows with Action hold wait until the named "
+        "DELTA is applied. A human reviews the rest of proposed_changes.csv.",
         "",
         "## Summary",
         "",
@@ -241,9 +264,13 @@ def hygiene_command(args):
     vocab = get_vocab(args.vocab)
     source = Path(args.worklist)
     rows = read_worklist(source, use_pandas=args.pandas)
+    pending, pending_files = load_pending(getattr(args, "pending", None))
+    if getattr(args, "pending", None) and not pending_files:
+        print("warning: --pending was given but no .md, .markdown or .txt DELTA file was found", file=sys.stderr)
     result = run_hygiene(rows, today=today, aged_days=args.aged_days, stale_days=args.stale_days,
                          dup_threshold=args.dup_threshold, skip_closed=args.skip_closed, vocab=vocab,
-                         done_candidate_days=args.done_candidate_days)
+                         done_candidate_days=args.done_candidate_days, pending=pending,
+                         pending_files=pending_files)
     out_dir = Path(args.out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     changes_path = out_dir / CHANGES_NAME
@@ -260,6 +287,8 @@ def hygiene_command(args):
     for check in CHECKS:
         if grouped.get(check):
             print(f"  {check}: {len(grouped[check])}")
+    if result.pending_files:
+        print(f"  pending DELTAs read: {len(result.pending_files)}; proposals on hold: {len(result.held())}")
     print(f"wrote {changes_path}")
     print(f"wrote {report_path}")
     return 0

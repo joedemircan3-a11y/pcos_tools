@@ -21,6 +21,27 @@ SECTION_SPECS = [
 SECTION_BY_NUMBER = {number: (key, title, keywords) for number, key, title, keywords in SECTION_SPECS}
 SECTION_KEYS = [key for _, key, _, _ in SECTION_SPECS]
 
+# RECON runbook 01-EM-02 v1.4 (Sep 2026) writes a different layout:
+# "## COVERAGE DISCLOSURE", "## SECTION 1 — NEW TASK CANDIDATES", ... "## RUN LOG",
+# with items as "**3.1**" or "**2.1 — title**" followed by "- **Field:** value"
+# bullets. Keywords are matched in this order against the heading text.
+V14_SPECS = [
+    ("coverage", "COVERAGE DISCLOSURE", ("coverage",)),
+    ("new_task_candidates", "NEW TASK CANDIDATES", ("new task",)),
+    ("task_updates", "UPDATES TO EXISTING TASKS", ("updates to existing", "update")),
+    ("action_on_joe", "FOLLOW-UPS REQUIRING OPERATOR ACTION", ("follow-up", "follow up", "operator action")),
+    ("sensitive", "SENSITIVE / LEADERSHIP-WATCH", ("sensitive", "leadership")),
+    ("ignore", "IGNORE / NO-ACTION", ("ignore", "no-action", "no action")),
+    ("run_log", "RUN LOG", ("run log", "run-log")),
+]
+V14_KEYS = [key for key, _, _ in V14_SPECS]
+V14_SECTION_RE = re.compile(r"^\s{0,3}#{1,6}\s+SECTION\s+\d+\s*[\u2014\u2013\-:.]", re.IGNORECASE)
+V14_ITEM_RE = re.compile(r"^\s{0,3}\*\*(\d+\.\d+)\s*(.*?)\*\*\s*(.*)$")
+V14_FIELD_RE = re.compile(r"^\s*[-*+]\s+\*\*([^*]{1,60}?)(?::\*\*|\*\*\s*:)\s*(.*)$")
+V14_TABLE_KV_RE = re.compile(r"^\s*\|\s*\**([^|*]{1,60}?)\**\s*\|\s*(.+?)\s*\|?\s*$")
+# When an item header has no text of its own, its label comes from the first of these fields.
+V14_LABEL_FIELDS = ("Title", "What is needed", "What changed", "Subject (verbatim)", "Contact")
+
 HASH_HEADER_RE = re.compile(r"^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$")
 NUMBERED_TITLE_RE = re.compile(r"^(\d)\s*[.):\-]\s*(.+)$")
 PLAIN_HEADER_RE = re.compile(r"^\s{0,3}[*_]{0,2}\s*(\d)\s*[.):\-]\s*(.+?)\s*[*_]{0,2}\s*$")
@@ -33,7 +54,8 @@ MONTH_PATTERN = (r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)
                  r"aug(?:ust)?|sep(?:t(?:ember)?)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?")
 MONTH_INDEX = {"jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
                "jul": 7, "aug": 8, "sep": 9, "oct": 10, "nov": 11, "dec": 12}
-ISO_RE = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})\b")
+# Also matches the date part of an ISO timestamp ("2026-09-23T16:08Z").
+ISO_RE = re.compile(r"\b(\d{4})-(\d{2})-(\d{2})(?:\b|(?=T\d))")
 DMY_RE = re.compile(rf"\b(\d{{1,2}})(?:st|nd|rd|th)?\s+({MONTH_PATTERN})\b\.?,?(?:\s+(\d{{4}}))?",
                     re.IGNORECASE)
 MDY_RE = re.compile(rf"\b({MONTH_PATTERN})\b\.?\s+(\d{{1,2}})(?:st|nd|rd|th)?\b(?:,?\s+(\d{{4}}))?",
@@ -215,13 +237,147 @@ def _new_sections():
     }
 
 
+# Keywords that only the v1.4 section titles use; a legacy file with "## Section 2: ACTION ON JOE"
+# headings stays legacy.
+V14_ONLY_KEYWORDS = ("new task", "updates to existing", "follow-up", "follow up", "sensitive", "no-action", "ignore")
+
+
+def is_v14_layout(lines, fenced):
+    for line, in_fence in zip(lines, fenced):
+        if not in_fence and V14_SECTION_RE.match(line):
+            if any(keyword in line.lower() for keyword in V14_ONLY_KEYWORDS):
+                return True
+    return False
+
+
+def _v14_section_key(title):
+    lowered = title.lower()
+    for key, _canonical, keywords in V14_SPECS:
+        if any(keyword in lowered for keyword in keywords):
+            return key
+    return None
+
+
+def _item_extras(item, default_year, known_people):
+    full = " ".join([item["text"]] + list(item.get("fields", {}).values()) + item.get("detail", []))
+    item["dates"] = extract_dates(full, default_year)
+    item["people"] = extract_people(full, known_people)
+    item["task_ids"] = sorted(set(TASK_ID_FIND_RE.findall(full)))
+
+
+def parse_recon_v14(text, lines, fenced, source, default_year, known_people):
+    """Parse the runbook v1.4 layout (see V14_SPECS)."""
+    sections = {key: {"key": key, "title": canonical, "found": False, "heading_line": None,
+                      "items": [], "notes": [], "fields": {}}
+                for key, canonical, _ in V14_SPECS}
+    preamble, warnings, current, item = [], [], None, None
+    for lineno, raw in enumerate(lines, start=1):
+        stripped = raw.strip()
+        if fenced[lineno - 1]:
+            if current is None:
+                preamble.append(raw.rstrip())
+            elif stripped:
+                (item["detail"] if item else current["notes"]).append(stripped)
+            continue
+        heading = HASH_HEADER_RE.match(raw)
+        if heading:
+            # Only the numbered SECTION headings, COVERAGE and RUN LOG switch sections;
+            # a sub-heading such as "### Follow-up context" stays inside the current one.
+            key = _v14_section_key(heading.group(1))
+            if key and not (V14_SECTION_RE.match(raw) or key in ("coverage", "run_log")):
+                key = None
+            if key:
+                section = sections[key]
+                if section["found"]:
+                    warnings.append(f"line {lineno}: {section['title']} appears again; items merged")
+                else:
+                    section["found"], section["title"], section["heading_line"] = True, heading.group(1), lineno
+                current, item = section, None
+                continue
+        if not stripped or RULE_RE.match(raw):
+            continue
+        if current is None:
+            preamble.append(stripped.lstrip("#").strip())
+            continue
+        head = V14_ITEM_RE.match(raw)
+        if head:
+            label = head.group(2).strip().lstrip("\u2014\u2013-: ").strip()
+            tail = head.group(3).strip().lstrip("\u2014\u2013-: ").strip()
+            item = {"ref": head.group(1), "text": " ".join(part for part in (label, tail) if part),
+                    "level": 0, "line": lineno, "fields": {}, "detail": []}
+            current["items"].append(item)
+            continue
+        field = V14_FIELD_RE.match(raw)
+        if field and item is not None:
+            item["fields"].setdefault(field.group(1).strip(), field.group(2).strip())
+            continue
+        table = V14_TABLE_KV_RE.match(raw)
+        next_line = lines[lineno] if lineno < len(lines) else ""
+        is_header_row = bool(re.match(r"^\s*\|[\s:|-]+\|?\s*$", next_line))
+        if table and not is_header_row and not set(table.group(1).strip()) <= set("-: "):
+            current["fields"].setdefault(table.group(1).strip(), table.group(2).strip())
+            continue
+        if item is not None:
+            item["detail"].append(stripped)
+        else:
+            current["notes"].append(stripped)
+
+    all_dates, people, task_ids = [], {}, set()
+    for key in V14_KEYS:
+        section = sections[key]
+        for index, entry in enumerate(section["items"]):
+            entry["index"] = index
+            if not entry["text"]:
+                entry["text"] = next((entry["fields"][name] for name in V14_LABEL_FIELDS
+                                      if entry["fields"].get(name)), "")
+            _item_extras(entry, default_year, known_people)
+            for found in entry["dates"]:
+                all_dates.append({"iso": found["iso"], "raw": found["raw"], "section": key, "item": index})
+            for person in entry["people"]:
+                record = people.setdefault(person["name"].lower(), {
+                    "name": person["name"], "count": 0, "sections": [], "confidence": person["confidence"]})
+                record["count"] += 1
+                if key not in record["sections"]:
+                    record["sections"].append(key)
+                if CONFIDENCE_RANK[person["confidence"]] > CONFIDENCE_RANK[record["confidence"]]:
+                    record["confidence"] = person["confidence"]
+            task_ids.update(entry["task_ids"])
+        if not section["found"]:
+            warnings.append(f"{section['title']} not found")
+
+    coverage_text = " ".join(list(sections["coverage"]["fields"].values()) + sections["coverage"]["notes"])
+    coverage_isos = [found["iso"] for found in extract_dates(coverage_text, default_year) if found["iso"]]
+    return {
+        "tool": f"pcos_tools recon_parse {__version__}",
+        "source": source,
+        "layout": "runbook-v1.4",
+        "parsed_at": date.today().isoformat(),
+        "as_of": max(coverage_isos) if coverage_isos else None,
+        "default_year": default_year,
+        "heading_mode": "markdown",
+        "preamble": preamble,
+        "sections": sections,
+        "dates": all_dates,
+        "people": sorted(people.values(), key=lambda entry: (-entry["count"], entry["name"])),
+        "task_ids": sorted(task_ids),
+        "warnings": warnings,
+    }
+
+
 def parse_recon(text, source="", default_year=None, known_people=()):
-    """Parse RECON markdown text into a JSON-serialisable dict."""
+    """Parse RECON markdown text into a JSON-serialisable dict.
+
+    Two layouts: the original six numbered sections (Coverage, ACTION ON JOE,
+    WAITING ON OTHERS, DELEGABLE, Patterns, Run-log) and runbook v1.4
+    ("SECTION n — ..." headings, see V14_SPECS). ``layout`` in the result says which.
+    """
     lines = text.splitlines()
     if default_year is None:
         first_iso = ISO_RE.search(text)
         default_year = int(first_iso.group(1)) if first_iso else date.today().year
     fenced = fence_flags(lines)
+    if is_v14_layout(lines, fenced):
+        return parse_recon_v14(text, lines, fenced, source, default_year, known_people)
     heading_mode = any(not in_fence and _is_section_heading(line) for line, in_fence in zip(lines, fenced))
     sections = _new_sections()
     preamble, warnings = [], []
@@ -309,6 +465,7 @@ def parse_recon(text, source="", default_year=None, known_people=()):
     return {
         "tool": f"pcos_tools recon_parse {__version__}",
         "source": source,
+        "layout": "legacy",
         "parsed_at": date.today().isoformat(),
         "as_of": max(coverage_isos) if coverage_isos else None,
         "default_year": default_year,
@@ -393,9 +550,9 @@ def recon_parse_command(args):
             raise WorklistError("refusing to overwrite the RECON input; choose another --out")
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(payload, encoding="utf-8", newline="\n")
-        counts = ", ".join(f"{key}={len(result['sections'][key]['items'])}" for key in SECTION_KEYS)
-        print(f"recon_parse: {counts}; dates={len(result['dates'])}; people={len(result['people'])}; "
-              f"as_of={result['as_of']}")
+        counts = ", ".join(f"{key}={len(section['items'])}" for key, section in result["sections"].items())
+        print(f"recon_parse ({result['layout']}): {counts}; dates={len(result['dates'])}; "
+              f"people={len(result['people'])}; as_of={result['as_of']}")
         print(f"wrote {out_path}")
     for warning in result["warnings"]:
         print(f"warning: {warning}", file=sys.stderr)

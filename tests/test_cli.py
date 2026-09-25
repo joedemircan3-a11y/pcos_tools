@@ -21,7 +21,7 @@ def test_version():
     completed = run("--version")
     assert completed.returncode == 0
     assert f"pcos_tools {__version__}" in completed.stdout
-    assert __version__ == "0.2.1"
+    assert __version__ == "0.3.0"
 
 
 def test_help_lists_commands():
