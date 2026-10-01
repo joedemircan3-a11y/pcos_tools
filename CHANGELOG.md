@@ -1,5 +1,31 @@
 # Changelog
 
+## Unreleased - 2026-10-01: agent cards and skills v0.1
+
+Why: PCOS queue item Q01 (PCOS_DISPATCH_2026-09-29 PROMPT C1, register P2-19,
+P2-03, P2-01, P2-02) puts the phase-2 agent cards and the first skills in this
+repository, so that build day installs them instead of writing them. Built by
+Claude (Claude Code on the web, session_01Urw9UiZSQ2c6DofLwbgk1t). The
+`pcos_tools` package is unchanged and stays at 0.3.0.
+
+- `agents/`: `CARD_TEMPLATE.md` (six parts: mission, inputs by ID, tools,
+  rules and kernel version, output contract with the Law 4 evidence labels,
+  trigger and owner model), `INPUTS.md` (46 source keys), `_INDEX.md`, and one
+  card for each planned lane: prediction-ledger, exo, checker, council-board,
+  council-github, intake-email, weekly-evolve, knowledge-extract,
+  knowledge-review, knowledge-chair.
+- `skills/`: checker (with checklists for 12 job types), prediction-ledger and
+  exo, in the Agent Skills format; `_INDEX.md`.
+- Sources are named by key. The Drive and Notion IDs stay in a private Drive map.
+  Why: this repository is public (Operating Card v7.4: never put real business
+  data in it), and one map means one line to change when a governance file is
+  superseded and its ID changes.
+- `tests/test_agents_skills.py`: card parts, skill frontmatter, keys, links,
+  and a guard against private identifiers. 171 tests pass (was 116), 1 is
+  skipped.
+- `scripts/build_zip.py` also ships `agents/` and `skills/`, so the test suite
+  passes when it is run from the zip.
+
 ## 0.3.0 - 2026-09-25
 
 Why: on 2026-09-25 v0.2.1 was run against the live PCOS files (102-row

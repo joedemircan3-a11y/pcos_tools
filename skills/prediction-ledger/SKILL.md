@@ -1,0 +1,127 @@
+---
+name: prediction-ledger
+description: Predict what each incoming PCOS item needs (task or not, owner, route, candidate output, assumptions), then check what actually happened and score the guess. Use in the daily prediction run after the brief, when scoring Prediction rows past their check date, when writing a "What happened?" question for Joe, and for the weekly calibration block.
+compatibility: Needs the PCOS Notion hub (Prediction, Decisions, Changelog), read access to Outlook through the Microsoft 365 connector, and the Drive Worklist.
+metadata:
+  version: "0.1"
+  status: Candidate
+  register: P2-01
+  kernel: "1.0"
+  card: agents/prediction-ledger.md
+---
+
+# Prediction ledger
+
+Guess first, check later, learn from the difference. The ledger never acts on a
+guess: it does not draft, send or change a task row.
+
+Sources are named by key, written `[[KEY]]` (defined in `agents/INPUTS.md`, IDs
+in the private map named there).
+
+## 1. Predict: one row per new item
+
+Items come from the day's [[INBOX]] rows written by the brief and project-watch
+lanes. Until [[INBOX]] exists, they come from the day's DELTA files in
+[[INBOX_FOLDER]]. Skip an item that already has a [[PREDICTION]] row for the same
+thread or subject.
+
+Fill the row:
+
+| Field | How to fill it |
+| --- | --- |
+| Subject | What the item is about, in plain words, at most 12 words, with the Task ID if one exists |
+| Source | The item's key and ID (Inbox row, or the thread's conversation ID) |
+| Is task | Yes when someone needs an action from Joe or his front line; No for information only; Unsure otherwise |
+| Owner | From the owner-map rows in [[RULES]] (until cutover, [[BRIEF_RULES]] section I). Use the address when two people share a name |
+| Route | Radar, Instruct front line or Joe direct, by the kernel evaluation order: Route 1 tests first, then Route 3 criteria, then Route 2 as the default |
+| Candidate output | What the system would produce: nothing, a draft to the owner, a reply on the thread, a row update, or a decision card; link it if it exists |
+| Assumptions | 1 to 4 lines, each a yes/no question ("Is the owner already on it?"), the one most likely to be wrong first |
+| Confidence | 0 to 100 percent for the whole row |
+| Check date | Source date + 3 days; + 1 day when the item meets the Route 3 money-or-deadline test (a crisis item) |
+| Status | Predicted |
+
+A prediction is Candidate (Law 4).
+
+## 2. Check: rows whose Check date has passed
+
+Look for what actually happened, in this order, and stop at the first
+conclusive evidence:
+
+1. Sent mail: Joe's messages in [[MAIL_SENT]] on the thread or subject after
+   the source date.
+2. Thread replies: later messages in the same conversation in [[MAIL_INBOX]] and
+   [[MAIL_ROUTED]]. The terminal message controls (Law 3).
+3. Worklist: the task's row in [[WORKLIST]] (Status, Updated, Next Action).
+4. Changelog: [[CHANGELOG]] rows about the subject or Task ID.
+
+Write Actual: what happened, the evidence key and ID, the date, and a label.
+Use Confirmed when the evidence was opened in this run, and Needs Thread Check
+when the thread's terminal message could not be read. When the evidence is
+partial, set Status Checking and move the Check date 3 days later, once. After
+that the row is either scored or asked.
+
+## 3. Ask only when blind
+
+When there is no evidence after the wait, set Status Asked Joe and put one
+question into the next EXO card slot, built from [[CAL_TEMPLATE]] by
+[[CAL_STANDARD]]. Never ask about a subject that has any evidence. Never ask
+twice about one row.
+
+The "What happened?" question:
+
+- Title: "What happened with SUBJECT?"
+- Context, one or two lines: what came in, when, from whom (role and address),
+  and what the system guessed.
+- Options, in this order. Put the recommended one first only when the evidence
+  leans one way.
+  - A. Handled offline, by me or by the owner.
+  - B. Nothing yet; still open.
+  - C. Dropped; not needed.
+  - D. Unrelated or wrong direction: the guess itself was wrong. This option is
+    mandatory and is never removed.
+- Note: free text or a voice note.
+
+Filing the answer:
+
+- A: Actual "handled offline", Confirmed, source = the card ID. Status Scored.
+- B: Status Parked and Check date 3 days later. No further question before that
+  date.
+- C: Actual "dropped", Confirmed, source = the card ID. Status Scored. If the
+  subject is a Worklist task, file one [[INBOX]] row for the closeout owner
+  quoting Joe's answer. The ledger never closes a task itself.
+- D: Is task and Route score 0. Status Scored. Joe's note goes into the miss
+  patterns.
+- Skipped twice: Status Parked, Check date 7 days later. The evidence check runs
+  again at that date, and the question is asked again only if the row is still
+  blind. No answer is never treated as an answer.
+
+## 4. Score
+
+Score each check 1 when the guess was right and 0 when it was wrong. Leave out
+checks that do not apply.
+
+- Is task, Owner, Route: compared with Actual.
+- Candidate output: used unedited 1; used after edits 0.5; not used 0.
+- Each assumption: right 1, wrong 0.
+
+Score = the sum divided by the number of checks, as a percent. Set Status
+Scored.
+
+## 5. Calibrate: weekly, Sunday, before the weekly-evolve lane
+
+- The week's numbers: prediction accuracy (mean Score), drafts used unedited
+  (count and share), questions asked (count). The target direction is up, up,
+  down.
+- Per project (a Task ID, or one subject that keeps recurring): after three
+  wrong guesses in a row, note "assume less, ask earlier". The next prediction
+  for that project then puts its weakest assumption into the next card at
+  Predict time, instead of waiting for the Check date.
+- Group the misses by pattern ("owner wrong when X", "Route 3 overcalled for
+  Y"), with row links, and hand them to the weekly-evolve lane as rule
+  candidates. The ledger never writes a rule.
+
+## Never
+
+- Act on a prediction: no send, no draft, no Worklist change, no new Task ID.
+- Ask Joe when there is evidence, or ask twice about one row.
+- Treat silence as an answer.

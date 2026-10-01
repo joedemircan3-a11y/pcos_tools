@@ -8,7 +8,7 @@ import zipfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-INCLUDE = ["README.md", "CHANGELOG.md", "pyproject.toml", "pcos_tools", "tests", "scripts"]
+INCLUDE = ["README.md", "CHANGELOG.md", "pyproject.toml", "pcos_tools", "tests", "scripts", "agents", "skills"]
 SKIP_DIRS = {"__pycache__", ".pytest_cache", "out", "dist", ".git"}
 
 

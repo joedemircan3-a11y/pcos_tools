@@ -104,6 +104,6 @@ build session), **planned** (a later queue item or register entry creates it).
 ## Change note
 
 v0.1 | 2026-10-01 | Claude Code on the web, PCOS queue item Q01 | first key table,
-44 keys | the cards need inputs by ID and the repository is public; keys here,
+46 keys | the cards need inputs by ID and the repository is public; keys here,
 IDs in the private map | PCOS_DISPATCH_2026-09-29 PROMPT C1; Operating Card v7.4
 WRITE PATHS

@@ -12,6 +12,12 @@ them.
 > network calls, no Google API, no email. Tool output is advisory: when it
 > disagrees with a live read of the source, the live read wins.
 
+The repository also holds the PCOS phase-2 **agent cards** (`agents/`, one
+six-part card per planned lane, template in `agents/CARD_TEMPLATE.md`) and
+**skills** in the Agent Skills format (`skills/`). Each folder has an
+`_INDEX.md`. Cards and skills name their sources by key (`agents/INPUTS.md`). The
+IDs stay in a private Drive file, because this repository is public.
+
 ## Quick start for a PCOS session
 
 The repository is public at https://github.com/joedemircan3-a11y/pcos_tools.
@@ -344,6 +350,12 @@ sections; `RECON_v14_sample.md` has the runbook v1.4 layout;
 one example of every `now_check` finding; `pending/` holds one DELTA. All
 fixture people, tasks, dates and paths are invented. Never add real business
 data to this public repository.
+
+`tests/test_agents_skills.py` checks the cards and skills. Each card must keep the
+six parts in order. Each skill's frontmatter must follow the Agent Skills format.
+Every source key must be defined, and every relative link must resolve. It also
+fails on anything that looks like a Drive or Notion ID, an e-mail address or a
+Drive or Notion link in `agents/` or `skills/`.
 
 ## Build the zip
 
