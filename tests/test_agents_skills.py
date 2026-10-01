@@ -1,8 +1,9 @@
-"""Format checks for the agent cards (agents/) and skills (skills/).
+"""Format checks for the agent cards (agents/), skills (skills/), Routine prompts
+(routines/) and the pull request template (.github/).
 
 They keep every card on the six-part template, every skill in the Agent Skills
-format, every source key defined, and keep private identifiers out of this
-public repository.
+format, every Routine prompt paste-ready, every source key defined, and keep
+private identifiers out of this public repository.
 """
 import re
 from pathlib import Path
@@ -12,6 +13,8 @@ import pytest
 ROOT = Path(__file__).resolve().parent.parent
 AGENTS = ROOT / "agents"
 SKILLS = ROOT / "skills"
+ROUTINES = ROOT / "routines"
+PR_TEMPLATE = ROOT / ".github" / "pull_request_template.md"
 
 PARTS = [
     "## 1. Mission",
@@ -31,6 +34,10 @@ SKILLS_WRITTEN = ["checker", "prediction-ledger", "exo", "council-board", "intak
 LABELS = ["Confirmed", "Candidate", "Needs Source Check", "Needs Thread Check",
           "Needs Joe Approval", "Blocked"]
 NOT_CARDS = {"CARD_TEMPLATE.md", "INPUTS.md", "_INDEX.md"}
+ROUTINE_FIELDS = ["Status", "Lane", "Trigger", "Repository", "Connectors", "Model", "Card",
+                  "Skills", "Needs first"]
+CHECKLIST = ["Six-part card present", "Sources by ID", "Evidence labels", "No pricing commitment",
+             "No external send"]
 
 KEY_USE = re.compile(r"\[\[([A-Z0-9_]+)\]\]")
 PLACEHOLDER_KEY = "KEY"  # the template and the skills explain the syntax as [[KEY]]
@@ -59,8 +66,13 @@ def skill_files():
     return sorted(SKILLS.glob("*/SKILL.md"))
 
 
+def routines():
+    return sorted(p for p in ROUTINES.glob("*.md") if p.name != "_INDEX.md")
+
+
 def public_files():
-    return sorted(p for folder in (AGENTS, SKILLS) for p in folder.rglob("*.md"))
+    return sorted([*(p for folder in (AGENTS, SKILLS, ROUTINES) for p in folder.rglob("*.md")),
+                   PR_TEMPLATE])
 
 
 def defined_keys():
@@ -171,3 +183,30 @@ def test_indexes_list_every_card_and_skill():
     skills_index = (SKILLS / "_INDEX.md").read_text(encoding="utf-8")
     for skill in skill_files():
         assert f"| skills/{skill.parent.name}/ |" in skills_index
+
+
+@pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
+def test_routine_header_and_paste_ready_prompt(routine):
+    text = routine.read_text(encoding="utf-8")
+    assert text.startswith(f"# Routine: {routine.stem}\n")
+    for field in ROUTINE_FIELDS:
+        assert re.search(rf"^- {field}: \S", text, re.M), f"header line {field} missing"
+    block = re.search(r"^```text\n(.*?)^```$", text, re.M | re.S)
+    assert block, "the prompt must sit in one ```text block"
+    lines = block.group(1).splitlines()
+    assert lines[0] == "BEGIN" and lines[-1] == "END"
+    prompt = block.group(1)
+    assert "kernel" in prompt and "[[LANES]]" in prompt, "load the kernel and write a heartbeat"
+    assert "never" in prompt.lower()
+
+
+def test_routines_index_lists_every_routine():
+    index = (ROUTINES / "_INDEX.md").read_text(encoding="utf-8")
+    for routine in routines():
+        assert f"| routines/{routine.name} |" in index
+
+
+def test_pull_request_template_has_the_review_checklist():
+    text = PR_TEMPLATE.read_text(encoding="utf-8")
+    for item in CHECKLIST:
+        assert f"- [ ] **{item}.**" in text

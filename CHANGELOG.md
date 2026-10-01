@@ -37,6 +37,21 @@ Claude (Claude Code on the web, session_01Urw9UiZSQ2c6DofLwbgk1t). The
     numbers.
   The four cards that use these skills link them and moved to v0.2. 182 tests
   pass, 1 is skipped.
+- Queue item QC13 (register P2-07, P2-19), in its own pull request
+  "repo-structure-v0.1", stacked on this one:
+  - The README now opens with what the repository holds and how PCOS points
+    here. The toolkit manual follows, unchanged.
+  - `routines/` holds 13 paste-ready Routine prompts, one file each:
+    L1 Brief, L2 Render, L3 Health, L4 Weekly, the council-github chair,
+    prediction-ledger, exo, the three council-board stages, intake-email,
+    and two knowledge Routines that are blocked until their skills exist.
+    Each prompt is a loader (kernel, then card, then skill, then key map).
+    `_INDEX.md` also lists the scheduled lanes that are not Claude Routines.
+  - `.github/pull_request_template.md` carries the review checklist: six-part
+    card, sources by ID, evidence labels, no pricing commitment, no external
+    send, no business data, tests.
+  - Tests cover the Routine format and the checklist: 227 pass, 1 is skipped.
+    The zip also ships `routines/` and `.github/`.
 
 ## 0.3.0 - 2026-09-25
 
