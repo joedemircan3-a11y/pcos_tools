@@ -10,7 +10,9 @@ date | status | open when. The ID is the folder path.
 | checker | skills/checker/ | Verdict Accept, Fix or Reject with one finding per line; checklists for 12 job types in `references/checklists.md` | 2026-10-01 | Candidate | Checking any lane output; weekly golden-set run |
 | prediction-ledger | skills/prediction-ledger/ | Prediction row fields, evidence lookup order, "What happened?" question, scoring, calibration | 2026-10-01 | Candidate | Daily prediction run; scoring; Sunday calibration |
 | exo | skills/exo/ | Breakdown into steps, assumption cards, skip rule, interpretation cards, voice-dump parsing | 2026-10-01 | Candidate | EXO card slots; "exo" or "next step"; new Capture rows |
+| council-board | skills/council-board/ | Plan and execution rounds on Council rows, anonymous reviews, chair rules; stage prompts in `references/prompts.md` | 2026-10-01 | Candidate | Judgment work; "council row X"; disputed readings or proposals |
+| intake-email | skills/intake-email/ | Door 1: allowlist check, routing and stop list, sourced answers, reply drafts with Joe in cc, send gate | 2026-10-01 | Candidate | Hourly intake run; [PCOS] requests |
+| weekly-evolve | skills/weekly-evolve/ | Corrections into versioned candidates, new golden-set cases, equal-or-better gate, three weekly numbers | 2026-10-01 | Candidate | Sunday L4 pass; any rule, kernel, card or skill proposal |
 
-Planned (not yet written): council-board, intake-email and weekly-evolve (queue
-item Q08); knowledge-extract, knowledge-review and knowledge-chair (P2-16); the
-PC council skill (P2-08).
+Planned (not yet written): knowledge-extract, knowledge-review and knowledge-chair
+(P2-16); the PC council skill (P2-08).

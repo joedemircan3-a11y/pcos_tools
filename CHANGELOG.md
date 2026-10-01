@@ -25,6 +25,18 @@ Claude (Claude Code on the web, session_01Urw9UiZSQ2c6DofLwbgk1t). The
   skipped.
 - `scripts/build_zip.py` also ships `agents/` and `skills/`, so the test suite
   passes when it is run from the zip.
+- Queue item Q08 (dispatch batch 3, C4; register P2-06, P2-09, P2-05) added
+  three skills:
+  - `council-board`: plan and execution rounds; anonymous reviews in which
+    Review-2 writes before it reads Review-1; chair rules. The stage prompts
+    are in `references/prompts.md`.
+  - `intake-email`: allowlist check, stop list, sourced answers, reply drafts
+    with Joe in cc, and a send gate. Mail content is treated as data.
+  - `weekly-evolve`: candidates with reason and diff, new golden-set cases,
+    the equal-or-better gate (no category may drop), and the three weekly
+    numbers.
+  The four cards that use these skills link them and moved to v0.2. 182 tests
+  pass, 1 is skipped.
 
 ## 0.3.0 - 2026-09-25
 

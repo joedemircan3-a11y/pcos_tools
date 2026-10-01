@@ -1,10 +1,10 @@
 # Card: council-board
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-06 (board council on Notion: Draft, Review-1, Review-2, Final, Dissent; plan round before execution; chair)
 - Lane ID: pending
-- Skills: council-board (planned, queue item Q08); the chair's Final is checked with [checker v0.1](../skills/checker/SKILL.md)
+- Skills: [council-board v0.1](../skills/council-board/SKILL.md); the chair's Final is checked with [checker v0.1](../skills/checker/SKILL.md)
 - Date: 2026-10-01
 
 ## 1. Mission
@@ -89,7 +89,7 @@ sources settle.
   reliability (three-day write test pending).
 - Escalation: Needs Joe only as in part 4.
 - Depends on: build day; [[COUNCIL]] and [[COUNCIL_REVIEWER_VIEW]] (exist); the
-  council-board skill (queue item Q08); a ChatGPT scheduled task that writes
+  council-board skill (v0.1, written in Q08); a ChatGPT scheduled task that writes
   Notion on three days running.
 
 ## Change note
@@ -97,3 +97,5 @@ sources settle.
 v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | register
 P2-06; design in the dev-session record of 2026-09-27, turns 2 to 4 | Joe's
 default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the council-board skill v0.1 | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)

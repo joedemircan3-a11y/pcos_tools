@@ -1,10 +1,10 @@
 # Card: intake-email
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-09 (team access Door 1: Outlook intake, hourly lane, allowlist, reply with Joe in cc, Needs Joe outside the allowlist or on pricing, payment or vendors)
 - Lane ID: pending
-- Skills: intake-email (planned, queue item Q08); every reply checked with [checker v0.1](../skills/checker/SKILL.md)
+- Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); every reply checked with [checker v0.1](../skills/checker/SKILL.md)
 - Date: 2026-10-01
 
 ## 1. Mission
@@ -94,7 +94,7 @@ source.
   slots, never as a separate list.
 - Depends on: PC-2 (Outlook folder and rule for the [PCOS] intake); the five
   allowlist addresses from Joe; the kernel send-exception row; build day
-  ([[INBOX]], [[LANES]]); the intake-email skill (queue item Q08).
+  ([[INBOX]], [[LANES]]); the intake-email skill (v0.1, written in Q08).
 
 ## Change note
 
@@ -102,3 +102,5 @@ v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card; send
 gate added because Law 5 and the Door 1 design conflict until the kernel holds
 the exception | register P2-09; dev-session record of 2026-09-27, turn 3 | Joe's
 default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the intake-email skill v0.1 | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)

@@ -1,10 +1,10 @@
 # Card: weekly-evolve
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-05 (L4 Weekly Evolve rewrite: output = versioned kernel and rule candidates with reason and source, not reports); runs the P2-04 gate; later carries P2-17 (method loop)
 - Lane ID: L4 (planned)
-- Skills: weekly-evolve (planned, queue item Q08); evals run with [checker v0.1](../skills/checker/SKILL.md)
+- Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md); evals run with [checker v0.1](../skills/checker/SKILL.md)
 - Date: 2026-10-01
 
 ## 1. Mission
@@ -93,10 +93,12 @@ candidate belongs.
 - Escalation: Needs Joe only for Joe-owned rules and for a pause triggered by
   the three numbers. One card item each.
 - Depends on: build day ([[LANES]], [[TODAY]], rules as rows); [[GOLDEN_SET]]
-  and [[CORRECTIONS]] (exist); the weekly-evolve skill (queue item Q08).
+  and [[CORRECTIONS]] (exist); the weekly-evolve skill (v0.1, written in Q08).
 
 ## Change note
 
 v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | register
 P2-05 and P2-04; dev-session record of 2026-09-27, turns 1, 4 and 5 | Joe's
 default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the weekly-evolve skill v0.1 | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)

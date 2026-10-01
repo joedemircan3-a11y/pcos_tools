@@ -27,7 +27,7 @@ PLANNED_LANES = [
     "intake-email", "weekly-evolve", "knowledge-extract", "knowledge-review",
     "knowledge-chair",
 ]
-FIRST_SKILLS = ["checker", "prediction-ledger", "exo"]
+SKILLS_WRITTEN = ["checker", "prediction-ledger", "exo", "council-board", "intake-email", "weekly-evolve"]
 LABELS = ["Confirmed", "Candidate", "Needs Source Check", "Needs Thread Check",
           "Needs Joe Approval", "Blocked"]
 NOT_CARDS = {"CARD_TEMPLATE.md", "INPUTS.md", "_INDEX.md"}
@@ -122,8 +122,8 @@ def test_input_keys_are_unique_and_every_used_key_is_defined():
         assert not unknown, f"{path.relative_to(ROOT)} uses undefined keys {sorted(unknown)}"
 
 
-def test_first_three_skills_exist():
-    assert sorted(p.parent.name for p in skill_files()) == sorted(FIRST_SKILLS)
+def test_every_written_skill_is_present():
+    assert sorted(p.parent.name for p in skill_files()) == sorted(SKILLS_WRITTEN)
 
 
 @pytest.mark.parametrize("skill", skill_files(), ids=lambda p: p.parent.name)

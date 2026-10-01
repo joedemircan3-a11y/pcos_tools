@@ -1,10 +1,10 @@
 # Card: council-github
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-07 (on-demand council through a GitHub pull request: "@codex review", Gemini CLI Action on a free API key, a Claude Code Routine on the PR event chairs and writes Notion)
 - Lane ID: pending
-- Skills: none of its own yet; the chair uses the council-board skill (planned, queue item Q08). The PC council skill is P2-08.
+- Skills: none of its own yet; the chair uses [council-board v0.1](../skills/council-board/SKILL.md). The PC council skill is P2-08.
 - Date: 2026-10-01
 
 ## 1. Mission
@@ -105,3 +105,5 @@ limited to method and code work while the repository is public | register P2-07;
 dev-session record of 2026-09-27, turn 3, which assumed a private repository |
 Joe's default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1;
 Operating Card v7.4 WRITE PATHS
+
+v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the council-board skill v0.1 used by the chair | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)
