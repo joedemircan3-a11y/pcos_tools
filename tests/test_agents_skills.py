@@ -523,6 +523,32 @@ def test_github_council_row_is_bound_by_the_pull_request_link_not_the_title():
     assert "writes the pull request's link into the Council row's Draft field" in card
 
 
+def test_council_final_author_check_covers_the_github_council():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    council_final = " ".join(section(text, "## council-final").split())
+    assert "6. The reviewers worked from the Reviewer view (Author hidden)." not in council_final
+    assert "Board council: they worked from the Reviewer view" in council_final
+    assert "GitHub council: the pull request names no author model" in council_final
+    assert "No author model is named." in (AGENTS / "council-github.md").read_text(encoding="utf-8")
+
+
+def test_pricing_result_carries_exactly_one_evidence_label():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    pricing = " ".join(section(text, "## pricing-prep").split())
+    assert "labeled Candidate and Needs Joe Approval" not in pricing
+    assert "exactly one evidence label, Needs Joe Approval" in pricing
+    assert "never as a second label" in pricing
+    assert "exactly one label" in (AGENTS / "CARD_TEMPLATE.md").read_text(encoding="utf-8")
+
+
+def test_delta_checklist_reopens_the_cited_sources():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    delta = " ".join(section(text, "## delta").split())
+    assert "Required: the sources each line cites" in delta
+    assert "reopened in this run" in delta and "what changed is what the source shows" in delta
+    assert "that no source shows, fails" in delta
+
+
 @pytest.mark.parametrize("text", [
     "ABCDEF1234567890ABCDEF1234567890", "abcdef1234567890abcdef1234567890",
     "ABCDEF12-3456-7890-ABCD-EF1234567890", "abcdef12-3456-7890-abcd-ef1234567890",

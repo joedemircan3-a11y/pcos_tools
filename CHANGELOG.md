@@ -19,6 +19,19 @@ pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the w
 - Council-github card v0.3 and the `council-github-chair` Routine (step 3): the
   chair finds the Council row by the pull request's link in the row's Draft field,
   never by Task title; no bound row, or more than one, is Blocked.
+- Checker `council-final` check 6 covers the GitHub council: there the pull
+  request names no author model and neither reviewer drafted; the Reviewer view
+  applies to the board council only.
+- Checker `pricing-prep`: the result carries exactly one evidence label, Needs Joe
+  Approval; being a preparation is its status, not a second label.
+- Checker `delta`: the sources each line cites are required, reopened and
+  compared; a line that a source contradicts or no source shows fails.
+- Routines (Codex review of PR 2): L1-brief v0.4 resumes from the window end in
+  its last heartbeat, so mail beyond the 5-day cap is read by later runs and never
+  dropped; L2-render v0.3 keeps every open Needs Joe row on Today, however old;
+  council-github-chair v0.8 ends a council only on its own "Chair: Final", counts
+  only reviews of the current head, re-checks the head before writing, and
+  restores missing Changelog rows before replaying a Final.
 - Tests: one per fix, each failing on the old text.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)

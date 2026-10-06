@@ -82,6 +82,9 @@ source that justifies the change; the [[CHANGELOG]] row.
 
 A DELTA row in [[INBOX]] or a DELTA file in [[INBOX_FOLDER]].
 
+Required: the sources each line cites: the files, rows, commits or pull requests
+listed under what changed, and the authority named under why.
+
 1. All five fields are present: Task ID, what changed, why (reason and
    authority), next action, confidence. Files created are listed with title and
    ID.
@@ -90,6 +93,11 @@ A DELTA row in [[INBOX]] or a DELTA file in [[INBOX_FOLDER]].
    no-change file.
 4. The Why names its authority. A DELTA without a reason is not applied until
    the reason is recovered (L11).
+5. Each line matches its sources, reopened in this run: every file, row, commit
+   or pull request listed exists with that title and ID; what changed is what
+   the source shows; the authority says what the Why claims; the next action
+   follows from them. A line that a source contradicts, or that no source
+   shows, fails.
 
 ## question-card
 
@@ -146,8 +154,9 @@ the cost documents named on the task row; [[DECISIONS]] for rulings.
 3. Units are consistent (per piece, per area, per lot), and every conversion is
    shown.
 4. No component is counted twice when a price already bundles it.
-5. The result is labeled Candidate and Needs Joe Approval, and names the
-   approval step.
+5. The result carries exactly one evidence label, Needs Joe Approval (a price
+   is committing), and names the approval step. That it is still a preparation
+   is recorded as its status, never as a second label.
 6. Nothing is sent, quoted or entered in any system.
 
 ## research-raw
@@ -196,7 +205,10 @@ the Draft cites.
 4. Dissent records each disagreement that is still open.
 5. Needs Joe is used only for a factual disagreement that the kernel and the
    sources cannot settle.
-6. The reviewers worked from the Reviewer view (Author hidden).
+6. The reviewers did not see the author. Board council: they worked from the
+   Reviewer view (Author hidden). GitHub council: the pull request names no
+   author model (council-github card section 5), and neither reviewer is the
+   drafting model.
 
 ## rule-candidate
 
