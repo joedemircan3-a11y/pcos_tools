@@ -184,11 +184,14 @@ Required: the source behind the Source ID.
 
 The Final and Dissent of a Council row (board or GitHub council).
 
-Required: the [[COUNCIL]] row with both reviews; the sources the Draft cites.
+Required: the [[COUNCIL]] row with both reviews, or with one review when the
+chair decided after the full-cycle wait (council-board skill section 6); the
+sources the Draft cites.
 
 1. The plan round was Final before execution started.
 2. Both reviews are present, one finding per bullet, each with evidence and a
-   verdict.
+   verdict. After the full-cycle wait, one review is enough when Dissent says
+   "Review-N missing" for the other; it then meets the same standard.
 3. The chair answered each Fix or Reject finding: accepted, or rejected with a
    reason.
 4. Dissent records each disagreement that is still open.

@@ -1,6 +1,6 @@
 # Card: prediction-ledger
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-01 (prediction ledger: Prediction database, evidence check in the daily run, "What happened?" card, calibration block in the weekly pass)
 - Lane ID: pending
@@ -27,13 +27,16 @@ an answer.
   project-watch lanes. Until [[INBOX]] exists: the day's DELTA files in
   [[INBOX_FOLDER]].
 - L2, evidence for rows past their Check date, in this order, stopping at the
-  first conclusive evidence: [[MAIL_SENT]] (Joe's sent mail on the thread or
-  subject); later replies in [[MAIL_INBOX]] and [[MAIL_ROUTED]] (the terminal
-  message controls); the task row in [[WORKLIST]] (Status, Updated, Next
-  Action); [[CHANGELOG]] rows about the subject or Task ID.
+  first conclusive evidence: the row's whole conversation, Joe's sent mail in
+  [[MAIL_SENT]] with the replies in [[MAIL_INBOX]] and [[MAIL_ROUTED]] (the
+  terminal message controls; Joe's message counts only while it is terminal);
+  the row in [[WORKLIST]] with the item's Task ID
+  (Status, Updated, Next Action); [[CHANGELOG]] rows that name the Task ID or the
+  Source identity. Evidence is matched by the row's Source identity; a match by
+  subject alone counts only when it is unique (skill section 2).
 - L2, for Owner and Route: the routing section of [[KERNEL]] and the owner-map
   rows in [[RULES]]; until cutover, [[BRIEF_RULES]] sections B and I.
-- Knowledge scope: no domain folders. Mail is read only for subjects already in
+- Knowledge scope: no domain folders. Mail is read only for items already in
   [[PREDICTION]] or in the day's new items.
 
 ## 3. Tools allowed
@@ -118,7 +121,13 @@ v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | regist
 P2-01; design in the dev-session record of 2026-09-27, turn 5 | Joe's default
 acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
 
-v0.2 | 2026-10-06 | Claude Code on the web, queue item QC19 | "What happened?"
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | evidence is matched
+by the row's Source identity, not by subject, and mail is read as the whole
+conversation (Joe's sent message counts only while terminal) | two unrelated items
+with one subject could take each other's evidence, and a sent message could hide a
+later reply (Codex review of PR 1) | PCOS QUEUE_v4 item QC18
+
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC19 | "What happened?"
 questions go on the evening retro card; the backtest lane named | Joe's decision:
 evening = past questions (dev-session record of 2026-10-06, part 7, turn 21); the
 backtest loop of turn 20 | PCOS QUEUE_v4 item QC19

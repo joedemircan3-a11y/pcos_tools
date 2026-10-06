@@ -19,9 +19,9 @@ backtest.
 - The cut: the first inbound message that makes the thread an item, one that
   asks something of Joe or his front line and is not Route 1 noise by the
   kernel's Route 1 tests. A thread without such a message is skipped.
-- Outcome in the mail: after the cut, the evidence order of skill section 2
-  (Joe's sent mail, then later replies; the terminal message controls) reaches
-  a conclusive outcome: the ask was answered, done, declined or dropped, and it
+- Outcome in the mail: after the cut, the evidence of skill section 2 (Joe's
+  sent mail and the later replies, read as one conversation; the terminal
+  message controls) reaches a conclusive outcome: the ask was answered, done, declined or dropped, and it
   is visible who acted. Partial or no evidence: skip the thread.
 - Not scored before: the conversation ID is in no earlier run report.
 - Order: newest cut first. Stop at 200 threads per run.

@@ -34,8 +34,8 @@ there. Changed cards are bumped; skill versions stay 0.1.
 - `skills/checker/references/checklists.md`: the question-card checklist covers
   retro items (six tap options, the read-everything gate).
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 325 tests pass (was
-  285), 1 is skipped.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 40 new tests; with
+  pull request 2's latest fixes merged in, 358 pass and 1 is skipped.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
@@ -46,19 +46,31 @@ stay 0.1 because the skills are not released yet.
 
 - Golden set: the lane run now scores whether a lane's output satisfies Joe's
   correction; a separate checker run scores the checker on the case's Wrong
-  output. Before, a version that kept the defect passed and a version that fixed
-  it failed. Checker card v0.2; checker and weekly-evolve skills follow.
+  output and on known-good outputs, which it must Accept. Before, a version that
+  kept the defect passed and a version that fixed it failed. Checker card v0.2;
+  checker and weekly-evolve skills follow.
 - Prediction ledger: items match by identity (thread conversation ID, Inbox row
   ID, or DELTA file ID with the Task ID), never by subject, so two unrelated
-  items with one subject get two rows.
+  items with one subject get two rows. Evidence is matched the same way; a
+  subject-only match counts only when it is unique, and only as Candidate.
+  Mail is read as the whole conversation: Joe's sent message counts only while
+  it is the terminal message (prediction-ledger card v0.2). A row left with only
+  nonconclusive evidence after the extra wait is Parked, not stranded.
 - Prediction ledger: a Parked row is never asked again; new evidence or Joe's
   own action reopens it, and the weekly calibration re-checks Parked rows.
 - Knowledge chair card v0.2: Status Duplicate for claims a review finds to
   repeat an earlier row (needs the Status option in the Knowledge database).
+- Checker `council-final` checklist: one review is enough after the full-cycle
+  wait when Dissent names the missing review, so the documented fallback can
+  pass.
+- Knowledge-extract card v0.2: model fixed at Claude Sonnet, so the Claude
+  Review-2 (Opus) is never the extracting model.
 - `agents/INPUTS.md` v0.2: one key per domain folder, `KL_00` to `KL_07`;
   `KL_DOMAINS` is a group of those keys; `MAIL_ROUTED` documented as the one set.
-- Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`, and
-  one test per fix above. 200 tests pass, 1 is skipped.
+- Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`: every
+  run of the URL-safe alphabet with both cases and a digit fails, except a short
+  list of public folder names kept in the test. One test per fix above. 212 tests
+  pass, 1 is skipped.
 - Routines (Codex review of pull request 2, same queue item):
   - L1, L2 and L3 read their lane card (`agents/L1-brief.md` and so on) in
     LOAD once P2-19 writes it; L4 reads every card in its header and runs both
@@ -66,11 +78,22 @@ stay 0.1 because the skills are not released yet.
   - council-board chair: the Reviewed-2 arm needs both review fields, so a row
     with a missed Review-1 waits the full cycle of skill section 6.
   - council-github chair: a schedule every 2 hours runs the missing-review
-    fallback, which no event would otherwise wake.
+    fallback, which no event would otherwise wake. The fallback chairs only
+    with exactly one review; with none it files one Blocked Inbox row and a
+    scheduled run goes on to the next pull request. A pull request that
+    already has a Final is not chaired again.
+  - knowledge-extract: a claim is written only after a checker Accept, and the
+    Routine runs Claude Sonnet, apart from the Opus Review-2.
+  - council-board chair: the Final is written only after a checker Accept;
+    five failed rounds give Needs Joe.
+  - L3 Health: the stale-kernel check looks at the last 24 hours only.
+  - L1: a thread is skipped only when a row already has its current terminal
+    message; a newer terminal message gets a new row that names the earlier one.
   - prediction-ledger: a Parked row is never asked again.
   - Tests: every Routine prompt reads the cards in its header (except the
     anonymous Review-2), has a schedule and numbers its steps in order; the
-    chair's queue needs both reviews. 285 tests pass, 1 is skipped.
+    chair's queue needs both reviews. The public-name list adds the dispatch
+    file name the routines cite. 316 tests pass, 1 is skipped.
 
 ## Unreleased - 2026-10-01: agent cards and skills v0.1
 

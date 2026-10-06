@@ -34,7 +34,7 @@ SWEEP
 
 ROUTE
 7. Apply the kernel evaluation order to each item: Route 1 tests first (notification, marketing, system mail, Joe's own outbound, a thread whose last message is Joe's), then the Route 3 criteria, then Route 2 as the default. The owner comes from the owner-map rows in [[RULES]]. Credentials or payment-detail changes are Route 3 security items: name the thread, sender and date only, never the content.
-8. Write one [[INBOX]] row for each item that is not Route 1 noise: source (conversation ID), scope (business only; personal and Room 10 never), summary, route, owner and the criterion that fired, why, next action, confidence, evidence labels. Skip items that already have a row with the same conversation ID.
+8. Write one [[INBOX]] row for each item that is not Route 1 noise: source (conversation ID, and the ID and date of the terminal message you read), scope (business only; personal and Room 10 never), summary, route, owner and the criterion that fired, why, next action, confidence, evidence labels. Skip a thread only when an [[INBOX]] row already has the same conversation ID and the same terminal message. When the thread has a newer terminal message than its last row, route it again and write a new row that names the earlier row; never edit the earlier row.
 
 DRAFT DESK
 9. At most 5 drafts per run, none for Route 1.
@@ -59,3 +59,8 @@ v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | LOAD step 3 reads 
 agents/L1-brief.md once it exists; later steps renumbered | the prompt never loaded the card that
 P2-19 requires, so card changes could not reach the lane (Codex review of PR 2) | PCOS
 QUEUE_v4 item QC18
+
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18 | step 8 skips a thread only
+when a row already has its current terminal message; a newer terminal message gets a new
+row | skipping by conversation ID alone dropped new messages in threads seen before, which
+can change route, owner or draft (Codex review of PR 2) | PCOS QUEUE_v4 item QC18

@@ -52,20 +52,36 @@ A prediction is Candidate (Law 4).
 ## 2. Check: rows whose Check date has passed
 
 Look for what actually happened, in this order, and stop at the first
-conclusive evidence:
+conclusive evidence. Evidence belongs to a row through its Source identity (the
+conversation ID, the Task ID, or the source row or file ID), never through its
+subject:
 
-1. Sent mail: Joe's messages in [[MAIL_SENT]] on the thread or subject after
-   the source date.
+1. Sent mail: Joe's messages in [[MAIL_SENT]] after the source date, in the
+   row's conversation; for an item without a thread, messages that name its
+   Task ID.
 2. Thread replies: later messages in the same conversation in [[MAIL_INBOX]] and
-   [[MAIL_ROUTED]]. The terminal message controls (Law 3).
-3. Worklist: the task's row in [[WORKLIST]] (Status, Updated, Next Action).
-4. Changelog: [[CHANGELOG]] rows about the subject or Task ID.
+   [[MAIL_ROUTED]]. Read steps 1 and 2 together, as one conversation, before
+   deciding: the terminal message controls (Law 3). Joe's sent message is
+   conclusive only while it is still the terminal message; a later reply
+   decides instead.
+3. Worklist: the row in [[WORKLIST]] with the item's Task ID (Status, Updated,
+   Next Action).
+4. Changelog: [[CHANGELOG]] rows that name the Task ID or the Source identity.
+
+A message or row that matches only by subject counts only when the match is
+unique: no other [[PREDICTION]] row and no other thread in the window has that
+subject. Such a match is labeled Candidate in Actual and is never conclusive on
+its own.
 
 Write Actual: what happened, the evidence key and ID, the date, and a label.
 Use Confirmed when the evidence was opened in this run, and Needs Thread Check
 when the thread's terminal message could not be read. When the evidence is
 partial, set Status Checking and move the Check date 3 days later, once. After
-that the row is either scored or asked.
+that the row is scored on conclusive evidence, or asked when it is blind
+(section 3). A row that still has only nonconclusive evidence (partial, or a
+subject-only match) is set Parked, with that evidence in Actual labeled
+Candidate. It is not asked, because its subject has evidence; the weekly
+calibration re-checks it like every Parked row.
 
 ## 3. Ask only when blind
 
