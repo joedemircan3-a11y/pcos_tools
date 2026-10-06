@@ -19,7 +19,14 @@ pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the w
 - Council-github card v0.3: the chair finds the Council row by the pull request's
   link in the row's Draft field, never by Task title; no bound row, or more than
   one, is Blocked.
-- Tests: one per fix, each failing on the old text. 224 tests pass.
+- Checker `council-final` check 6 covers the GitHub council: there the pull
+  request names no author model and neither reviewer drafted; the Reviewer view
+  applies to the board council only.
+- Checker `pricing-prep`: the result carries exactly one evidence label, Needs Joe
+  Approval; being a preparation is its status, not a second label.
+- Checker `delta`: the sources each line cites are required, reopened and
+  compared; a line that a source contradicts or no source shows fails.
+- Tests: one per fix, each failing on the old text. 227 tests pass.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1)
 
