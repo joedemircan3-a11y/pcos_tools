@@ -13,15 +13,19 @@ stay 0.1 because the skills are not released yet.
   it failed. Checker card v0.2; checker and weekly-evolve skills follow.
 - Prediction ledger: items match by identity (thread conversation ID, Inbox row
   ID, or DELTA file ID with the Task ID), never by subject, so two unrelated
-  items with one subject get two rows.
+  items with one subject get two rows. Evidence is matched the same way; a
+  subject-only match counts only when it is unique, and only as Candidate
+  (prediction-ledger card v0.2).
 - Prediction ledger: a Parked row is never asked again; new evidence or Joe's
   own action reopens it, and the weekly calibration re-checks Parked rows.
 - Knowledge chair card v0.2: Status Duplicate for claims a review finds to
   repeat an earlier row (needs the Status option in the Knowledge database).
 - `agents/INPUTS.md` v0.2: one key per domain folder, `KL_00` to `KL_07`;
   `KL_DOMAINS` is a group of those keys; `MAIL_ROUTED` documented as the one set.
-- Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`, and
-  one test per fix above. 200 tests pass, 1 is skipped.
+- Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`: every
+  run of the URL-safe alphabet with both cases and a digit fails, except a short
+  list of public folder names kept in the test. One test per fix above. 210 tests
+  pass, 1 is skipped.
 
 ## Unreleased - 2026-10-01: agent cards and skills v0.1
 

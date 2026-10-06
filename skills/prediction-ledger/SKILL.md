@@ -52,14 +52,23 @@ A prediction is Candidate (Law 4).
 ## 2. Check: rows whose Check date has passed
 
 Look for what actually happened, in this order, and stop at the first
-conclusive evidence:
+conclusive evidence. Evidence belongs to a row through its Source identity (the
+conversation ID, the Task ID, or the source row or file ID), never through its
+subject:
 
-1. Sent mail: Joe's messages in [[MAIL_SENT]] on the thread or subject after
-   the source date.
+1. Sent mail: Joe's messages in [[MAIL_SENT]] after the source date, in the
+   row's conversation; for an item without a thread, messages that name its
+   Task ID.
 2. Thread replies: later messages in the same conversation in [[MAIL_INBOX]] and
    [[MAIL_ROUTED]]. The terminal message controls (Law 3).
-3. Worklist: the task's row in [[WORKLIST]] (Status, Updated, Next Action).
-4. Changelog: [[CHANGELOG]] rows about the subject or Task ID.
+3. Worklist: the row in [[WORKLIST]] with the item's Task ID (Status, Updated,
+   Next Action).
+4. Changelog: [[CHANGELOG]] rows that name the Task ID or the Source identity.
+
+A message or row that matches only by subject counts only when the match is
+unique: no other [[PREDICTION]] row and no other thread in the window has that
+subject. Such a match is labeled Candidate in Actual and is never conclusive on
+its own.
 
 Write Actual: what happened, the evidence key and ID, the date, and a label.
 Use Confirmed when the evidence was opened in this run, and Needs Thread Check
