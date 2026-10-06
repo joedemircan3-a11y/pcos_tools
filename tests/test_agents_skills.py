@@ -251,7 +251,10 @@ def test_golden_set_lane_run_scores_the_output_and_the_checker_is_scored_apart()
     lane_run = " ".join(section(text, "### Lane run: scores a lane version").split())
     assert "satisfies Joe's correction" in lane_run
     assert "checker raises" not in lane_run
-    assert "raises the defect" in section(text, "### Checker run: scores a checker version")
+    checker_run = " ".join(section(text, "### Checker run: scores a checker version").split())
+    assert "raises the defect" in checker_run
+    assert "known-good outputs" in checker_run and "passes when the checker gives Accept" in checker_run
+    assert "clean half drops fails" in " ".join(section(text, "### Scores").split())
     assert "never added together" in section(text, "### Scores")
 
 
@@ -269,6 +272,8 @@ def test_prediction_evidence_matches_the_source_identity():
     for text in (check, card):
         assert "thread or subject" not in text and "about the subject" not in text
     assert "Source identity" in check and "unique" in check
+    assert "conclusive only while it is still the terminal message" in check
+    assert "counts only while it is terminal" in card
 
 
 def test_parked_prediction_rows_are_never_asked_again():

@@ -30,7 +30,8 @@ a vendor, promotes canon or deletes.
   [[MAIL_ROUTED]] or [[MAIL_SENT]]; the task row in [[WORKLIST]]; the Rules rows
   that apply in [[RULES]]; [[DECISIONS]] for re-asked questions; [[CORRECTIONS]]
   rows with the same pattern; [[CANON]] until rules are rows.
-- L2, weekly eval: [[GOLDEN_SET]].
+- L2, weekly eval: [[GOLDEN_SET]]; for the checker run's clean half, outputs
+  Joe used unedited ([[PREDICTION]], [[CORRECTIONS]]).
 - Knowledge scope: exactly the generator card's scope. The checker never widens
   a lane's scope.
 
@@ -78,8 +79,8 @@ a vendor, promotes canon or deletes.
   sixth round, becomes one Needs Joe card item with the open findings.
 - Eval: the weekly [[GOLDEN_SET]] runs in the skill. The lane run scores each
   lane's output: it passes when the output satisfies Joe's correction. The
-  checker run scores this lane: it passes when the checker raises the defect in
-  the case's Wrong output. Pass rates per category (routing, drafting, pricing,
+  checker run scores this lane in two halves: it must raise the defect in the
+  case's Wrong output, and it must Accept known-good outputs. Pass rates per category (routing, drafting, pricing,
   sources, re-asking, formatting) go to the weekly-evolve lane, one set per run.
 
 ## 6. Trigger and owner model
@@ -105,6 +106,7 @@ default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
 
 v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | Eval: the golden-set
 lane run scores whether the lane's output satisfies Joe's correction; the checker
-run scores the checker separately | the old criterion passed a version that kept
-the defect and failed one that fixed it (Codex review of PR 1) | PCOS QUEUE_v4
-item QC18
+run scores the checker separately, on Wrong outputs and on known-good outputs | the
+old criterion passed a version that kept the defect and failed one that fixed it,
+and a checker that failed everything would have scored perfectly (Codex review of
+PR 1) | PCOS QUEUE_v4 item QC18

@@ -27,9 +27,10 @@ an answer.
   project-watch lanes. Until [[INBOX]] exists: the day's DELTA files in
   [[INBOX_FOLDER]].
 - L2, evidence for rows past their Check date, in this order, stopping at the
-  first conclusive evidence: [[MAIL_SENT]] (Joe's sent mail in the row's
-  conversation); later replies in [[MAIL_INBOX]] and [[MAIL_ROUTED]] (the
-  terminal message controls); the row in [[WORKLIST]] with the item's Task ID
+  first conclusive evidence: the row's whole conversation, Joe's sent mail in
+  [[MAIL_SENT]] with the replies in [[MAIL_INBOX]] and [[MAIL_ROUTED]] (the
+  terminal message controls; Joe's message counts only while it is terminal);
+  the row in [[WORKLIST]] with the item's Task ID
   (Status, Updated, Next Action); [[CHANGELOG]] rows that name the Task ID or the
   Source identity. Evidence is matched by the row's Source identity; a match by
   subject alone counts only when it is unique (skill section 2).
@@ -117,6 +118,7 @@ P2-01; design in the dev-session record of 2026-09-27, turn 5 | Joe's default
 acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
 
 v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | evidence is matched
-by the row's Source identity, not by subject | two unrelated items with one subject
-could take each other's evidence and corrupt the score (Codex review of PR 1) |
-PCOS QUEUE_v4 item QC18
+by the row's Source identity, not by subject, and mail is read as the whole
+conversation (Joe's sent message counts only while terminal) | two unrelated items
+with one subject could take each other's evidence, and a sent message could hide a
+later reply (Codex review of PR 1) | PCOS QUEUE_v4 item QC18
