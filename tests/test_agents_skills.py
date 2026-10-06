@@ -362,3 +362,17 @@ def test_council_chair_finalizes_reviewed_2_rows_only_with_both_reviews():
     prompt = routine_prompt((ROUTINES / "council-board-chair.md").read_text(encoding="utf-8"))
     queue = next(line for line in prompt.splitlines() if line.startswith("3. Queue:"))
     assert "Status Reviewed-2 and both Review-1 and Review-2 written" in queue
+
+
+def test_brief_keeps_new_messages_in_known_threads():
+    prompt = routine_prompt((ROUTINES / "L1-brief.md").read_text(encoding="utf-8"))
+    assert "same conversation ID and the same terminal message" in prompt
+    assert "Skip items that already have a row with the same conversation ID." not in prompt
+
+
+def test_github_chair_never_chairs_without_a_review():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    fallback = next(line for line in prompt.splitlines() if line.startswith("2. Find the two reviews"))
+    assert "If exactly one is still missing" in fallback and "If both are missing" in fallback
+    assert "never chair" in fallback
+
