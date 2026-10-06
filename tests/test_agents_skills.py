@@ -306,3 +306,44 @@ def test_pull_request_template_has_the_review_checklist():
     text = PR_TEMPLATE.read_text(encoding="utf-8")
     for item in CHECKLIST:
         assert f"- [ ] **{item}.**" in text
+
+
+# The anonymous Review-2 works from the reviewer prompt and the Reviewer view
+# only: the council-board card names the drafting model, so it never loads it.
+ANONYMOUS_REVIEWERS = {"council-board-review-2"}
+
+
+def routine_prompt(text):
+    return re.search(r"^```text\n(.*?)^```$", text, re.M | re.S).group(1)
+
+
+def header_line(text, field):
+    return re.search(rf"^- {field}: (.*)$", text, re.M).group(1)
+
+
+@pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
+def test_routine_prompt_loads_the_cards_in_its_header(routine):
+    text = routine.read_text(encoding="utf-8")
+    cards = re.findall(r"agents/[\w.-]+\.md", header_line(text, "Card"))
+    assert cards, "the Card line names no card file"
+    if routine.stem not in ANONYMOUS_REVIEWERS:
+        prompt = routine_prompt(text)
+        for card in cards:
+            assert card in prompt, f"the prompt never reads {card}"
+
+
+@pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
+def test_routine_has_a_schedule_so_a_waiting_run_is_picked_up(routine):
+    assert "cron `" in header_line(routine.read_text(encoding="utf-8"), "Trigger")
+
+
+@pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
+def test_routine_prompt_steps_are_numbered_in_order(routine):
+    steps = re.findall(r"^(\d+)\. ", routine_prompt(routine.read_text(encoding="utf-8")), re.M)
+    assert [int(n) for n in steps] == list(range(1, len(steps) + 1))
+
+
+def test_council_chair_finalizes_reviewed_2_rows_only_with_both_reviews():
+    prompt = routine_prompt((ROUTINES / "council-board-chair.md").read_text(encoding="utf-8"))
+    queue = next(line for line in prompt.splitlines() if line.startswith("3. Queue:"))
+    assert "Status Reviewed-2 and both Review-1 and Review-2 written" in queue

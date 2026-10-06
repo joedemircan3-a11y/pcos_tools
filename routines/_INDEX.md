@@ -23,7 +23,7 @@ One line per file, using the PCOS index convention (P2-12): title | ID | what | 
 | L2 Render | routines/L2-render.md | Daily 07:15: Today page from rows; mirrors only after cutover | 2026-10-01 | Candidate | Build day; changing Today |
 | L3 Health | routines/L3-health.md | Daily 07:30: missed runs, stale kernel, old Inbox rows, REASON-MISSING, naming, governance count | 2026-10-01 | Candidate | Build day; a lane goes quiet |
 | L4 Weekly | routines/L4-weekly.md | Sunday 15:00 UTC: calibration, golden-set eval, weekly-evolve, knowledge chair later | 2026-10-01 | Candidate | Build day; rule and skill evolution |
-| council-github chair | routines/council-github-chair.md | GitHub PR events: chairs council PRs only, writes Final and Dissent to the PR and the Council row | 2026-10-01 | Candidate | PC-1 step 4 (P2-07) |
+| council-github chair | routines/council-github-chair.md | GitHub PR events, plus a run every 2 hours for the missing-review fallback: chairs council PRs only, writes Final and Dissent to the PR and the Council row | 2026-10-06 | Candidate | PC-1 step 4 (P2-07) |
 | prediction-ledger | routines/prediction-ledger.md | Weekdays 07:45: predict, check, ask when blind, score | 2026-10-01 | Candidate | Build day plus three Brief runs |
 | exo | routines/exo.md | 07:00, 13:00, 19:00 America/Matamoros: one card a slot, answers filed, skip rule | 2026-10-01 | Candidate | Build day |
 | council-board Draft | routines/council-board-draft.md | Daily 08:00: drafts queued Council rows, plan round first | 2026-10-01 | Candidate | Build day |

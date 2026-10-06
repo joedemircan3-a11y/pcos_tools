@@ -23,7 +23,7 @@ LOAD
 2. Read agents/council-board.md, skills/council-board/SKILL.md and the chair prompt in skills/council-board/references/prompts.md. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 
 RUN
-3. Queue: [[COUNCIL]] rows with Status Reviewed-2, and rows whose Deadline has passed with one review missing for a full cycle (skill section 6).
+3. Queue: [[COUNCIL]] rows with Status Reviewed-2 and both Review-1 and Review-2 written; and rows whose Deadline has passed with one review still missing a full cycle later (skill section 6). A row with an empty review field waits for that second condition, whatever its Status.
 4. For each row, read it right before writing, then run the chair prompt: answer every Fix or Reject finding, write Final and Dissent, and set Status Final or Needs Joe.
 5. Run the checker (job type council-final) on each Final, on a different model. On Fix, repair and re-check (at most 5 rounds).
 6. When a plan row ("TITLE · plan") becomes Final, create its execution row: Task "TITLE · execution", Status Draft, Deadline the next cycle's chair time. The 08:00 Draft stage picks it up.
@@ -43,3 +43,8 @@ END
 v0.1 | 2026-10-01 | Claude Code on the web, queue item QC13 | first version; step 6 names
 the chair as the creator of the execution row, which the skill v0.1 leaves open | skill of
 queue item Q08; register P2-06 | PCOS QUEUE_v2 item QC13
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | the Reviewed-2 arm of the queue
+needs both review fields | Review-2 sets Reviewed-2 even when Review-1 was missed, so the chair
+finalized such rows at once instead of waiting the full cycle of skill section 6 (Codex review
+of PR 2) | PCOS QUEUE_v4 item QC18

@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased - 2026-10-06: Codex review fixes (PR 1)
+## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
 Why: PCOS queue item QC18 (QUEUE_v4) applies the six Codex review suggestions on
 pull request 1, recorded at PC-1 (DELTA_PC-1 step B3). Built by Claude (Claude
@@ -22,6 +22,18 @@ stay 0.1 because the skills are not released yet.
   `KL_DOMAINS` is a group of those keys; `MAIL_ROUTED` documented as the one set.
 - Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`, and
   one test per fix above. 200 tests pass, 1 is skipped.
+- Routines (Codex review of pull request 2, same queue item):
+  - L1, L2 and L3 read their lane card (`agents/L1-brief.md` and so on) in
+    LOAD once P2-19 writes it; L4 reads every card in its header and runs both
+    golden-set runs.
+  - council-board chair: the Reviewed-2 arm needs both review fields, so a row
+    with a missed Review-1 waits the full cycle of skill section 6.
+  - council-github chair: a schedule every 2 hours runs the missing-review
+    fallback, which no event would otherwise wake.
+  - prediction-ledger: a Parked row is never asked again.
+  - Tests: every Routine prompt reads the cards in its header (except the
+    anonymous Review-2), has a schedule and numbers its steps in order; the
+    chair's queue needs both reviews. 285 tests pass, 1 is skipped.
 
 ## Unreleased - 2026-10-01: agent cards and skills v0.1
 
