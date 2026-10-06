@@ -50,6 +50,10 @@ Two kinds of candidate:
    in [[STEPS]], identified by Task ID. Active rows are today's work and
    EXO's.
 
+A thread and a Worklist row that concern the same ask (the row's sources name
+the thread, or the thread names the Task ID) are one gap with both identities:
+one question, filed under both (section 6), excluded when either identity is.
+
 A candidate is a gap only when the record shows no closure evidence:
 
 - no final reply: the terminal message (Law 3) leaves the ask open;
@@ -153,8 +157,8 @@ the size of the backlog or a count of open gaps.
 
 Build the page from [[CAL_TEMPLATE]] by [[CAL_STANDARD]]. Add one Open row to
 [[DECISIONS]] for the card: link, each item with every identity it covers (the
-conversation ID or Task ID of each thread; a class item covers 2 to 5), due
-the next evening.
+conversation ID or Task ID of each gap, both for a linked thread and Worklist
+row; a class item covers 2 to 5 gaps), due the next evening.
 
 ## 6. File the answers
 
@@ -162,9 +166,10 @@ At the start of the next run, before the new card. Ledger items are filed by
 the prediction-ledger skill section 3, into their own rows. For each retro
 item, in this order:
 
-1. Prediction rows, one per identity. A retro item covers one identity (the
-   conversation ID, else the Task ID or source row ID); a class item covers
-   one per thread. For every identity, find the [[PREDICTION]] row with it in
+1. Prediction rows, one per identity. A retro item covers the identities of
+   its gap (the conversation ID, else the Task ID or source row ID; both for a
+   linked thread and Worklist row); a class item covers those of each of its
+   gaps. For every identity, find the [[PREDICTION]] row with it in
    Source, and create one if none: Subject (at most 12 words), Source (the
    identity), Actual, Status. Steps 2 to 5 apply to each identity. A thread
    that Joe's note names as an exception gets the answer the note gives it;

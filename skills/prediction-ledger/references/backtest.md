@@ -39,8 +39,9 @@ output, Assumptions, Confidence), from the messages up to the cut only.
   Changelog row written after the cut, no owner assignment made after the cut,
   and no outcome reaches the predictor.
 - The owner map as it stood at the cut: start from the owner-map rows in
-  [[RULES]] and undo every change dated after the cut, using the before value
-  that its [[CHANGELOG]] row records. A row that was Live at the cut counts
+  [[RULES]] and undo every change dated after the cut, newest first, using the
+  before value that its [[CHANGELOG]] row records (for A to B to C, undoing C
+  then B leaves A). A row that was Live at the cut counts
   even if it is Retired now; a row created after the cut does not. When a
   change after the cut has no recorded before value, skip the thread and note
   it in the run report: a map that cannot be rebuilt would leak the later

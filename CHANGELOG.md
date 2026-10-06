@@ -47,9 +47,12 @@ there. Changed cards are bumped; skill versions stay 0.1.
   identity too, so no subject-based veto is left; at three skips the
   last-chance "Keep this open, or let it go?" item is shown before any row
   parks the gap (a Parked row would have hidden it).
+- Codex review, round 4: the backtest undoes owner-map changes newest first;
+  a thread and the Worklist row that names it are one gap with both
+  identities, never two questions.
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 50 new tests; with
-  pull request 2's latest fixes merged in, 375 pass and 1 is skipped.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 52 new tests; with
+  pull request 2's latest fixes merged in, 377 pass and 1 is skipped.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 

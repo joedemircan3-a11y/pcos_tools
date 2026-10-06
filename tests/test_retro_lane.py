@@ -218,3 +218,14 @@ def test_the_last_chance_item_is_shown_before_any_row_parks_it():
     skips = flat(section(read(RETRO_SKILL), "## 7. Skip rule (as EXO)"))
     assert skips.index("Keep this open, or let it go?") < skips.index("Status Parked")
     assert "before any row is written" in skips
+
+
+def test_backtest_undoes_owner_changes_newest_first():
+    method = flat(section(read(BACKTEST), "## 2. Predict blind"))
+    assert "undo every change dated after the cut, newest first" in method
+
+
+def test_a_thread_and_its_worklist_row_are_one_gap():
+    gaps = flat(section(read(RETRO_SKILL), "## 2. Find the gaps"))
+    assert "are one gap with both identities" in gaps
+    assert "excluded when either identity is" in gaps
