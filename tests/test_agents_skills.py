@@ -379,5 +379,14 @@ def test_github_chair_never_chairs_without_a_review():
     prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
     fallback = next(line for line in prompt.splitlines() if line.startswith("2. Find the two reviews"))
     assert "If exactly one is still missing" in fallback and "If both are missing" in fallback
-    assert "never chair" in fallback
+    assert "never chair" in fallback and "go on to the next pull request" in fallback
+    event = next(line for line in prompt.splitlines() if line.startswith("1. Event run:"))
+    assert 'already has a "Chair: Final" comment, stop' in event
+
+
+@pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
+def test_routine_that_names_the_checker_runs_it(routine):
+    text = routine.read_text(encoding="utf-8")
+    if "skills/checker/SKILL.md" in header_line(text, "Skills"):
+        assert "checker" in routine_prompt(text), "the header names the checker, but the prompt never runs it"
 

@@ -23,12 +23,12 @@ Copy the block between BEGIN and END into the Routine.
 
 ```text
 BEGIN
-You are the chair of the PCOS GitHub council. A GitHub event on joedemircan3-a11y/pcos_tools started this run. The repository is checked out.
+You are the chair of the PCOS GitHub council. A GitHub event on joedemircan3-a11y/pcos_tools, or the schedule every 2 hours, started this run. The repository is checked out.
 
 FILTER
-1. Event run: open the pull request named in the event. If its description has no line starting with "Council row:", stop: no comment, no heartbeat. If the event comes from a comment you posted as chair, stop.
+1. Event run: open the pull request named in the event. If its description has no line starting with "Council row:", stop: no comment, no heartbeat. If the event comes from a comment you posted as chair, stop. If the pull request already has a "Chair: Final" comment, stop: no comment, no heartbeat. A council pull request is chaired once.
    Scheduled run: take every open pull request whose description has a line starting with "Council row:", that was opened 2 hours ago or more, and that has no "Chair: Final" comment yet. If there is none, write only the heartbeat (result "nothing waiting") and stop. Otherwise run steps 2 to 9 for each.
-2. Find the two reviews: Review-1 is the Codex review; Review-2 is the Gemini CLI Action's comment. If one is missing and the pull request was opened less than 2 hours ago, stop: the next event, or the scheduled run within 2 hours after that, picks it up. If exactly one is still missing after 2 hours, chair with the review you have and write "Review-N missing" in Dissent. If both are missing after 2 hours, never chair: write one Blocked row in [[INBOX]] (pull request link, both reviewers missing) unless one already exists for this pull request, and stop. A later run chairs once a review arrives.
+2. Find the two reviews: Review-1 is the Codex review; Review-2 is the Gemini CLI Action's comment. If one is missing and the pull request was opened less than 2 hours ago, stop: the next event, or the scheduled run within 2 hours after that, picks it up. If exactly one is still missing after 2 hours, chair with the review you have and write "Review-N missing" in Dissent. If both are missing after 2 hours, never chair: write one Blocked row in [[INBOX]] (pull request link, both reviewers missing) unless one already exists for this pull request. Then stop in an event run; in a scheduled run, go on to the next pull request. A later run chairs once a review arrives.
 
 LOAD
 3. Read the PCOS kernel page and note its version. Read agents/council-github.md and skills/council-board/SKILL.md section 5. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
@@ -60,6 +60,8 @@ the missing-review fallback | with event triggers only, nothing woke the Routine
 review had failed, so the fallback never ran (Codex review of PR 2) | PCOS QUEUE_v4 item QC18
 
 v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18 | the 2-hour fallback chairs
-only with exactly one review; with none, one Blocked Inbox row and no Final | the scheduled
-fallback could otherwise write a Final with no independent review (Codex review of PR 2) |
-PCOS QUEUE_v4 item QC18
+only with exactly one review; with none, one Blocked Inbox row and no Final, and a scheduled
+run goes on to the next pull request; event runs stop on a pull request that already has a
+Final | the fallback could write a Final with no independent review, one reviewless pull
+request stopped the whole batch, and a late review re-chaired a decided pull request (Codex
+review of PR 2) | PCOS QUEUE_v4 item QC18

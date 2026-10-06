@@ -36,14 +36,17 @@ stay 0.1 because the skills are not released yet.
     with a missed Review-1 waits the full cycle of skill section 6.
   - council-github chair: a schedule every 2 hours runs the missing-review
     fallback, which no event would otherwise wake. The fallback chairs only
-    with exactly one review; with none it files one Blocked Inbox row.
+    with exactly one review; with none it files one Blocked Inbox row and a
+    scheduled run goes on to the next pull request. A pull request that
+    already has a Final is not chaired again.
+  - knowledge-extract: a claim is written only after a checker Accept.
   - L1: a thread is skipped only when a row already has its current terminal
     message; a newer terminal message gets a new row that names the earlier one.
   - prediction-ledger: a Parked row is never asked again.
   - Tests: every Routine prompt reads the cards in its header (except the
     anonymous Review-2), has a schedule and numbers its steps in order; the
     chair's queue needs both reviews. The public-name list adds the dispatch
-    file name the routines cite. 298 tests pass, 1 is skipped.
+    file name the routines cite. 311 tests pass, 1 is skipped.
 
 ## Unreleased - 2026-10-01: agent cards and skills v0.1
 
