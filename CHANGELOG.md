@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1)
+## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1 and PR 2)
 
 Why: PCOS queue item QC18-R (QUEUE_v6) fixes the four Codex findings left open on
 pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the web).
@@ -16,9 +16,9 @@ pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the w
 - Checker `knowledge-claim` checklist: an inferred claim passes when it is labeled
   Candidate and follows from the source, matching the knowledge-extract card; an
   inferred claim labeled Confirmed fails.
-- Council-github card v0.3: the chair finds the Council row by the pull request's
-  link in the row's Draft field, never by Task title; no bound row, or more than
-  one, is Blocked.
+- Council-github card v0.3 and the `council-github-chair` Routine (step 3): the
+  chair finds the Council row by the pull request's link in the row's Draft field,
+  never by Task title; no bound row, or more than one, is Blocked.
 - Checker `council-final` check 6 covers the GitHub council: there the pull
   request names no author model and neither reviewer drafted; the Reviewer view
   applies to the board council only.
@@ -33,12 +33,20 @@ pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the w
   the GitHub council has no plan round.
 - Checker `research-raw`: the cited sources are required and opened by URL; each
   claim and quote must match an opened source.
+- Routines (Codex review of PR 2): L1-brief v0.4 resumes from the window end in
+  its last heartbeat, so mail beyond the 5-day cap is read by later runs and never
+  dropped; L2-render v0.4 keeps every open Needs Joe row on Today, however old, and
+  links the rest in the Inbox when they do not fit in 12 lines;
+  council-github-chair v0.9 ends a council only on its own "Chair: Final", counts
+  only reviews tied to the current head commit (Codex by commit, Gemini by its
+  Action run), re-checks the head before writing and again before posting, and
+  restores missing Changelog rows before replaying a Final.
 - Tests: the private-ID guard also flags runs of 25 characters or more with two of
   the three character classes, or with no "-" or "_" (Drive IDs are 28 or more), so
-  an ID without a digit or without mixed case is caught; two public names join the
-  reviewed list. One test per fix, each failing on the old text. 237 tests pass.
+  an ID without a digit or without mixed case is caught; public names on the
+  reviewed list stay allowed. One test per fix, each failing on the old text.
 
-## Unreleased - 2026-10-06: Codex review fixes (PR 1)
+## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
 Why: PCOS queue item QC18 (QUEUE_v4) applies the six Codex review suggestions on
 pull request 1, recorded at PC-1 (DELTA_PC-1 step B3). Built by Claude (Claude
@@ -78,6 +86,38 @@ stay 0.1 because the skills are not released yet.
   run of the URL-safe alphabet with both cases and a digit fails, except a short
   list of public folder names kept in the test. Notion IDs and UUIDs are caught
   in upper or lower case. One test per fix above. 219 tests pass, 1 is skipped.
+- Routines (Codex review of pull request 2, same queue item):
+  - L1, L2 and L3 read their lane card (`agents/L1-brief.md` and so on) in
+    LOAD once P2-19 writes it; L4 reads every card in its header and runs both
+    golden-set runs.
+  - council-board chair: the Reviewed-2 arm needs both review fields, so a row
+    with a missed Review-1 waits the full cycle of skill section 6.
+  - council-github chair: a schedule every 2 hours runs the missing-review
+    fallback, which no event would otherwise wake. The fallback chairs only
+    with exactly one review; with none it files one Blocked Inbox row and a
+    scheduled run goes on to the next pull request. A pull request that
+    already has a Final is not chaired again.
+  - knowledge-extract: a claim is written only after a checker Accept, and the
+    Routine runs Claude Sonnet, apart from the Opus Review-2.
+  - council-board chair: the Final is written only after a checker Accept;
+    after five failed rounds the row keeps its Status and Joe gets one card
+    item (Needs Joe stays for factual disagreements). The council-github
+    chair runs the same check before it posts a Final, with the pull
+    request's reviews as the checklist's reviews; it writes and reads back
+    the Council row before posting, and repairs a run that failed in between
+    (same head commit only). It acts only on pull requests from the
+    repository owner's account on a branch of this repository that are bound
+    to their Council row, and it loads the key map before any Notion access.
+  - Every Routine that names the checker loads `skills/checker/SKILL.md`
+    (council-board chair, exo, intake-email, prediction-ledger added).
+  - L3 Health: the stale-kernel check looks at the last 24 hours only.
+  - L1: a thread is skipped only when a row already has its current terminal
+    message; a newer terminal message gets a new row that names the earlier one.
+  - prediction-ledger: a Parked row is never asked again.
+  - Tests: every Routine prompt reads the cards in its header (except the
+    anonymous Review-2), has a schedule and numbers its steps in order; the
+    chair's queue needs both reviews. The public-name list adds the dispatch
+    file name the routines cite. 325 tests pass, 1 is skipped.
 
 ## Unreleased - 2026-10-01: agent cards and skills v0.1
 
@@ -116,6 +156,21 @@ Claude (Claude Code on the web, session_01Urw9UiZSQ2c6DofLwbgk1t). The
     numbers.
   The four cards that use these skills link them and moved to v0.2. 182 tests
   pass, 1 is skipped.
+- Queue item QC13 (register P2-07, P2-19), in its own pull request
+  "repo-structure-v0.1", stacked on this one:
+  - The README now opens with what the repository holds and how PCOS points
+    here. The toolkit manual follows, unchanged.
+  - `routines/` holds 13 paste-ready Routine prompts, one file each:
+    L1 Brief, L2 Render, L3 Health, L4 Weekly, the council-github chair,
+    prediction-ledger, exo, the three council-board stages, intake-email,
+    and two knowledge Routines that are blocked until their skills exist.
+    Each prompt is a loader (kernel, then card, then skill, then key map).
+    `_INDEX.md` also lists the scheduled lanes that are not Claude Routines.
+  - `.github/pull_request_template.md` carries the review checklist: six-part
+    card, sources by ID, evidence labels, no pricing commitment, no external
+    send, no business data, tests.
+  - Tests cover the Routine format and the checklist: 227 pass, 1 is skipped.
+    The zip also ships `routines/` and `.github/`.
 
 ## 0.3.0 - 2026-09-25
 

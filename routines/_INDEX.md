@@ -1,0 +1,48 @@
+# routines/_INDEX.md
+
+Paste-ready prompts for the planned Claude Code Routines: one file per Routine.
+PC-1 (step 4) and build day create them from here. Each prompt is a loader: it reads
+the kernel, then the lane's card in `agents/` and its skill in `skills/`, and
+resolves source keys through the kernel's "Where things are" table. Until the kernel
+holds that table, keys resolve through the private Drive map. Lane logic lives in
+the cards and skills, so a Routine prompt rarely changes.
+
+Times: Mexico City time unless stated otherwise. The session that creates a Routine
+may shift a minute value by a few minutes to avoid the top-of-hour load, but it must
+keep the order of dependent lanes (L1, then L2 and L3, then prediction-ledger; the
+council at 08:00, 09:00, 09:30 and 10:00).
+
+One line per file, using the PCOS index convention (P2-12): title | ID | what | date
+| status | open when.
+
+## Claude Code Routines (files in this folder)
+
+| Title | ID | What | Date | Status | Open when |
+| --- | --- | --- | --- | --- | --- |
+| L1 Brief | routines/L1-brief.md | Weekdays 06:30: sweep, route, Inbox rows, at most 5 checked drafts, never send | 2026-10-01 | Candidate | Build day; changing the brief |
+| L2 Render | routines/L2-render.md | Daily 07:15: Today page from rows; mirrors only after cutover | 2026-10-01 | Candidate | Build day; changing Today |
+| L3 Health | routines/L3-health.md | Daily 07:30: missed runs, stale kernel, old Inbox rows, REASON-MISSING, naming, governance count | 2026-10-01 | Candidate | Build day; a lane goes quiet |
+| L4 Weekly | routines/L4-weekly.md | Sunday 15:00 UTC: calibration, golden-set eval, weekly-evolve, knowledge chair later | 2026-10-01 | Candidate | Build day; rule and skill evolution |
+| council-github chair | routines/council-github-chair.md | GitHub PR events, plus a run every 2 hours for the missing-review fallback: chairs council PRs only, writes Final and Dissent to the PR and the Council row | 2026-10-06 | Candidate | PC-1 step 4 (P2-07) |
+| prediction-ledger | routines/prediction-ledger.md | Weekdays 07:45: predict, check, ask when blind, score | 2026-10-01 | Candidate | Build day plus three Brief runs |
+| exo | routines/exo.md | 07:00, 13:00, 19:00 America/Matamoros: one card a slot, answers filed, skip rule | 2026-10-01 | Candidate | Build day |
+| council-board Draft | routines/council-board-draft.md | Daily 08:00: drafts queued Council rows, plan round first | 2026-10-01 | Candidate | Build day |
+| council-board Review-2 | routines/council-board-review-2.md | Daily 09:30: anonymous Review-2 (Claude until Gemini) | 2026-10-01 | Candidate | Build day |
+| council-board chair | routines/council-board-chair.md | Daily 10:00: Final, Dissent, Status; creates execution rows | 2026-10-01 | Candidate | Build day |
+| intake-email | routines/intake-email.md | Weekdays hourly 08:05 to 18:05: Door 1 requests, drafts, send gate | 2026-10-01 | Candidate | After PC-2 and the allowlist |
+| knowledge-extract | routines/knowledge-extract.md | Daily 11:00 during the backlog, then weekly: claims into Knowledge | 2026-10-01 | Blocked (skill P2-16, Q02 indexes) | When P2-16 is built |
+| knowledge-review Review-2 | routines/knowledge-review-2.md | Daily 13:00: anonymous Review-2 of claims (Claude until Gemini) | 2026-10-01 | Blocked (skill P2-16) | When P2-16 is built |
+
+## Scheduled lanes that are not Claude Code Routines (no file here)
+
+| Lane | Runs on | Prompt lives in | Note |
+| --- | --- | --- | --- |
+| L5 CAL | Claude Routine, already installed | The CAL lane's own folder ([[CAL_FOLDER]]) | Not rewritten here |
+| L6 07-SAP-01 | Cowork desktop task on Joe's computer | Its existing task | The only lane that needs Joe's computer |
+| G1 Project Watch | ChatGPT scheduled task, every 6 hours | ChatGPT project | Writes Inbox rows |
+| G2 Weekly leadership page | ChatGPT scheduled task, Sunday | ChatGPT project | |
+| council-board Review-1 | ChatGPT scheduled task, daily 09:00 | The reviewer prompt in `skills/council-board/references/prompts.md` | Joe pastes it at PC-1 step 5 |
+| knowledge-review Review-1 | ChatGPT scheduled task, daily 12:00 | Planned with the knowledge-review skill (P2-16) | |
+| N1 Decision processor, N2 Hub hygiene, N3 Inbox mail | Notion custom agents | Notion (build day, Business plan) | |
+| X1 Codex Watchdog | Codex, weekdays 07:45 | Codex | Re-triggers missed Claude lanes |
+| checker (L7) | No schedule of its own | Runs as a subagent inside each lane; the weekly eval runs inside L4 | |

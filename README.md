@@ -1,4 +1,50 @@
-# pcos_tools v0.3.0
+# pcos_tools
+
+The code repository of Joe Demircan's PCOS system. It holds the draft-only Python
+toolkit, the agent cards and skills of the PCOS lanes, and the prompts for their
+scheduled Routines.
+
+> **This repository is public.** It holds no business data: no Drive or Notion
+> IDs or links, no names of people, no prices, customers, vendor terms or mail
+> text (Operating Card v7.4, WRITE PATHS). Cards, skills and prompts name their
+> sources by key. The IDs live in a private Drive map.
+
+## What this repository holds
+
+| Path | What | Status |
+| --- | --- | --- |
+| `pcos_tools/` | The toolkit, v0.3.0: `hygiene`, `recon_parse`, `now_build`, `now_check`. Draft-only; documented in "The toolkit" below. | Live |
+| `scripts/` | Build helpers (`build_zip.py`) | Live |
+| `tests/` | Test suite; synthetic fixtures only | Live |
+| `agents/` | One six-part card per lane (`CARD_TEMPLATE.md`), the source keys (`INPUTS.md`), `_INDEX.md` | Candidate |
+| `skills/` | Lane skills in the Agent Skills format (`SKILL.md` per folder), `_INDEX.md` | Candidate |
+| `routines/` | Paste-ready prompts for the planned Claude Code Routines, one file each, `_INDEX.md` | Candidate |
+| `.github/pull_request_template.md` | The review checklist every pull request answers | Live |
+
+The tool scripts stay at `pcos_tools/` and `scripts/` (not under a separate
+`/tools` folder), so `python -m pcos_tools` and the Operating Card's CLOSE C commands
+keep working unchanged. A card, skill or Routine stays Candidate until its Lanes row
+exists and its first run is in the Changelog.
+
+## How PCOS points here
+
+- PCOS_NOW section 7 points to the live rules: the Operating Card now, the kernel
+  page after build day. Their WRITE PATHS ("Where things are" in the kernel) name
+  this repository as the home of code, skills and cards.
+- Operating Card CLOSE C clones this repository in every closeout and runs the
+  toolkit checks (see "Quick start" below).
+- Each scheduled lane is a Routine created from `routines/`. Its prompt loads the
+  kernel, then the lane's card in `agents/` and its skill in `skills/`.
+- Sources are named as `[[KEY]]` (`agents/INPUTS.md`). Keys resolve through the
+  kernel's "Where things are" table. Until the kernel holds it, they resolve through
+  the private Drive file `PCOS_AGENT_INPUT_IDS` in the folder
+  `PCOS_BUILD_KIT_2026-09-28`. Nothing in this repository points back to a private
+  object by ID.
+- Changes arrive as pull requests that answer the checklist in
+  `.github/pull_request_template.md`. Commenting "@codex review" asks Codex for a
+  review; for council pull requests, the council-github chair Routine decides.
+
+## The toolkit: pcos_tools v0.3.0
 
 Small, standard-library-only Python 3.11 toolkit for Joe Demircan's PCOS system.
 It reads exported files (a Worklist CSV, a RECON markdown, the current PCOS_NOW
@@ -11,12 +57,6 @@ them.
 > is a proposal that a human or a Claude session reviews and then applies. No
 > network calls, no Google API, no email. Tool output is advisory: when it
 > disagrees with a live read of the source, the live read wins.
-
-The repository also holds the PCOS phase-2 **agent cards** (`agents/`, one
-six-part card per planned lane, template in `agents/CARD_TEMPLATE.md`) and
-**skills** in the Agent Skills format (`skills/`). Each folder has an
-`_INDEX.md`. Cards and skills name their sources by key (`agents/INPUTS.md`). The
-IDs stay in a private Drive file, because this repository is public.
 
 ## Quick start for a PCOS session
 
