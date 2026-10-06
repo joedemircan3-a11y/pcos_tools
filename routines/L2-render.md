@@ -25,14 +25,16 @@ LOAD
 
 READ (view mode only; SQL and rows mode hit the plan's query cap)
 4. Read the newest [[CHANGELOG]] rows first and note the time of the last hub update. Never show a row as open when a newer Changelog row closed it.
-5. Read [[NOTION_WORKLIST]] (open rows), [[DECISIONS]] (open, with default and due date), [[INBOX]] (rows since the last render), [[LANES]] (the last heartbeat of each lane), and today's EXO card row in [[DECISIONS]].
+5. Read [[NOTION_WORKLIST]] (open rows), [[DECISIONS]] (open, with default and due date), [[INBOX]] (every row whose Status is still Needs Joe, however old, plus the other rows since the last render; a Needs Joe row leaves Today only when a newer row or [[CHANGELOG]] row closes it), [[LANES]] (the last heartbeat of each lane), and today's EXO card row in [[DECISIONS]].
 
 WRITE
 6. [[TODAY]]: at most 12 lines that Joe can read on his phone in under two minutes:
    - the time of the last hub update;
    - at most 5 decisions due, each with its default and date;
    - today's EXO card link;
-   - the Needs Joe items, one line each;
+   - the Needs Joe items, one line each, oldest first. When they do not all fit in
+     the 12 lines, show as many as fit and end with one line that links [[INBOX]]
+     filtered to Status Needs Joe (no count), so every open item stays one tap away;
    - the lanes that missed their run.
    No overdue lists and no counts of late items.
 7. After Joe's typed cutover yes only: render PCOS_NOW [MIRROR] and KERNEL.md in Drive from the rows and the kernel page, as new files. Rename the previous mirrors (created by this lane) with the suffix [SUPERSEDED] and the date, and move them to [[ARCHIVE]]. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
@@ -54,3 +56,13 @@ v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | LOAD step 3 reads 
 agents/L2-render.md once it exists; later steps renumbered | the prompt never loaded the card that
 P2-19 requires, so card changes could not reach the lane (Codex review of PR 2) | PCOS
 QUEUE_v4 item QC18
+
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18-R | step 5 reads every Inbox row
+still at Needs Joe, whatever its age, not only the rows since the last render | an unresolved
+Needs Joe row dropped off Today after one render although nothing closed it (Codex review of
+PR 2) | PCOS QUEUE_v6 item QC18-R
+
+v0.4 | 2026-10-06 | Claude Code on the web, queue item QC18-R | when the open Needs Joe items
+do not fit in the 12 lines, Today ends with a link to all of them in the Inbox | with more
+Needs Joe rows than lines, some open items fell off Today (Codex review of PR 2) | PCOS
+QUEUE_v6 item QC18-R

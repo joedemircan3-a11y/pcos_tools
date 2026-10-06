@@ -1,6 +1,6 @@
 # Card: prediction-ledger
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-01 (prediction ledger: Prediction database, evidence check in the daily run, "What happened?" card, calibration block in the weekly pass)
 - Lane ID: pending
@@ -82,7 +82,10 @@ an answer.
 - After the Check date: Actual (what happened, evidence key and ID, date) and
   Score with Status Scored; or Status Asked Joe with one "What happened?"
   question; or Status Parked with a new Check date when Joe answers "nothing
-  yet".
+  yet"; or Status Parked with Actual kept when Joe answers "handled offline" and
+  the answer, his note and the evidence do not settle every guess (Owner, Route,
+  Candidate output, each assumption). Such a row is never scored on part of its
+  checks.
 - Evidence labels: a prediction is Candidate. Actual is Confirmed only when its
   evidence was opened in this run. Otherwise it is Needs Thread Check (mail) or
   Needs Source Check (row or Changelog).
@@ -127,7 +130,13 @@ conversation (Joe's sent message counts only while terminal) | two unrelated ite
 with one subject could take each other's evidence, and a sent message could hide a
 later reply (Codex review of PR 1) | PCOS QUEUE_v4 item QC18
 
-v0.3 | 2026-10-06 | Claude Code on the web, queue item QC19 | "What happened?"
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18-R | a "handled offline"
+answer scores the row only when the answer, Joe's note and the evidence settle every
+guess; otherwise the row is Parked with Actual kept | the row was marked Scored with
+Owner, Route, output use and assumptions unknown (Codex review of PR 1) | PCOS
+QUEUE_v6 item QC18-R
+
+v0.4 | 2026-10-06 | Claude Code on the web, queue item QC19 | "What happened?"
 questions go on the evening retro card; the backtest lane named | Joe's decision:
 evening = past questions (dev-session record of 2026-10-06, part 7, turn 21); the
 backtest loop of turn 20 | PCOS QUEUE_v4 item QC19

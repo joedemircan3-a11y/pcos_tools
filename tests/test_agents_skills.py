@@ -51,14 +51,18 @@ PLURAL_OBJECT = re.compile(r"\b(folders|files|databases|pages|views|sheets)\b")
 SET_KEYS = {"MAIL_ROUTED"}  # Outlook folders named in one list; see the top of INPUTS.md
 
 # Drive IDs are opaque runs of the URL-safe alphabet: letters, digits, "-" and "_".
-# Every run of that alphabet with both cases and a digit counts as an ID, however
-# word-like its pieces look, unless it is one of these public folder and file
-# names. A name joins this list only on purpose, in a reviewed change.
+# A run of that alphabet counts as an ID, however word-like its pieces look, when it
+# has both cases and a digit; or when it is LONG_RUN characters or longer (Drive IDs
+# are 28 or more) and has two of the three character classes, or no "-" or "_" at
+# all. Public folder and file names are the exception; a name joins this list only
+# on purpose, in a reviewed change.
 PUBLIC_NAMES = {
     "KL_00_PCOS_System_and_AI", "KL_01_Stone_and_Materials", "KL_02_Mosaic_and_Waterjet_Production",
     "KL_03_Pricing", "KL_04_Vendors_and_Terms", "KL_05_Logistics_and_Customs_MX_US_TR",
-    "KL_06_Sales_and_CS", "KL_07_Company_and_People", "PCOS_DISPATCH_2026-09-29b",
+    "KL_06_Sales_and_CS", "KL_07_Company_and_People", "PCOS_BUILD_KIT_2026-09-28",
+    "DELTA_YYYY-MM-DD_source_topic", "PCOS_DISPATCH_2026-09-29b",
 }
+LONG_RUN = 25
 ID_RUN = re.compile(r"(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{12,}(?![A-Za-z0-9_-])")
 
 
@@ -66,7 +70,10 @@ def find_drive_id(text):
     """Return the first Drive-style ID in text, or None."""
     for match in ID_RUN.finditer(text):
         run = match.group()
-        if run not in PUBLIC_NAMES and all(re.search(c, run) for c in ("[a-z]", "[A-Z]", r"\d")):
+        if run in PUBLIC_NAMES:
+            continue
+        kinds = sum(bool(re.search(c, run)) for c in ("[a-z]", "[A-Z]", r"\d"))
+        if kinds == 3 or (len(run) >= LONG_RUN and (kinds >= 2 or not re.search(r"[-_]", run))):
             return run
     return None
 
@@ -217,6 +224,8 @@ def test_no_private_identifiers_in_the_public_repository(path):
     "1Abc_defghijklmnop", "1abc_Defghijklmnop", "id 0AbC1dEf2GhI3jKl4Mn.",
     "(1aB9-xYz_Q2w3e4R5t6y7U8i9o0P1a)", "1-_xQ09Kp_Lm3NoPqRsTuVwXy",
     "Abc_123D_Def_456E_Ghi_789J_Klm", "Abc_Def_v4_Ghi_Jkl", "KL_02_Mosaic_and_Waterjet_Productio",
+    "abcdefghijklmnopqrstuvwxyz123456789", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghi",
+    "ABCDEFGHIJKLMNOP1234567890QRS", "abcdefghijklmnopqrstuvwxyzabcdefgh", "abc-def_ghi-jkl_mno-pqr-stu1",
 ])
 def test_drive_id_detector_catches_ids_with_url_safe_separators(text):
     assert find_drive_id(text)
@@ -378,9 +387,48 @@ def test_brief_keeps_new_messages_in_known_threads():
     assert "Skip items that already have a row with the same conversation ID." not in prompt
 
 
+def test_brief_backlog_beyond_five_days_is_never_skipped():
+    prompt = " ".join(routine_prompt((ROUTINES / "L1-brief.md").read_text(encoding="utf-8")).split())
+    assert "at most 5 days." not in prompt and "from the end of the last L1 heartbeat" not in prompt
+    assert "window end in the last L1 heartbeat" in prompt
+    assert "read the oldest 5 days only and record their end as this run's window end" in prompt
+    assert 'the result starts with "window end"' in prompt
+
+
+def test_render_keeps_every_open_needs_joe_row_on_today():
+    prompt = " ".join(routine_prompt((ROUTINES / "L2-render.md").read_text(encoding="utf-8")).split())
+    assert "[[INBOX]] (rows since the last render)" not in prompt
+    assert "every row whose Status is still Needs Joe, however old" in prompt
+    assert "show as many as fit and end with one line that links [[INBOX]]" in prompt
+
+
+def test_github_chair_ties_gemini_to_the_head_and_rechecks_it_before_posting():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    steps = {line.split(". ", 1)[0]: line for line in prompt.splitlines() if re.match(r"\d+\. ", line)}
+    assert "posted after the head reached the pull request" not in steps["5"]
+    assert "Action run whose head commit is the current head" in steps["5"]
+    write = steps["10"]
+    assert write.index("[[CHANGELOG]] row per field") < write.index("Right before posting, re-read the head once more")
+    assert write.index("Right before posting, re-read the head once more") < write.index('post one comment')
+
+
+def test_github_chair_trusts_only_its_own_final_and_reviews_of_the_current_head():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    steps = {line.split(". ", 1)[0]: line for line in prompt.splitlines() if re.match(r"\d+\. ", line)}
+    assert "posted by the chair's account" in steps["1"] and "from any other account is ignored" in steps["1"]
+    assert "Codex review whose commit is the head" in steps["5"]
+    assert "A review of an earlier commit does not count" in steps["5"]
+    assert "head reached the pull request less than 2 hours ago" in steps["5"]
+    assert "opened less than 2 hours ago" not in steps["5"]
+    assert steps["10"].startswith("10. Re-read the pull request's head.")
+    assert "write nothing and skip" in steps["10"]
+    replay = steps["4"]
+    assert replay.index("add any that is missing") < replay.index('post that Final')
+
+
 def test_github_chair_never_chairs_without_a_review():
     prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
-    fallback = next(line for line in prompt.splitlines() if line.startswith("5. Find the two reviews"))
+    fallback = next(line for line in prompt.splitlines() if line.startswith("5. "))
     assert "If exactly one is still missing" in fallback and "If both are missing" in fallback
     assert "never chair" in fallback and "skip" in fallback
     assert "scheduled run goes on to the next pull request" in prompt
@@ -456,8 +504,92 @@ def test_intake_stop_list_asks_stay_needs_joe():
     assert "a stop-list ask" in gate and "only when condition 1 alone failed" in gate
 
 
-    assert "Needs Joe when the sender is not on the allowlist" in gate
-    assert "a stop-list ask" in gate and "only when condition 1 alone failed" in gate
+def test_prediction_checklist_reads_the_conversation_and_takes_the_terminal_message():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    prediction = " ".join(section(text, "## prediction").split())
+    assert "lookup order" not in prediction
+    assert "Joe's sent mail, thread replies" not in prediction
+    assert "read together" in prediction and "terminal message" in prediction
+    assert "counts only while no later reply follows it" in prediction
+
+
+def test_handled_offline_answer_is_scored_only_when_every_guess_is_settled():
+    ask = " ".join(section((SKILLS / "prediction-ledger" / "SKILL.md").read_text(encoding="utf-8"),
+                           "## 3. Ask only when blind").split())
+    answer_a = ask[ask.index('- A: Actual "handled offline"'):ask.index("- B:")]
+    assert "Status Scored" not in answer_a
+    assert "Owner, Route, Candidate output and every assumption" in answer_a
+    assert "set Status Parked with Actual kept" in answer_a
+    contract = " ".join(section((AGENTS / "prediction-ledger.md").read_text(encoding="utf-8"),
+                                "## 5. Output contract with evidence labels").split())
+    assert '"handled offline"' in contract and "never scored on part of its checks" in contract
+
+
+def test_knowledge_checklist_accepts_inferred_claims_labeled_candidate():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    claim = " ".join(section(text, "## knowledge-claim").split())
+    assert "and the source states the claim." not in claim
+    assert "a claim that needs inference is labeled Candidate" in claim
+    assert "an inferred claim labeled Confirmed" in claim
+    extract = " ".join((AGENTS / "knowledge-extract.md").read_text(encoding="utf-8").split())
+    assert "a claim that needs inference from the source is labeled Candidate" in extract
+
+
+def test_github_council_row_is_bound_by_the_pull_request_link_not_the_title():
+    card = " ".join((AGENTS / "council-github.md").read_text(encoding="utf-8").split())
+    inputs = card[card.index("- L1:"):card.index("- L2:")]
+    assert "matched by the Task title" not in inputs
+    assert "Draft field holds the pull request's link" in inputs
+    assert "never picked by its title" in inputs and "more than one, means Blocked" in inputs
+    assert "writes the pull request's link into the Council row's Draft field" in card
+
+
+def test_council_final_author_check_covers_the_github_council():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    council_final = " ".join(section(text, "## council-final").split())
+    assert "6. The reviewers worked from the Reviewer view (Author hidden)." not in council_final
+    assert "Board council: they worked from the Reviewer view" in council_final
+    assert "GitHub council: the pull request names no author model" in council_final
+    assert "No author model is named." in (AGENTS / "council-github.md").read_text(encoding="utf-8")
+
+
+def test_pricing_result_carries_exactly_one_evidence_label():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    pricing = " ".join(section(text, "## pricing-prep").split())
+    assert "labeled Candidate and Needs Joe Approval" not in pricing
+    assert "exactly one evidence label, Needs Joe Approval" in pricing
+    assert "never as a second label" in pricing
+    assert "exactly one label" in (AGENTS / "CARD_TEMPLATE.md").read_text(encoding="utf-8")
+
+
+def test_delta_checklist_reopens_the_cited_sources():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    delta = " ".join(section(text, "## delta").split())
+    assert "Required: the sources each line cites" in delta
+    assert "reopened in this run" in delta and "what changed is what the source shows" in delta
+    assert "that no source shows, fails" in delta
+
+
+def test_lane_run_case_needs_an_overall_accept_too():
+    text = (SKILLS / "checker" / "SKILL.md").read_text(encoding="utf-8")
+    lane_run = " ".join(section(text, "### Lane run: scores a lane version").split())
+    assert "overall verdict on the output is Accept" in lane_run
+    assert "fails another check or hits a hard stop does not" in lane_run
+
+
+def test_council_final_plan_round_check_is_for_the_board_council():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    council_final = " ".join(section(text, "## council-final").split())
+    assert "1. The plan round was Final before execution started." not in council_final
+    assert "GitHub council: there is no plan round" in council_final
+
+
+def test_research_raw_checklist_reopens_the_cited_sources():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    raw = " ".join(section(text, "## research-raw").split())
+    assert "Required: every source the file cites, opened by its URL in this run." in raw
+    assert "matches the cited source as opened in this run" in raw
+    assert "no opened source supports fails" in raw
 
 
 @pytest.mark.parametrize("text", [
@@ -485,3 +617,12 @@ def test_github_chair_trusts_only_owner_pull_requests_bound_to_their_row():
     load = prompt.index("\nLOAD\n")
     assert all(prompt.index(key) > load for key in ("[[COUNCIL]]", "[[INBOX]]")), "load keys first"
     assert "Draft field" in next(line for line in lines if line.startswith("3. "))
+
+
+def test_github_chair_finds_the_council_row_by_link_never_by_title():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    step_3 = next(line for line in prompt.splitlines() if line.startswith("3. "))
+    assert 'row named after "Council row:"' not in step_3
+    assert "search the Draft field for the pull request's link" in step_3
+    assert "Never pick a row by its Task title" in step_3
+    assert "exactly one row holds the link" in step_3 and "more than one bound row" in step_3

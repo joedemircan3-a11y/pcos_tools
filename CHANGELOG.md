@@ -22,7 +22,7 @@ there. Changed cards are bumped; skill versions stay 0.1.
   the EXO Routine gives up. `routines/exo.md` now runs at 07:00 and 13:00 only.
 - Past questions have one home: the prediction-ledger lane's "What happened?"
   questions move from the EXO cards to the evening retro card (ledger card
-  v0.2, skill section 3, Routine step 5; EXO card v0.2, Routine step 6). Why:
+  v0.4, skill section 3, Routine step 5; EXO card v0.2, Routine step 6). Why:
   Joe's decision "evening = past questions, morning and midday = today", and
   one card that owns every past question cannot ask about a thread twice.
 - `agents/ledger-backtest.md`, `routines/ledger-backtest.md` and
@@ -63,7 +63,53 @@ there. Changed cards are bumped; skill versions stay 0.1.
   on the last-chance item is handed on like "still open".
 - The three indexes list the new cards, skill and Routines.
   `tests/test_retro_lane.py` pins the lane's fixed parts: 58 new tests; with
-  pull request 2's latest fixes merged in, 384 pass and 1 is skipped.
+  main merged in (pull requests 1 and 2 and the QC18-R fixes), 407 pass.
+
+## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1 and PR 2)
+
+Why: PCOS queue item QC18-R (QUEUE_v6) fixes the four Codex findings left open on
+pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the web).
+
+- Checker `prediction` checklist: the sent mail and the replies are read together
+  as one conversation and Actual rests on the terminal message, as in the
+  prediction-ledger skill section 2; the old sent-mail-first lookup order is gone.
+- Prediction ledger: a "handled offline" answer scores the row only when the
+  answer, Joe's note and the evidence settle every guess (Owner, Route, Candidate
+  output, each assumption); otherwise the row is Parked with Actual kept and the
+  weekly calibration scores it later. The note under that option asks who handled
+  it and whether the draft was used (prediction-ledger card v0.3).
+- Checker `knowledge-claim` checklist: an inferred claim passes when it is labeled
+  Candidate and follows from the source, matching the knowledge-extract card; an
+  inferred claim labeled Confirmed fails.
+- Council-github card v0.3 and the `council-github-chair` Routine (step 3): the
+  chair finds the Council row by the pull request's link in the row's Draft field,
+  never by Task title; no bound row, or more than one, is Blocked.
+- Checker `council-final` check 6 covers the GitHub council: there the pull
+  request names no author model and neither reviewer drafted; the Reviewer view
+  applies to the board council only.
+- Checker `pricing-prep`: the result carries exactly one evidence label, Needs Joe
+  Approval; being a preparation is its status, not a second label.
+- Checker `delta`: the sources each line cites are required, reopened and
+  compared; a line that a source contradicts or no source shows fails.
+- Checker golden set, lane run: a case passes only when the output satisfies Joe's
+  correction and the checker's overall verdict is Accept, so a fix that adds a
+  new failure or hard stop cannot be promoted.
+- Checker `council-final` check 1 (plan round) applies to the board council only;
+  the GitHub council has no plan round.
+- Checker `research-raw`: the cited sources are required and opened by URL; each
+  claim and quote must match an opened source.
+- Routines (Codex review of PR 2): L1-brief v0.4 resumes from the window end in
+  its last heartbeat, so mail beyond the 5-day cap is read by later runs and never
+  dropped; L2-render v0.4 keeps every open Needs Joe row on Today, however old, and
+  links the rest in the Inbox when they do not fit in 12 lines;
+  council-github-chair v0.9 ends a council only on its own "Chair: Final", counts
+  only reviews tied to the current head commit (Codex by commit, Gemini by its
+  Action run), re-checks the head before writing and again before posting, and
+  restores missing Changelog rows before replaying a Final.
+- Tests: the private-ID guard also flags runs of 25 characters or more with two of
+  the three character classes, or with no "-" or "_" (Drive IDs are 28 or more), so
+  an ID without a digit or without mixed case is caught; public names on the
+  reviewed list stay allowed. One test per fix, each failing on the old text.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 

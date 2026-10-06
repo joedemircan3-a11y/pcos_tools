@@ -82,6 +82,9 @@ source that justifies the change; the [[CHANGELOG]] row.
 
 A DELTA row in [[INBOX]] or a DELTA file in [[INBOX_FOLDER]].
 
+Required: the sources each line cites: the files, rows, commits or pull requests
+listed under what changed, and the authority named under why.
+
 1. All five fields are present: Task ID, what changed, why (reason and
    authority), next action, confidence. Files created are listed with title and
    ID.
@@ -90,6 +93,11 @@ A DELTA row in [[INBOX]] or a DELTA file in [[INBOX_FOLDER]].
    no-change file.
 4. The Why names its authority. A DELTA without a reason is not applied until
    the reason is recovered (L11).
+5. Each line matches its sources, reopened in this run: every file, row, commit
+   or pull request listed exists with that title and ID; what changed is what
+   the source shows; the authority says what the Why claims; the next action
+   follows from them. A line that a source contradicts, or that no source
+   shows, fails.
 
 ## question-card
 
@@ -136,15 +144,21 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
 
 A Prediction row or its scoring.
 
-Required: the [[PREDICTION]] row; for scoring, the evidence sources in lookup
-order (Joe's sent mail, thread replies, [[WORKLIST]], [[CHANGELOG]]).
+Required: the [[PREDICTION]] row; for scoring, the evidence sources of
+prediction-ledger section 2: the row's whole conversation (Joe's sent mail in
+[[MAIL_SENT]] and the replies in [[MAIL_INBOX]] and [[MAIL_ROUTED]], read
+together), then [[WORKLIST]], then [[CHANGELOG]].
 
 1. Every field is filled with an allowed value (Is task: Yes, No or Unsure;
    Route: Radar, Instruct front line or Joe direct).
 2. Assumptions are yes/no questions; 1 to 4 of them.
 3. The Check date is the source date plus 3 days, or plus 1 day for a crisis
    item (Route 3 money-or-deadline test).
-4. Actual cites its evidence by key and ID, found in lookup order.
+4. Actual cites its evidence by key and ID, matched by the row's Source
+   identity. For mail, the sent messages and the replies were read together as
+   one conversation, and Actual rests on the terminal message (Law 3): Joe's
+   sent message counts only while no later reply follows it. An Actual taken
+   from a sent message that a later reply overtakes fails.
 5. The Score follows the scoring rule in the prediction-ledger skill.
 6. No question was asked about a subject that has evidence.
 
@@ -162,17 +176,23 @@ the cost documents named on the task row; [[DECISIONS]] for rulings.
 3. Units are consistent (per piece, per area, per lot), and every conversion is
    shown.
 4. No component is counted twice when a price already bundles it.
-5. The result is labeled Candidate and Needs Joe Approval, and names the
-   approval step.
+5. The result carries exactly one evidence label, Needs Joe Approval (a price
+   is committing), and names the approval step. That it is still a preparation
+   is recorded as its status, never as a second label.
 6. Nothing is sent, quoted or entered in any system.
 
 ## research-raw
 
 A RAW research file (domain research runs, P2-15).
 
+Required: every source the file cites, opened by its URL in this run.
+
 1. One sub-topic per file, with a date in the title.
 2. Sources listed with URLs and access dates. Verbatim quotes only where quoting
-   is allowed; paraphrase otherwise, marked as such.
+   is allowed; paraphrase otherwise, marked as such. Each substantive claim and
+   each quote matches the cited source as opened in this run. A source that
+   cannot be opened is Blocked; a claim or quote that no opened source supports
+   fails.
 3. No REFINED claims: no recommendation stated as fact, no "we should".
 4. The folder's `_INDEX.md` has the file's line, written in the same run.
 5. Status Candidate.
@@ -185,7 +205,11 @@ Required: the source behind the Source ID.
 
 1. One atomic claim per row.
 2. Type is rule, fact, method, decision or open question.
-3. The Source ID resolves, and the source states the claim.
+3. The Source ID resolves, and the source supports the claim with the right
+   evidence label: a claim labeled Confirmed is stated by the source; a claim
+   that needs inference is labeled Candidate and follows from what the source
+   states. A claim the source does not support fails, and so does an inferred
+   claim labeled Confirmed.
 4. Source date is the source's own date, not the run date.
 5. Status is Candidate at extraction.
 6. No duplicate of an existing row for the same source.
@@ -199,7 +223,9 @@ council, the two reviews on the pull request), or one review when the chair
 decided after the full-cycle wait (council-board skill section 6); the sources
 the Draft cites.
 
-1. The plan round was Final before execution started.
+1. Board council: the plan round was Final before execution started. GitHub
+   council: there is no plan round (one pull request carries the draft, the
+   reviews and the Final), so this check does not apply.
 2. Both reviews are present, one finding per bullet, each with evidence and a
    verdict. After the full-cycle wait, one review is enough when Dissent says
    "Review-N missing" for the other; it then meets the same standard.
@@ -208,7 +234,10 @@ the Draft cites.
 4. Dissent records each disagreement that is still open.
 5. Needs Joe is used only for a factual disagreement that the kernel and the
    sources cannot settle.
-6. The reviewers worked from the Reviewer view (Author hidden).
+6. The reviewers did not see the author. Board council: they worked from the
+   Reviewer view (Author hidden). GitHub council: the pull request names no
+   author model (council-github card section 5), and neither reviewer is the
+   drafting model.
 
 ## rule-candidate
 
