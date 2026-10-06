@@ -50,21 +50,22 @@ PLURAL_OBJECT = re.compile(r"\b(folders|files|databases|pages|views|sheets)\b")
 SET_KEYS = {"MAIL_ROUTED"}  # Outlook folders named in one list; see the top of INPUTS.md
 
 # Drive IDs are opaque runs of the URL-safe alphabet: letters, digits, "-" and "_".
-# A run of that alphabet with both cases and a digit is an ID unless every piece
-# between the separators reads as a word, a number, a short code or a timestamp
-# (KL_02_Mosaic_and_Waterjet_Production, PCOS_DISPATCH_2026-09-29b, QC18, v4).
+# Every run of that alphabet with both cases and a digit counts as an ID, however
+# word-like its pieces look, unless it is one of these public folder and file
+# names. A name joins this list only on purpose, in a reviewed change.
+PUBLIC_NAMES = {
+    "KL_00_PCOS_System_and_AI", "KL_01_Stone_and_Materials", "KL_02_Mosaic_and_Waterjet_Production",
+    "KL_03_Pricing", "KL_04_Vendors_and_Terms", "KL_05_Logistics_and_Customs_MX_US_TR",
+    "KL_06_Sales_and_CS", "KL_07_Company_and_People", "PCOS_DISPATCH_2026-09-29b",
+}
 ID_RUN = re.compile(r"(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{12,}(?![A-Za-z0-9_-])")
-WORDISH = re.compile(r"[A-Z]*[a-z]*|(?:[A-Z]{0,4}|[a-z]{0,4})\d+[a-z]{0,2}|\d+[A-Z]{1,4}"
-                     r"|\d{8}T\d{4,6}Z?")
 
 
 def find_drive_id(text):
     """Return the first Drive-style ID in text, or None."""
     for match in ID_RUN.finditer(text):
         run = match.group()
-        if not all(re.search(c, run) for c in ("[a-z]", "[A-Z]", r"\d")):
-            continue
-        if not all(WORDISH.fullmatch(piece) for piece in re.split("[-_]", run)):
+        if run not in PUBLIC_NAMES and all(re.search(c, run) for c in ("[a-z]", "[A-Z]", r"\d")):
             return run
     return None
 
@@ -213,18 +214,23 @@ def test_no_private_identifiers_in_the_public_repository(path):
 @pytest.mark.parametrize("text", [
     "1Abc_defghijklmnop", "1abc_Defghijklmnop", "id 0AbC1dEf2GhI3jKl4Mn.",
     "(1aB9-xYz_Q2w3e4R5t6y7U8i9o0P1a)", "1-_xQ09Kp_Lm3NoPqRsTuVwXy",
+    "Abc_123D_Def_456E_Ghi_789J_Klm", "Abc_Def_v4_Ghi_Jkl", "KL_02_Mosaic_and_Waterjet_Productio",
 ])
 def test_drive_id_detector_catches_ids_with_url_safe_separators(text):
     assert find_drive_id(text)
 
 
 @pytest.mark.parametrize("text", [
-    "KL_02_Mosaic_and_Waterjet_Production", "KL_05_Logistics_and_Customs_MX_US_TR",
-    "PCOS_DISPATCH_2026-09-29b", "PCOS_BUILD_KIT_2026-09-28", "PCOS_AGENT_INPUT_IDS",
-    "CLAIM_QC18_CLAUDE_code_20261006T021249Z.md", "council-board-review-2", "KL_VENDORS_RAW__INDEX",
+    *sorted(PUBLIC_NAMES), "PCOS_BUILD_KIT_2026-09-28", "PCOS_AGENT_INPUT_IDS",
+    "council-board-review-2", "KL_VENDORS_RAW__INDEX", "[[KL_DOMAINS]]",
 ])
-def test_drive_id_detector_passes_file_and_key_names(text):
+def test_drive_id_detector_passes_public_names_and_names_without_mixed_case(text):
     assert find_drive_id(text) is None
+
+
+def test_every_public_name_is_still_used():
+    text = "\n".join(p.read_text(encoding="utf-8") for p in public_files())
+    assert not {name for name in PUBLIC_NAMES if name not in text}, "drop unused names from PUBLIC_NAMES"
 
 
 def test_each_key_names_one_object_and_groups_list_keys():
@@ -254,6 +260,15 @@ def test_prediction_items_match_by_identity_never_by_subject():
     predict = section(text, "## 1. Predict: one row per new item")
     assert "never by subject" in predict and "conversation ID" in predict
     assert "same identity" in predict and "or subject" not in predict
+
+
+def test_prediction_evidence_matches_the_source_identity():
+    skill = (SKILLS / "prediction-ledger" / "SKILL.md").read_text(encoding="utf-8")
+    check = " ".join(section(skill, "## 2. Check: rows whose Check date has passed").split())
+    card = " ".join((AGENTS / "prediction-ledger.md").read_text(encoding="utf-8").split())
+    for text in (check, card):
+        assert "thread or subject" not in text and "about the subject" not in text
+    assert "Source identity" in check and "unique" in check
 
 
 def test_parked_prediction_rows_are_never_asked_again():
