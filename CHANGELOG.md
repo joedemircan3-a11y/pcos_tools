@@ -43,9 +43,13 @@ there. Changed cards are bumped; skill versions stay 0.1.
   same ask; a gate catch is filed with its identity in Source; "moved
   offline" never guesses a channel; an unmatched free-text answer is Parked;
   the checker's backtest sample is min(10, threads scored).
+- Codex review, round 3: the Never list and the checker match a gap by
+  identity too, so no subject-based veto is left; at three skips the
+  last-chance "Keep this open, or let it go?" item is shown before any row
+  parks the gap (a Parked row would have hidden it).
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 48 new tests; with
-  pull request 2's latest fixes merged in, 373 pass and 1 is skipped.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 50 new tests; with
+  pull request 2's latest fixes merged in, 375 pass and 1 is skipped.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 

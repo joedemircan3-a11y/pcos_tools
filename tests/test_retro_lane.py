@@ -202,3 +202,19 @@ def test_filing_never_invents_a_channel_and_always_sets_a_status():
 def test_backtest_checker_sample_fits_the_run():
     for path in (BACKTEST, BACKTEST_CARD, ROUTINES / "ledger-backtest.md"):
         assert "min(10, threads scored" in flat(read(path))
+
+
+def test_no_subject_based_veto_remains():
+    never = flat(section(read(RETRO_SKILL), "## Never"))
+    assert "a subject that has a [[PREDICTION]] row" not in never
+    assert "identity is in the Source of a [[PREDICTION]] row" in never
+    checklist = flat(section(read(ROOT / "skills" / "checker" / "references" / "checklists.md"),
+                             "## question-card"))
+    assert "the subject has no [[PREDICTION]] row" not in checklist
+    assert "never by subject" in checklist
+
+
+def test_the_last_chance_item_is_shown_before_any_row_parks_it():
+    skips = flat(section(read(RETRO_SKILL), "## 7. Skip rule (as EXO)"))
+    assert skips.index("Keep this open, or let it go?") < skips.index("Status Parked")
+    assert "before any row is written" in skips

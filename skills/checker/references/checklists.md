@@ -118,13 +118,15 @@ thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]], and the
    offline and still open, plus the template's "Not needed / wrong direction"
    as the sixth, unrelated (never a second unrelated option), and free text or
    voice. A class item covers 2 to 5 threads of one class, each listed with its
-   identity in the card's [[DECISIONS]] row. A progress line ends the card; no
-   count of open gaps.
+   identity in the card's [[DECISIONS]] row. The skip rule's last-chance item
+   offers keep or let go instead of the six options. A progress line ends the
+   card; no count of open gaps.
 8. Retro gate, for every thread of the item: every message of the thread and
    every later reply was read (the message IDs are in the run record); no
    closure evidence exists in the mail, [[WORKLIST]], [[CHANGELOG]] or
-   [[DECISIONS]]; the subject has no [[PREDICTION]] row, unless the item is the
-   ledger's own queued question.
+   [[DECISIONS]]; no [[PREDICTION]] row has the thread's identity in Source,
+   unless the item is the ledger's own queued question. Matching is by
+   identity, never by subject.
 
 ## prediction
 

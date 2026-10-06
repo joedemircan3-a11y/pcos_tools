@@ -230,13 +230,13 @@ skips, so a class item that is split keeps its count.
 
 - 2 skips: reshape. A shorter summary, a likelier option first, or a class item
   split into single threads.
-- 3 skips: park and ask once. Create a [[PREDICTION]] row for each identity of
-  the item with Status Parked, no Actual, and a Check date 7 days later, so the
-  ledger's evidence check can still settle it, without a Score. The next card
-  shows one last item: "Keep this open, or let it go?", keep as the default.
-  Let it go: Actual "let go", Confirmed with the card ID, Status Scored. No
-  answer leaves it Parked. Nothing closes on silence, and the lane never asks
-  about it again.
+- 3 skips: park and ask once. The next card shows one last item for it, before
+  any row is written: "Keep this open, or let it go?", keep as the default.
+  This item offers those two options, not the six tap options. Then create a [[PREDICTION]] row for each identity of the item. Let it go:
+  Actual "let go", Confirmed with the card ID, Status Scored. Keep, or no
+  answer by the next evening: Status Parked, no Actual, and a Check date 7 days
+  later, so the ledger's evidence check can still settle it, without a Score.
+  Nothing closes on silence, and the lane never asks about it again.
 
 Ledger items follow the ledger's own skip rule (prediction-ledger skill section
 3). A conflict item skipped three times is not shown again: its Decision row
@@ -254,8 +254,9 @@ candidates; the lane never writes a rule.
 
 - Ask what the record already answers, or ask before the full thread chain and
   every later reply are read.
-- Ask about a subject that has a [[PREDICTION]] row, except by carrying the
-  ledger's own queued question; ask about a Parked row.
+- Ask about a thread or item whose identity is in the Source of a
+  [[PREDICTION]] row, except by carrying the ledger's own queued question; ask
+  about a Parked row.
 - Overwrite, move, delete, forward or reply to mail; send or draft anything.
 - Close, drop or change a Worklist row; mint a Task ID.
 - Ask about today's work: that is the morning and midday cards' job.
