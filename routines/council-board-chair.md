@@ -25,7 +25,7 @@ LOAD
 RUN
 3. Queue: [[COUNCIL]] rows with Status Reviewed-2 and both Review-1 and Review-2 written; and rows whose Deadline has passed with one review still missing a full cycle later (skill section 6). A row with an empty review field waits for that second condition, whatever its Status.
 4. For each row, read it right before writing, then run the chair prompt: answer every Fix or Reject finding and draft Final, Dissent and Status (Final or Needs Joe). A row decided with one review after the full-cycle wait says "Review-N missing" in Dissent.
-5. Run the checker (job type council-final) on the draft, on a different model. On Fix, repair and re-check, at most 5 rounds. Write Final, Dissent and Status to the row only after an Accept. With no Accept after 5 rounds, write Status Needs Joe and the open findings in Dissent, leave Final empty, and put one card item in the next EXO slot (step 7).
+5. Run the checker (job type council-final) on the draft, on a different model. On Fix, repair and re-check, at most 5 rounds. Write Final, Dissent and Status to the row only after an Accept. With no Accept after 5 rounds, write nothing: the row keeps its Status and is chaired again next cycle, and the open findings go to Joe as one card item (checker skill, Verdict) unless one is already open for this row. Needs Joe stays reserved for step 7's factual disagreements.
 6. When a plan row ("TITLE · plan") becomes Final, create its execution row: Task "TITLE · execution", Status Draft, Deadline the next cycle's chair time. The 08:00 Draft stage picks it up.
 7. Needs Joe: add one card question to the next EXO slot: the disputed fact in one line, 2 or 3 options, your default first.
 
@@ -50,7 +50,8 @@ finalized such rows at once instead of waiting the full cycle of skill section 6
 of PR 2) | PCOS QUEUE_v4 item QC18
 
 v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18 | steps 4 and 5: the chair drafts,
-the checker checks, and the row is written only after an Accept; five failed rounds give Needs
-Joe | the Final was written before the check, and a one-review fallback Final could never pass
-the council-final checklist (Codex review of PR 2; the checklist now allows it) | PCOS QUEUE_v4
-item QC18
+the checker checks, and the row is written only after an Accept; five failed rounds go to
+Joe's attention as one card item, never the Needs Joe status | the Final was written before the
+check, a one-review fallback Final could never pass the council-final checklist (the checklist
+now allows it), and Needs Joe is reserved for factual disagreements (Codex reviews of PR 2) |
+PCOS QUEUE_v4 item QC18

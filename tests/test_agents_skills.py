@@ -412,7 +412,14 @@ def test_claim_extraction_and_claude_review_use_different_models():
 def test_council_chair_writes_only_after_a_checker_accept():
     prompt = routine_prompt((ROUTINES / "council-board-chair.md").read_text(encoding="utf-8"))
     check = next(line for line in prompt.splitlines() if line.startswith("5. Run the checker"))
-    assert "only after an Accept" in check and "Needs Joe" in check
+    assert "only after an Accept" in check and "keeps its Status" in check
+    assert "Needs Joe stays reserved" in check
+
+
+def test_github_chair_checks_the_final_before_posting():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    check = next(line for line in prompt.splitlines() if "job type council-final" in line)
+    assert "only after an Accept" in check and "post nothing" in check
 
 
 def test_health_stale_kernel_check_is_scoped_to_the_last_day():
@@ -426,3 +433,23 @@ def test_extract_and_review_2_routines_run_different_models():
         line = header_line((ROUTINES / name).read_text(encoding="utf-8"), "Model")
         return re.match(r"Claude (\w+)", line).group(1)
     assert model("knowledge-extract.md") != model("knowledge-review-2.md")
+
+
+def test_extracted_claims_keep_the_evidence_label_apart_from_status():
+    contract = " ".join(section((AGENTS / "knowledge-extract.md").read_text(encoding="utf-8"),
+                                "## 5. Output contract with evidence labels").split())
+    assert "every extracted claim is Candidate" not in contract
+    assert "separate from Status" in contract and "labeled Confirmed" in contract
+
+
+def test_blind_row_blocked_by_another_rows_subject_is_parked():
+    ask = " ".join(section((SKILLS / "prediction-ledger" / "SKILL.md").read_text(encoding="utf-8"),
+                           "## 3. Ask only when blind").split())
+    assert "through another row" in ask and "It is set Parked" in ask
+
+
+def test_intake_stop_list_asks_stay_needs_joe():
+    gate = " ".join(section((SKILLS / "intake-email" / "SKILL.md").read_text(encoding="utf-8"),
+                            "## 6. Send gate").split())
+    assert "Needs Joe when the message has a stop-list ask" in gate
+    assert "Drafted when only conditions 1 or 2 failed" in gate
