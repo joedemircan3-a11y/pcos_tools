@@ -5,7 +5,7 @@
 - Trigger: cron `0 13 * * *`, CRON_TZ=America/Mexico_City (daily 13:00, after extraction and Review-1)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Google Drive, Notion
-- Model: Claude Opus, never the model that extracted the batch (exact version from the kernel lane table)
+- Model: Claude Opus, never the model that extracted the batch: knowledge-extract runs Claude Sonnet (exact versions from the kernel lane table)
 - Card: [knowledge-review](../agents/knowledge-review.md)
 - Skills: knowledge-review (planned, P2-16)
 - Needs first: the skill above; knowledge-extract running; build day ([[LANES]], [[INBOX]])
@@ -36,3 +36,7 @@ END
 
 v0.1 | 2026-10-01 | Claude Code on the web, queue item QC13 | first version, blocked on
 its skill | card of queue item Q01; register P2-16 stage 2 | PCOS QUEUE_v2 item QC13
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | Model line names the extractor's
+model | the reviewer cannot find out who extracted, so the two models are fixed apart (Codex
+review of PR 2) | PCOS QUEUE_v4 item QC18

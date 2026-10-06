@@ -273,6 +273,7 @@ def test_prediction_evidence_matches_the_source_identity():
         assert "thread or subject" not in text and "about the subject" not in text
     assert "Source identity" in check and "unique" in check
     assert "conclusive only while it is still the terminal message" in check
+    assert "only nonconclusive evidence" in check and "is set Parked" in check
     assert "counts only while it is terminal" in card
 
 
@@ -390,3 +391,37 @@ def test_routine_that_names_the_checker_runs_it(routine):
     if "skills/checker/SKILL.md" in header_line(text, "Skills"):
         assert "checker" in routine_prompt(text), "the header names the checker, but the prompt never runs it"
 
+
+def test_council_final_checklist_accepts_the_one_review_fallback():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    council_final = " ".join(section(text, "## council-final").split())
+    assert 'Dissent says "Review-N missing"' in council_final
+
+
+def test_claim_extraction_and_claude_review_use_different_models():
+    extract = section((AGENTS / "knowledge-extract.md").read_text(encoding="utf-8"),
+                      "## 6. Trigger and owner model")
+    review = section((AGENTS / "knowledge-review.md").read_text(encoding="utf-8"),
+                     "## 6. Trigger and owner model")
+    extract_model = re.search(r"- Model: Claude (\w+)", extract).group(1)
+    review_2_model = re.search(r"Review-2 Claude (\w+)", review).group(1)
+    assert extract_model != review_2_model
+
+
+def test_council_chair_writes_only_after_a_checker_accept():
+    prompt = routine_prompt((ROUTINES / "council-board-chair.md").read_text(encoding="utf-8"))
+    check = next(line for line in prompt.splitlines() if line.startswith("5. Run the checker"))
+    assert "only after an Accept" in check and "Needs Joe" in check
+
+
+def test_health_stale_kernel_check_is_scoped_to_the_last_day():
+    prompt = routine_prompt((ROUTINES / "L3-health.md").read_text(encoding="utf-8"))
+    stale = next(line for line in prompt.splitlines() if "Stale kernel:" in line)
+    assert "last 24 hours" in stale
+
+
+def test_extract_and_review_2_routines_run_different_models():
+    def model(name):
+        line = header_line((ROUTINES / name).read_text(encoding="utf-8"), "Model")
+        return re.match(r"Claude (\w+)", line).group(1)
+    assert model("knowledge-extract.md") != model("knowledge-review-2.md")

@@ -77,7 +77,11 @@ Write Actual: what happened, the evidence key and ID, the date, and a label.
 Use Confirmed when the evidence was opened in this run, and Needs Thread Check
 when the thread's terminal message could not be read. When the evidence is
 partial, set Status Checking and move the Check date 3 days later, once. After
-that the row is either scored or asked.
+that the row is scored on conclusive evidence, or asked when it is blind
+(section 3). A row that still has only nonconclusive evidence (partial, or a
+subject-only match) is set Parked, with that evidence in Actual labeled
+Candidate. It is not asked, because its subject has evidence; the weekly
+calibration re-checks it like every Parked row.
 
 ## 3. Ask only when blind
 

@@ -5,7 +5,7 @@
 - Trigger: cron `0 11 * * *`, CRON_TZ=America/Mexico_City (daily 11:00, after the daily lanes) during the backlog pass. Then change it to weekly: cron `0 11 * * 1` (Monday 11:00).
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Google Drive, Notion
-- Model: Claude Opus, or Claude Sonnet for purely mechanical batches (the kernel lane table decides)
+- Model: Claude Sonnet, fixed (card v0.2): never the Claude Opus of knowledge-review Review-2
 - Card: [knowledge-extract](../agents/knowledge-extract.md)
 - Skills: knowledge-extract (planned, P2-16); [checker v0.1](../skills/checker/SKILL.md) (job type knowledge-claim)
 - Needs first: the skill above; Q02 index files; build day ([[LANES]], [[INBOX]]); [[KNOWLEDGE]] exists
@@ -38,6 +38,7 @@ v0.1 | 2026-10-01 | Claude Code on the web, queue item QC13 | first version, blo
 its skill | card of queue item Q01; register P2-16 stage 1 | PCOS QUEUE_v2 item QC13
 
 v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | LOAD reads the checker skill;
-step 4 writes a claim only after a checker Accept (job type knowledge-claim) | the header and
-the card require the checker, but the prompt never ran it (Codex review of PR 2) | PCOS
+step 4 writes a claim only after a checker Accept (job type knowledge-claim); model fixed at
+Claude Sonnet | the header and the card require the checker, but the prompt never ran it; with
+"Opus, or Sonnet" the Opus batches collided with the Opus Review-2 (Codex review of PR 2) | PCOS
 QUEUE_v4 item QC18

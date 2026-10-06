@@ -25,7 +25,7 @@ LOAD
 
 CHECK (view mode reads)
 4. Missed runs: for each lane in the kernel lane table, compare its schedule with its heartbeats in [[LANES]] over the last 24 hours. Each missing run is a finding (lane, expected time).
-5. Stale kernel: a heartbeat or Changelog row stamped with an older kernel version than the current one.
+5. Stale kernel: a heartbeat or Changelog row from the last 24 hours stamped with an older kernel version than the current one. Older rows were current when they were written.
 6. Inbox age: [[INBOX]] rows older than 48 hours that are still Received.
 7. Reasons: [[CHANGELOG]] rows from the last 24 hours with an empty Why are REASON-MISSING. List them for their author. Never guess, undo or re-argue them.
 8. Naming: files created in the last 24 hours in [[INBOX_FOLDER]] that do not match DELTA_YYYY-MM-DD_source_topic.md, and placeholder or no-change files anywhere in the PCOS root.
@@ -51,3 +51,7 @@ v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | LOAD step 3 reads 
 agents/L3-health.md once it exists; later steps renumbered | the prompt never loaded the card that
 P2-19 requires, so card changes could not reach the lane (Codex review of PR 2) | PCOS
 QUEUE_v4 item QC18
+
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18 | step 5 looks only at the last
+24 hours | the unbounded check re-flagged the whole history after every kernel change (Codex
+review of PR 2) | PCOS QUEUE_v4 item QC18
