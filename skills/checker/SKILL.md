@@ -102,16 +102,26 @@ because they test two different things: the lanes' outputs, and this checker.
 
 ### Checker run: scores a checker version
 
-1. For each case, run the checker version under test (live or candidate) on the
-   case's Wrong output, with its Input.
-2. The case passes when the checker raises the defect that Joe's correction
-   names (a FAIL on the matching check) and does not Accept.
+The run has two halves, so a checker that fails everything cannot score well.
+
+1. Defect half: for each case, run the checker version under test (live or
+   candidate) on the case's Wrong output, with its Input. It passes when the
+   checker raises the defect that Joe's correction names (a FAIL on the
+   matching check) and does not Accept.
+2. Clean half: run the same version on known-good outputs of the same
+   categories: a case's corrected output where Joe's correction is a full
+   corrected version, and lane outputs from the last 4 weeks that Joe used
+   unedited (Candidate output scored "used unedited" in [[PREDICTION]], with no
+   [[CORRECTIONS]] row). Each passes when the checker gives Accept.
 
 ### Scores
 
 - Score each run per Category (routing, drafting, pricing, sources, re-asking,
   formatting) = passed cases / cases. Cases with Category Needs Source Check
   are listed but not scored. The two runs' scores are never added together.
+- In the checker run, score the defect half and the clean half separately. For
+  the gate, each half counts as its own category, so a candidate whose clean
+  half drops fails, however well it finds defects.
 - The weekly-evolve gate compares live and candidate with the lane run, except
   for a change to this skill or its checklists, which it compares with the
   checker run.

@@ -9,13 +9,15 @@ stay 0.1 because the skills are not released yet.
 
 - Golden set: the lane run now scores whether a lane's output satisfies Joe's
   correction; a separate checker run scores the checker on the case's Wrong
-  output. Before, a version that kept the defect passed and a version that fixed
-  it failed. Checker card v0.2; checker and weekly-evolve skills follow.
+  output and on known-good outputs, which it must Accept. Before, a version that
+  kept the defect passed and a version that fixed it failed. Checker card v0.2;
+  checker and weekly-evolve skills follow.
 - Prediction ledger: items match by identity (thread conversation ID, Inbox row
   ID, or DELTA file ID with the Task ID), never by subject, so two unrelated
   items with one subject get two rows. Evidence is matched the same way; a
-  subject-only match counts only when it is unique, and only as Candidate
-  (prediction-ledger card v0.2).
+  subject-only match counts only when it is unique, and only as Candidate.
+  Mail is read as the whole conversation: Joe's sent message counts only while
+  it is the terminal message (prediction-ledger card v0.2).
 - Prediction ledger: a Parked row is never asked again; new evidence or Joe's
   own action reopens it, and the weekly calibration re-checks Parked rows.
 - Knowledge chair card v0.2: Status Duplicate for claims a review finds to

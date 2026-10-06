@@ -60,7 +60,10 @@ subject:
    row's conversation; for an item without a thread, messages that name its
    Task ID.
 2. Thread replies: later messages in the same conversation in [[MAIL_INBOX]] and
-   [[MAIL_ROUTED]]. The terminal message controls (Law 3).
+   [[MAIL_ROUTED]]. Read steps 1 and 2 together, as one conversation, before
+   deciding: the terminal message controls (Law 3). Joe's sent message is
+   conclusive only while it is still the terminal message; a later reply
+   decides instead.
 3. Worklist: the row in [[WORKLIST]] with the item's Task ID (Status, Updated,
    Next Action).
 4. Changelog: [[CHANGELOG]] rows that name the Task ID or the Source identity.
