@@ -116,8 +116,9 @@ becomes a question:
 4. If anything read answers the question, do not ask. Write what the record
    shows instead, on a new [[PREDICTION]] row built as section 6 step 1 builds
    one (Subject, Source = the identity, no prediction fields): Actual,
-   Confirmed, with the evidence key and ID; Status Scored. Note it as a gate
-   catch for the weekly method loop.
+   Confirmed, with the evidence key and ID; Status Scored. When a Worklist row
+   covers the gap, also file one [[INBOX]] row for the closeout owner with that
+   evidence. Note it as a gate catch for the weekly method loop.
 5. Hand every item to the checker (job type question-card, retro items) on a
    different model. Only Accepted items are shown. A Rejected item is dropped
    and the next gap takes its place.
@@ -175,7 +176,10 @@ item, in this order:
    linked thread and Worklist row); a class item covers those of each of its
    gaps. For every identity, find the [[PREDICTION]] row with it in
    Source, and create one if none: Subject (at most 12 words), Source (the
-   identity), Actual, Status. Steps 2 to 5 apply to each identity. A thread
+   identity), Actual, Status. The Actual and Status of step 2 are written on
+   each identity's row; every other record (the Inbox rows of steps 2 and 3,
+   the Corrections row of step 4, the Decision row of step 5) is filed once
+   per gap, never once per identity. A thread
    that Joe's note names as an exception gets the answer the note gives it;
    one the note leaves unanswered stays a gap and can come back as a single
    item. A row this lane creates holds no prediction: Is task, Owner, Route,
@@ -245,11 +249,14 @@ skips, so a class item that is split keeps its count.
   split into single threads.
 - 3 skips: park and ask once. The next card shows one last item for it, before
   any row is written: "Keep this open, or let it go?", keep as the default.
-  This item offers those two options, not the six tap options. Then create a [[PREDICTION]] row for each identity of the item. Let it go:
-  Actual "let go", Confirmed with the card ID, Status Scored. Keep, or no
-  answer by the next evening: Status Parked, no Actual, and a Check date 7 days
-  later, so the ledger's evidence check can still settle it, without a Score.
-  Nothing closes on silence, and the lane never asks about it again.
+  This item offers those two options, not the six tap options. Then create a
+  [[PREDICTION]] row for each identity of the item. Let it go: Actual "let
+  go", Confirmed with the card ID, Status Scored. Keep, or no answer by the
+  next evening: Status Parked, no Actual, and a Check date 7 days later, so
+  the ledger's evidence check can still settle it, without a Score. An
+  explicit keep is also filed as "still open" is: one [[INBOX]] row for the
+  closeout owner when no open Worklist row covers it. Nothing closes on
+  silence, and the lane never asks about it again.
 
 Ledger items follow the ledger's own skip rule (prediction-ledger skill section
 3). A conflict item skipped three times is not shown again: its Decision row

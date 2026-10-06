@@ -260,3 +260,13 @@ def test_the_checker_accepts_a_gap_with_no_thread():
                              "## question-card"))
     assert "for a gap with no thread, the Worklist row" in checklist
     assert "for a Worklist row alone, the row and the sources it names were read" in checklist
+
+
+def test_gap_level_records_are_filed_once_and_handoffs_cover_every_settlement():
+    skill = read(RETRO_SKILL)
+    gate = flat(section(skill, "## 4. Gate before any question"))
+    assert "When a Worklist row covers the gap, also file one [[INBOX]] row" in gate
+    filing = flat(section(skill, "## 6. File the answers"))
+    assert "filed once per gap, never once per identity" in filing
+    skips = flat(section(skill, "## 7. Skip rule (as EXO)"))
+    assert "An explicit keep is also filed as \"still open\" is" in skips

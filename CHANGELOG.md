@@ -57,9 +57,13 @@ there. Changed cards are bumped; skill versions stay 0.1.
 - Codex review, round 6: every answer that settles a Worklist-covered gap
   reaches the closeout owner as an Inbox row; the checker accepts a gap
   with no thread (row summary, row and its sources read).
+- Codex review, round 7: a gate catch on a Worklist row reaches the
+  closeout owner; Inbox, Corrections and Decision rows are filed once per
+  gap, only the Prediction write repeats per identity; an explicit "keep"
+  on the last-chance item is handed on like "still open".
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 57 new tests; with
-  pull request 2's latest fixes merged in, 383 pass and 1 is skipped.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 58 new tests; with
+  pull request 2's latest fixes merged in, 384 pass and 1 is skipped.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
