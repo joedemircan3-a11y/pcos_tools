@@ -26,13 +26,23 @@ pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the w
   Approval; being a preparation is its status, not a second label.
 - Checker `delta`: the sources each line cites are required, reopened and
   compared; a line that a source contradicts or no source shows fails.
+- Checker golden set, lane run: a case passes only when the output satisfies Joe's
+  correction and the checker's overall verdict is Accept, so a fix that adds a
+  new failure or hard stop cannot be promoted.
+- Checker `council-final` check 1 (plan round) applies to the board council only;
+  the GitHub council has no plan round.
+- Checker `research-raw`: the cited sources are required and opened by URL; each
+  claim and quote must match an opened source.
 - Routines (Codex review of PR 2): L1-brief v0.4 resumes from the window end in
   its last heartbeat, so mail beyond the 5-day cap is read by later runs and never
   dropped; L2-render v0.3 keeps every open Needs Joe row on Today, however old;
   council-github-chair v0.8 ends a council only on its own "Chair: Final", counts
   only reviews of the current head, re-checks the head before writing, and
   restores missing Changelog rows before replaying a Final.
-- Tests: one per fix, each failing on the old text.
+- Tests: the private-ID guard also flags runs of 25 characters or more with two of
+  the three character classes, or with no "-" or "_" (Drive IDs are 28 or more), so
+  an ID without a digit or without mixed case is caught; public names on the
+  reviewed list stay allowed. One test per fix, each failing on the old text.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 

@@ -97,8 +97,10 @@ because they test two different things: the lanes' outputs, and this checker.
    Joe's correction (it does what the correction asks and follows the rule it
    implies) and does not repeat the defect of the case's Wrong output. Open the
    case's Source ID when the correction is unclear.
-3. The case passes when that check is PASS. A version that no longer makes the
-   mistake passes, even though the checker then has nothing to raise.
+3. The case passes when that check is PASS and the skill's overall verdict on
+   the output is Accept. A version that no longer makes the mistake passes, even
+   though the checker then has nothing to raise; a version that fixes the old
+   defect but fails another check or hits a hard stop does not.
 
 ### Checker run: scores a checker version
 

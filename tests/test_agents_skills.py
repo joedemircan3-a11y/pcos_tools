@@ -50,14 +50,18 @@ PLURAL_OBJECT = re.compile(r"\b(folders|files|databases|pages|views|sheets)\b")
 SET_KEYS = {"MAIL_ROUTED"}  # Outlook folders named in one list; see the top of INPUTS.md
 
 # Drive IDs are opaque runs of the URL-safe alphabet: letters, digits, "-" and "_".
-# Every run of that alphabet with both cases and a digit counts as an ID, however
-# word-like its pieces look, unless it is one of these public folder and file
-# names. A name joins this list only on purpose, in a reviewed change.
+# A run of that alphabet counts as an ID, however word-like its pieces look, when it
+# has both cases and a digit; or when it is LONG_RUN characters or longer (Drive IDs
+# are 28 or more) and has two of the three character classes, or no "-" or "_" at
+# all. Public folder and file names are the exception; a name joins this list only
+# on purpose, in a reviewed change.
 PUBLIC_NAMES = {
     "KL_00_PCOS_System_and_AI", "KL_01_Stone_and_Materials", "KL_02_Mosaic_and_Waterjet_Production",
     "KL_03_Pricing", "KL_04_Vendors_and_Terms", "KL_05_Logistics_and_Customs_MX_US_TR",
-    "KL_06_Sales_and_CS", "KL_07_Company_and_People", "PCOS_DISPATCH_2026-09-29b",
+    "KL_06_Sales_and_CS", "KL_07_Company_and_People", "PCOS_BUILD_KIT_2026-09-28",
+    "DELTA_YYYY-MM-DD_source_topic", "PCOS_DISPATCH_2026-09-29b",
 }
+LONG_RUN = 25
 ID_RUN = re.compile(r"(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{12,}(?![A-Za-z0-9_-])")
 
 
@@ -65,7 +69,10 @@ def find_drive_id(text):
     """Return the first Drive-style ID in text, or None."""
     for match in ID_RUN.finditer(text):
         run = match.group()
-        if run not in PUBLIC_NAMES and all(re.search(c, run) for c in ("[a-z]", "[A-Z]", r"\d")):
+        if run in PUBLIC_NAMES:
+            continue
+        kinds = sum(bool(re.search(c, run)) for c in ("[a-z]", "[A-Z]", r"\d"))
+        if kinds == 3 or (len(run) >= LONG_RUN and (kinds >= 2 or not re.search(r"[-_]", run))):
             return run
     return None
 
@@ -216,6 +223,8 @@ def test_no_private_identifiers_in_the_public_repository(path):
     "1Abc_defghijklmnop", "1abc_Defghijklmnop", "id 0AbC1dEf2GhI3jKl4Mn.",
     "(1aB9-xYz_Q2w3e4R5t6y7U8i9o0P1a)", "1-_xQ09Kp_Lm3NoPqRsTuVwXy",
     "Abc_123D_Def_456E_Ghi_789J_Klm", "Abc_Def_v4_Ghi_Jkl", "KL_02_Mosaic_and_Waterjet_Productio",
+    "abcdefghijklmnopqrstuvwxyz123456789", "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghi",
+    "ABCDEFGHIJKLMNOP1234567890QRS", "abcdefghijklmnopqrstuvwxyzabcdefgh", "abc-def_ghi-jkl_mno-pqr-stu1",
 ])
 def test_drive_id_detector_catches_ids_with_url_safe_separators(text):
     assert find_drive_id(text)
@@ -547,6 +556,28 @@ def test_delta_checklist_reopens_the_cited_sources():
     assert "Required: the sources each line cites" in delta
     assert "reopened in this run" in delta and "what changed is what the source shows" in delta
     assert "that no source shows, fails" in delta
+
+
+def test_lane_run_case_needs_an_overall_accept_too():
+    text = (SKILLS / "checker" / "SKILL.md").read_text(encoding="utf-8")
+    lane_run = " ".join(section(text, "### Lane run: scores a lane version").split())
+    assert "overall verdict on the output is Accept" in lane_run
+    assert "fails another check or hits a hard stop does not" in lane_run
+
+
+def test_council_final_plan_round_check_is_for_the_board_council():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    council_final = " ".join(section(text, "## council-final").split())
+    assert "1. The plan round was Final before execution started." not in council_final
+    assert "GitHub council: there is no plan round" in council_final
+
+
+def test_research_raw_checklist_reopens_the_cited_sources():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    raw = " ".join(section(text, "## research-raw").split())
+    assert "Required: every source the file cites, opened by its URL in this run." in raw
+    assert "matches the cited source as opened in this run" in raw
+    assert "no opened source supports fails" in raw
 
 
 @pytest.mark.parametrize("text", [
