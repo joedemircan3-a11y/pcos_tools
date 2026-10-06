@@ -44,17 +44,44 @@ PLACEHOLDER_KEY = "KEY"  # the template and the skills explain the syntax as [[K
 KEY_DEF = re.compile(r"^\| `([A-Z0-9_]+)` \|", re.M)
 LINK = re.compile(r"\]\(([^)\s]+)\)")
 SKILL_NAME = re.compile(r"^[a-z0-9]+(-[a-z0-9]+)*$")
-# Patterns that would publish private PCOS identifiers: Drive-style IDs (a long
-# run of letters and digits with both cases and a digit), Notion IDs, UUIDs,
-# e-mail addresses and links to Drive, Docs or Notion objects.
+KEY_ROW = re.compile(r"^\| `([A-Z0-9_]+)` \| [^|\n]* \| ([^|\n]*) \|", re.M)
+GROUP_ROW = re.compile(r"^\| `([A-Z0-9_]+)` \| ([^|\n]*) \|", re.M)
+PLURAL_OBJECT = re.compile(r"\b(folders|files|databases|pages|views|sheets)\b")
+SET_KEYS = {"MAIL_ROUTED"}  # Outlook folders named in one list; see the top of INPUTS.md
+
+# Drive IDs are opaque runs of the URL-safe alphabet: letters, digits, "-" and "_".
+# A run of that alphabet with both cases and a digit is an ID unless every piece
+# between the separators reads as a word, a number, a short code or a timestamp
+# (KL_02_Mosaic_and_Waterjet_Production, PCOS_DISPATCH_2026-09-29b, QC18, v4).
+ID_RUN = re.compile(r"(?<![A-Za-z0-9_-])[A-Za-z0-9_-]{12,}(?![A-Za-z0-9_-])")
+WORDISH = re.compile(r"[A-Z]*[a-z]*|(?:[A-Z]{0,4}|[a-z]{0,4})\d+[a-z]{0,2}|\d+[A-Z]{1,4}"
+                     r"|\d{8}T\d{4,6}Z?")
+
+
+def find_drive_id(text):
+    """Return the first Drive-style ID in text, or None."""
+    for match in ID_RUN.finditer(text):
+        run = match.group()
+        if not all(re.search(c, run) for c in ("[a-z]", "[A-Z]", r"\d")):
+            continue
+        if not all(WORDISH.fullmatch(piece) for piece in re.split("[-_]", run)):
+            return run
+    return None
+
+
+def first_match(pattern):
+    """A finder that returns the first match of pattern as text, or None."""
+    return lambda text: (found := pattern.search(text)) and found.group()
+
+
+# Finders for what would publish private PCOS identifiers: Drive-style IDs,
+# Notion IDs, UUIDs, e-mail addresses and links to Drive, Docs or Notion objects.
 PRIVATE = {
-    "Drive-style ID": re.compile(
-        r"(?<![A-Za-z0-9])(?=[A-Za-z0-9]*[a-z])(?=[A-Za-z0-9]*[A-Z])(?=[A-Za-z0-9]*\d)"
-        r"[A-Za-z0-9]{12,}(?![A-Za-z0-9])"),
-    "Notion ID": re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])"),
-    "UUID": re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"),
-    "e-mail address": re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+"),
-    "Drive or Notion link": re.compile(r"(docs|drive)\.google\.com|notion\.(so|site|com)"),
+    "Drive-style ID": find_drive_id,
+    "Notion ID": first_match(re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")),
+    "UUID": first_match(re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")),
+    "e-mail address": first_match(re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+")),
+    "Drive or Notion link": first_match(re.compile(r"(docs|drive)\.google\.com|notion\.(so|site|com)")),
 }
 
 
@@ -77,6 +104,13 @@ def public_files():
 
 def defined_keys():
     return KEY_DEF.findall((AGENTS / "INPUTS.md").read_text(encoding="utf-8"))
+
+
+def section(text, heading):
+    """The body of the markdown section whose heading line is exactly heading."""
+    match = re.search(rf"^{re.escape(heading)}\n(.*?)(?=^#{{1,3}} |\Z)", text, re.M | re.S)
+    assert match, f"section {heading!r} missing"
+    return match.group(1)
 
 
 def parse_frontmatter(text):
@@ -171,9 +205,71 @@ def test_relative_links_resolve(path):
 @pytest.mark.parametrize("path", public_files(), ids=lambda p: str(p.relative_to(ROOT)))
 def test_no_private_identifiers_in_the_public_repository(path):
     text = path.read_text(encoding="utf-8")
-    for what, pattern in PRIVATE.items():
-        found = pattern.search(text)
-        assert not found, f"{what} in {path.relative_to(ROOT)}: {found.group()}"
+    for what, find in PRIVATE.items():
+        found = find(text)
+        assert not found, f"{what} in {path.relative_to(ROOT)}: {found}"
+
+
+@pytest.mark.parametrize("text", [
+    "1Abc_defghijklmnop", "1abc_Defghijklmnop", "id 0AbC1dEf2GhI3jKl4Mn.",
+    "(1aB9-xYz_Q2w3e4R5t6y7U8i9o0P1a)", "1-_xQ09Kp_Lm3NoPqRsTuVwXy",
+])
+def test_drive_id_detector_catches_ids_with_url_safe_separators(text):
+    assert find_drive_id(text)
+
+
+@pytest.mark.parametrize("text", [
+    "KL_02_Mosaic_and_Waterjet_Production", "KL_05_Logistics_and_Customs_MX_US_TR",
+    "PCOS_DISPATCH_2026-09-29b", "PCOS_BUILD_KIT_2026-09-28", "PCOS_AGENT_INPUT_IDS",
+    "CLAIM_QC18_CLAUDE_code_20261006T021249Z.md", "council-board-review-2", "KL_VENDORS_RAW__INDEX",
+])
+def test_drive_id_detector_passes_file_and_key_names(text):
+    assert find_drive_id(text) is None
+
+
+def test_each_key_names_one_object_and_groups_list_keys():
+    text = (AGENTS / "INPUTS.md").read_text(encoding="utf-8")
+    groups = dict(GROUP_ROW.findall(section(text, "## Groups")))
+    keys = {key: system for key, system in KEY_ROW.findall(text) if key not in groups}
+    for key, system in keys.items():
+        if key not in SET_KEYS:
+            assert not PLURAL_OBJECT.search(system), f"{key} names more than one object: {system}"
+    for group, members in groups.items():
+        listed = re.findall(r"`([A-Z0-9_]+)`", members)
+        assert listed, f"group {group} lists no keys"
+        assert all(m in keys for m in listed), f"group {group} lists a key that is not defined"
+
+
+def test_golden_set_lane_run_scores_the_output_and_the_checker_is_scored_apart():
+    text = (SKILLS / "checker" / "SKILL.md").read_text(encoding="utf-8")
+    lane_run = " ".join(section(text, "### Lane run: scores a lane version").split())
+    assert "satisfies Joe's correction" in lane_run
+    assert "checker raises" not in lane_run
+    assert "raises the defect" in section(text, "### Checker run: scores a checker version")
+    assert "never added together" in section(text, "### Scores")
+
+
+def test_prediction_items_match_by_identity_never_by_subject():
+    text = (SKILLS / "prediction-ledger" / "SKILL.md").read_text(encoding="utf-8")
+    predict = section(text, "## 1. Predict: one row per new item")
+    assert "never by subject" in predict and "conversation ID" in predict
+    assert "same identity" in predict and "or subject" not in predict
+
+
+def test_parked_prediction_rows_are_never_asked_again():
+    text = (SKILLS / "prediction-ledger" / "SKILL.md").read_text(encoding="utf-8")
+    ask = section(text, "## 3. Ask only when blind")
+    assert "A Parked row is never asked again." in ask
+    assert "asked again only if" not in ask and "7 days later" not in ask
+    assert "Parked row" in section(text, "## 5. Calibrate: weekly, Sunday, before the weekly-evolve lane")
+
+
+def test_every_knowledge_review_verdict_has_a_chair_status():
+    review = (AGENTS / "knowledge-review.md").read_text(encoding="utf-8")
+    mission = section((AGENTS / "knowledge-chair.md").read_text(encoding="utf-8"), "## 1. Mission")
+    for verdict, status in [("supported", "Confirmed"), ("contradicted", "Contradicted"),
+                            ("stale", "Stale"), ("duplicate", "Duplicate")]:
+        assert verdict in review and status in mission, f"no chair status for verdict {verdict}"
 
 
 def test_indexes_list_every_card_and_skill():

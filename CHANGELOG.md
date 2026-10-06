@@ -1,5 +1,28 @@
 # Changelog
 
+## Unreleased - 2026-10-06: Codex review fixes (PR 1)
+
+Why: PCOS queue item QC18 (QUEUE_v4) applies the six Codex review suggestions on
+pull request 1, recorded at PC-1 (DELTA_PC-1 step B3). Built by Claude (Claude
+Code on the web). Card versions are bumped where a card changed; skill versions
+stay 0.1 because the skills are not released yet.
+
+- Golden set: the lane run now scores whether a lane's output satisfies Joe's
+  correction; a separate checker run scores the checker on the case's Wrong
+  output. Before, a version that kept the defect passed and a version that fixed
+  it failed. Checker card v0.2; checker and weekly-evolve skills follow.
+- Prediction ledger: items match by identity (thread conversation ID, Inbox row
+  ID, or DELTA file ID with the Task ID), never by subject, so two unrelated
+  items with one subject get two rows.
+- Prediction ledger: a Parked row is never asked again; new evidence or Joe's
+  own action reopens it, and the weekly calibration re-checks Parked rows.
+- Knowledge chair card v0.2: Status Duplicate for claims a review finds to
+  repeat an earlier row (needs the Status option in the Knowledge database).
+- `agents/INPUTS.md` v0.2: one key per domain folder, `KL_00` to `KL_07`;
+  `KL_DOMAINS` is a group of those keys; `MAIL_ROUTED` documented as the one set.
+- Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`, and
+  one test per fix above. 200 tests pass, 1 is skipped.
+
 ## Unreleased - 2026-10-01: agent cards and skills v0.1
 
 Why: PCOS queue item Q01 (PCOS_DISPATCH_2026-09-29 PROMPT C1, register P2-19,

@@ -1,6 +1,6 @@
 # Card: knowledge-chair
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-16 stages 3 and 4 (consolidation and golden-set gate); later P2-17 (method loop)
 - Lane ID: pending
@@ -9,8 +9,8 @@
 
 ## 1. Mission
 
-Decide each reviewed claim: Confirmed, Contradicted, Stale or Needs Joe.
-Contradictions between business sources become decisions with a default and a
+Decide each reviewed claim: Confirmed, Contradicted, Stale, Duplicate or Needs
+Joe. Contradictions between business sources become decisions with a default and a
 date. Write the next REFINED version of each domain from Confirmed claims only,
 and promote it only if the golden set scores equal or better.
 
@@ -32,7 +32,8 @@ settle.
 
 ## 3. Tools allowed
 
-- Notion: set Status on [[KNOWLEDGE]] rows; create [[DECISIONS]] rows with a
+- Notion: set Status on [[KNOWLEDGE]] rows (Confirmed, Contradicted, Stale,
+  Duplicate, Needs Joe); create [[DECISIONS]] rows with a
   default and a review date; [[CHANGELOG]] rows; one heartbeat in [[LANES]].
 - Drive: create the new REFINED version files and their index lines, following
   the P2-12 index rule. No in-place edits.
@@ -59,6 +60,10 @@ settle.
 
 - [[KNOWLEDGE]] Status per claim, with one line of reasoning in Reviewer notes
   when the chair overrules a reviewer.
+- Duplicate: when a review says "duplicate of row X" and the chair agrees, the
+  claim gets Status Duplicate and the note "duplicate of row X" in Reviewer
+  notes. Row X keeps its own decision. The claim text is not changed and the row
+  is not deleted. Duplicate rows never enter consolidation.
 - [[DECISIONS]] rows for contradictions: the two sources (keys and IDs), the
   question in one line, the default and a review date.
 - REFINED vN+1 file per changed domain, with a change list (claim row, change,
@@ -85,10 +90,16 @@ settle.
 - Escalation: one card question per contradiction that the sources cannot
   settle, with the chair's default first.
 - Depends on: knowledge-extract and knowledge-review running; P2-12 index files
-  (queue item Q02); [[GOLDEN_SET]] (exists).
+  (queue item Q02); [[GOLDEN_SET]] (exists); the Status option Duplicate in
+  [[KNOWLEDGE]] (added with P2-16).
 
 ## Change note
 
 v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | register
 P2-16 stages 3 and 4; dev-session records of 2026-09-27 turn 4 and 2026-09-28
 part 2 | Joe's default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | Status Duplicate for
+claims that a review finds to repeat an earlier row | the review lane can return
+"duplicate of row X", but the chair had no status for it, so such a claim could
+never be decided (Codex review of PR 1) | PCOS QUEUE_v4 item QC18
