@@ -94,7 +94,9 @@ Send, with Joe in cc, only when all of these hold:
 3. No ask in the message is on the stop list.
 4. The checker returned Accept.
 
-If any one fails, the reply stays in Drafts (Status Drafted) and Joe sends it.
+If any one fails, the reply stays in Drafts and Joe sends it. The row's Status
+is Needs Joe when the message has a stop-list ask (condition 3, section 3) or
+the checker did not Accept, and Drafted when only conditions 1 or 2 failed.
 Until conditions 1 and 2 exist, every reply waits in Drafts.
 
 ## 7. Record

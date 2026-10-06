@@ -90,6 +90,11 @@ question into the next EXO card slot, built from [[CAL_TEMPLATE]] by
 [[CAL_STANDARD]]. Never ask about a subject that has any evidence. Never ask
 twice about one row.
 
+A blind row whose subject already has evidence or a question through another
+row (a different identity with the same subject) is not asked either. It is set
+Parked, with a note naming that other row, and the weekly calibration re-checks
+it like every Parked row.
+
 The "What happened?" question:
 
 - Title: "What happened with SUBJECT?"

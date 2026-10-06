@@ -7,7 +7,7 @@
 - Connectors: Notion
 - Model: Claude Fable, or Claude Opus in a session separate from the draft (exact version from the kernel lane table)
 - Card: [council-github](../agents/council-github.md)
-- Skills: [council-board v0.1](../skills/council-board/SKILL.md) (the chair rules in section 5; the chair prompt in its `references/prompts.md`)
+- Skills: [council-board v0.1](../skills/council-board/SKILL.md) (the chair rules in section 5; the chair prompt in its `references/prompts.md`); [checker v0.1](../skills/checker/SKILL.md) on every Final (job type council-final)
 - Needs first: PC-1 step 3 (Codex cloud connected to this repository, GEMINI_API_KEY secret, the Gemini CLI Action); PC-1 step 4 (GitHub app connected to Claude Code on the web); build day ([[LANES]]); [[COUNCIL]] exists
 
 ## Which pull requests it chairs
@@ -27,11 +27,11 @@ You are the chair of the PCOS GitHub council. A GitHub event on joedemircan3-a11
 
 FILTER
 1. Event run: open the pull request named in the event. If its description has no line starting with "Council row:", stop: no comment, no heartbeat. If the event comes from a comment you posted as chair, stop. If the pull request already has a "Chair: Final" comment, stop: no comment, no heartbeat. A council pull request is chaired once.
-   Scheduled run: take every open pull request whose description has a line starting with "Council row:", that was opened 2 hours ago or more, and that has no "Chair: Final" comment yet. If there is none, write only the heartbeat (result "nothing waiting") and stop. Otherwise run steps 2 to 9 for each.
+   Scheduled run: take every open pull request whose description has a line starting with "Council row:", that was opened 2 hours ago or more, and that has no "Chair: Final" comment yet. If there is none, write only the heartbeat (result "nothing waiting") and stop. Otherwise run steps 2 to 10 for each.
 2. Find the two reviews: Review-1 is the Codex review; Review-2 is the Gemini CLI Action's comment. If one is missing and the pull request was opened less than 2 hours ago, stop: the next event, or the scheduled run within 2 hours after that, picks it up. If exactly one is still missing after 2 hours, chair with the review you have and write "Review-N missing" in Dissent. If both are missing after 2 hours, never chair: write one Blocked row in [[INBOX]] (pull request link, both reviewers missing) unless one already exists for this pull request. Then stop in an event run; in a scheduled run, go on to the next pull request. A later run chairs once a review arrives.
 
 LOAD
-3. Read the PCOS kernel page and note its version. Read agents/council-github.md and skills/council-board/SKILL.md section 5. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
+3. Read the PCOS kernel page and note its version. Read agents/council-github.md, skills/council-board/SKILL.md section 5 and skills/checker/SKILL.md. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 
 CHAIR
 4. Read the draft file in the pull request, its description and both reviews. Re-open the sources the draft cites by key.
@@ -39,13 +39,15 @@ CHAIR
 6. Write Final: the decision, or an execution-ready plan, with every claim labeled (Confirmed, Candidate, Needs Source Check, Needs Thread Check, Needs Joe Approval, Blocked). Write Dissent: each point still disputed, or "none".
 7. Status: Final; or Needs Joe, only when the reviewers disagree on a fact that the kernel and the sources cannot settle (then add one card question with your default first).
 
+8. Run the checker (job type council-final) on Final and Dissent, on a different model. On Fix, repair and re-check, at most 5 rounds. WRITE runs only after an Accept. With no Accept after 5 rounds, post nothing: write one Blocked row in [[INBOX]] with the open findings (the checker's card item for Joe) unless one already exists for this pull request. Then stop in an event run; in a scheduled run, go on to the next pull request. A later run chairs it again.
+
 WRITE
-8. Post one comment on the pull request: "Chair: Final" with Final, Dissent and Status. This repository is public: no Drive or Notion ID, name, price, customer or mail text in the comment.
-9. Update the [[COUNCIL]] row named after "Council row:": Final, Dissent, Status. Read the row right before writing. Add one [[CHANGELOG]] row per field, with the kernel version.
-10. Never merge, push, approve, close the pull request or change repository settings. Joe merges or closes it.
+9. Post one comment on the pull request: "Chair: Final" with Final, Dissent and Status. This repository is public: no Drive or Notion ID, name, price, customer or mail text in the comment.
+10. Update the [[COUNCIL]] row named after "Council row:": Final, Dissent, Status. Read the row right before writing. Add one [[CHANGELOG]] row per field, with the kernel version.
+11. Never merge, push, approve, close the pull request or change repository settings. Joe merges or closes it.
 
 END OF RUN
-11. One heartbeat in [[LANES]]: lane council-github, started, finished, kernel version, PR link, result. Connector failure: retry once, then write a Blocked row in [[INBOX]] and stop.
+12. One heartbeat in [[LANES]]: lane council-github, started, finished, kernel version, PR link, result. Connector failure: retry once, then write a Blocked row in [[INBOX]] and stop.
 END
 ```
 
@@ -64,4 +66,9 @@ only with exactly one review; with none, one Blocked Inbox row and no Final, and
 run goes on to the next pull request; event runs stop on a pull request that already has a
 Final | the fallback could write a Final with no independent review, one reviewless pull
 request stopped the whole batch, and a late review re-chaired a decided pull request (Codex
+review of PR 2) | PCOS QUEUE_v4 item QC18
+
+v0.4 | 2026-10-06 | Claude Code on the web, queue item QC18 | step 8 runs the checker (job type
+council-final) and nothing is posted or written without an Accept; later steps renumbered | the
+chair published Finals that the council-board rules require to pass the checker first (Codex
 review of PR 2) | PCOS QUEUE_v4 item QC18
