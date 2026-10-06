@@ -28,7 +28,7 @@ row; send or commit anything; treat silence as an answer.
   re-ask); the CAL lane's open questions in [[CAL_FOLDER]]; [[PREDICTION]]
   (the identities the ledger already owns, and the Asked Joe rows whose
   questions ride on this card); [[WORKLIST]] rows updated in the window;
-  [[STEPS]] rows Queued or Shown (EXO works those tasks).
+  [[STEPS]] rows Queued, Shown or Reshaped (EXO works those tasks).
 - L2, gap query and gate, per candidate: the whole thread in [[MAIL_INBOX]],
   [[MAIL_SENT]] and [[MAIL_ROUTED]]; later threads with the same counterpart or
   Task ID; [[CHANGELOG]] rows about it; the measured closure habits in

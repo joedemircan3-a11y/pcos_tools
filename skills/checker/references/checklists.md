@@ -124,9 +124,10 @@ thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]], and the
 8. Retro gate, for every thread of the item: every message of the thread and
    every later reply was read (the message IDs are in the run record); no
    closure evidence exists in the mail, [[WORKLIST]], [[CHANGELOG]] or
-   [[DECISIONS]]; no [[PREDICTION]] row has the thread's identity in Source,
-   unless the item is the ledger's own queued question. Matching is by
-   identity, never by subject.
+   [[DECISIONS]]; no [[PREDICTION]] row has any identity the gap carries (the
+   conversation ID, and the Task ID of a linked Worklist row) in Source, unless
+   the item is the ledger's own queued question. Matching is by identity, never
+   by subject.
 
 ## prediction
 

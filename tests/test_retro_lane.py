@@ -229,3 +229,21 @@ def test_a_thread_and_its_worklist_row_are_one_gap():
     gaps = flat(section(read(RETRO_SKILL), "## 2. Find the gaps"))
     assert "are one gap with both identities" in gaps
     assert "excluded when either identity is" in gaps
+
+
+def test_worklist_only_gaps_have_their_own_wording_and_outcome():
+    card = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    assert "A gap with no thread (a Worklist row alone) sums up the row instead" in card
+    filing = flat(section(read(RETRO_SKILL), "## 6. File the answers"))
+    assert "done as the row's Next Action planned" in filing
+
+
+def test_reshaped_exo_steps_keep_a_row_out_of_retro():
+    gaps = flat(section(read(RETRO_SKILL), "## 2. Find the gaps"))
+    assert "no Queued, Shown or Reshaped step" in gaps
+
+
+def test_the_checker_checks_every_identity_of_a_gap():
+    checklist = flat(section(read(ROOT / "skills" / "checker" / "references" / "checklists.md"),
+                             "## question-card"))
+    assert "any identity the gap carries" in checklist

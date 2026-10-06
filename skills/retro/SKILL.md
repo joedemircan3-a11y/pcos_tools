@@ -46,9 +46,9 @@ Two kinds of candidate:
    not asks), and that have been quiet for at least 7 days.
 2. Rows of [[WORKLIST]] updated in the window whose Status waits on an event
    that may have happened offline (Waiting, Blocked, Done-Candidate,
-   Stale-Triage), quiet for at least 7 days, and with no Queued or Shown step
-   in [[STEPS]], identified by Task ID. Active rows are today's work and
-   EXO's.
+   Stale-Triage), quiet for at least 7 days, and with no Queued, Shown or
+   Reshaped step in [[STEPS]], identified by Task ID. Active rows are today's
+   work and EXO's.
 
 A thread and a Worklist row that concern the same ask (the row's sources name
 the thread, or the thread names the Task ID) are one gap with both identities:
@@ -140,7 +140,11 @@ Write each retro item:
   what was asked, the date, the last state. For example: "Sample request from
   the stone vendor, Aug 12: you asked for two samples; their quote got no
   reply." Self-contained, in plain words; no internal ID without its meaning.
-  Quote no more mail text than Joe needs to remember the thread.
+  Quote no more mail text than Joe needs to remember the thread. A gap with no
+  thread (a Worklist row alone) sums up the row instead: what the task is, what
+  it waited on, since when. For such a gap, "closed as quoted" means done as
+  the row's Next Action planned, and "closed differently" means done another
+  way.
 - Tap options, in this order: closed as quoted; closed differently; dropped;
   moved offline (phone, WhatsApp, in person); still open; unrelated. The item
   lists the first five. The sixth, unrelated, is the CAL template's own "Not
@@ -179,7 +183,8 @@ item, in this order:
    weekly calibration leaves it out. Scored on such a row means settled.
 2. Actual, by answer, each Confirmed with the card ID and item as source:
    - closed as quoted: "closed on the terms last quoted or proposed in the
-     thread". Status Scored.
+     thread", or for a gap with no thread, "done as the row's Next Action
+     planned". Status Scored.
    - closed differently: "closed on other terms", with Joe's note verbatim, or
      "terms not recorded" without one. Status Scored.
    - dropped: "dropped". Status Scored. When a Worklist row covers it, one

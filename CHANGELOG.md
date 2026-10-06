@@ -50,9 +50,13 @@ there. Changed cards are bumped; skill versions stay 0.1.
 - Codex review, round 4: the backtest undoes owner-map changes newest first;
   a thread and the Worklist row that names it are one gap with both
   identities, never two questions.
+- Codex review, round 5: a gap with no thread (a Worklist row alone) is
+  summed up from the row, and "closed as quoted" means done as its Next
+  Action planned; a row with a Reshaped EXO step stays EXO's; the checker
+  checks every identity a gap carries.
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 52 new tests; with
-  pull request 2's latest fixes merged in, 377 pass and 1 is skipped.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 55 new tests; with
+  pull request 2's latest fixes merged in, 380 pass and 1 is skipped.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
