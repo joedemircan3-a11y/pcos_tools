@@ -379,11 +379,11 @@ def test_brief_keeps_new_messages_in_known_threads():
 
 def test_github_chair_never_chairs_without_a_review():
     prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
-    fallback = next(line for line in prompt.splitlines() if line.startswith("2. Find the two reviews"))
+    fallback = next(line for line in prompt.splitlines() if line.startswith("5. Find the two reviews"))
     assert "If exactly one is still missing" in fallback and "If both are missing" in fallback
-    assert "never chair" in fallback and "go on to the next pull request" in fallback
-    event = next(line for line in prompt.splitlines() if line.startswith("1. Event run:"))
-    assert 'already has a "Chair: Final" comment, stop' in event
+    assert "never chair" in fallback and "skip" in fallback
+    assert "scheduled run goes on to the next pull request" in prompt
+    assert 'no "Chair: Final" comment' in prompt
 
 
 @pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
@@ -469,11 +469,18 @@ def test_privacy_guard_catches_hex_ids_in_either_case(text):
 
 def test_github_chair_feeds_the_pr_reviews_to_the_checker_and_writes_the_row_first():
     prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
-    lines = prompt.splitlines()
-    check = next(line for line in lines if "job type council-final" in line)
-    assert "two reviews from the pull request" in check
-    row = next(i for i, line in enumerate(lines) if "Update the [[COUNCIL]] row" in line)
-    comment = next(i for i, line in enumerate(lines) if 'Post one comment on the pull request: "Chair: Final"' in line)
-    assert row < comment, "write the Council row before the public comment"
-    assert "post that Final as the comment" in prompt and "never chair it again" in prompt
+    check = next(line for line in prompt.splitlines() if "job type council-final" in line)
+    assert "the reviews the pull request has" in check and "one-review fallback" in check
+    assert prompt.index("Update the [[COUNCIL]] row") < prompt.index('"Chair: Final" with Final')
+    assert "head commit on the Final's first line equals" in prompt
 
+
+def test_github_chair_trusts_only_owner_pull_requests_bound_to_their_row():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    lines = prompt.splitlines()
+    first = next(line for line in lines if line.startswith("1. "))
+    assert "repository owner's account" in first and "not a fork" in first
+    assert "[[" not in first, "the GitHub-only filter must not touch keyed objects"
+    load = prompt.index("\nLOAD\n")
+    assert all(prompt.index(key) > load for key in ("[[COUNCIL]]", "[[INBOX]]")), "load keys first"
+    assert "Draft field" in next(line for line in lines if line.startswith("3. "))

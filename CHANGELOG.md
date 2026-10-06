@@ -57,8 +57,11 @@ stay 0.1 because the skills are not released yet.
     after five failed rounds the row keeps its Status and Joe gets one card
     item (Needs Joe stays for factual disagreements). The council-github
     chair runs the same check before it posts a Final, with the pull
-    request's two reviews as the checklist's reviews; it writes and reads back
-    the Council row before posting, and repairs a run that failed in between.
+    request's reviews as the checklist's reviews; it writes and reads back
+    the Council row before posting, and repairs a run that failed in between
+    (same head commit only). It acts only on pull requests from the
+    repository owner's account on a branch of this repository that are bound
+    to their Council row, and it loads the key map before any Notion access.
   - Every Routine that names the checker loads `skills/checker/SKILL.md`
     (council-board chair, exo, intake-email, prediction-ledger added).
   - L3 Health: the stale-kernel check looks at the last 24 hours only.
