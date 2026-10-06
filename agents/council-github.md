@@ -1,6 +1,6 @@
 # Card: council-github
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-07 (on-demand council through a GitHub pull request: "@codex review", Gemini CLI Action on a free API key, a Claude Code Routine on the PR event chairs and writes Notion)
 - Lane ID: pending
@@ -23,8 +23,11 @@ reviews its own draft.
 
 - L0, always loaded: [[KERNEL]].
 - L1: the pull request in [[REPO]] (diff, description, review comments) and the
-  matching [[COUNCIL]] row, matched by the Task title written in the PR
-  description.
+  [[COUNCIL]] row bound to it: the one row whose Draft field holds the pull
+  request's link. Task titles are not unique, so a row is never picked by its
+  title; the "Council row:" line in the PR description only names the row for
+  people. No bound row, or more than one, means Blocked: the chair writes
+  nothing to any Council row.
 - L2: the sources the draft cites by key; the reviewers and the chair re-open
   them inside their own access. Live rows in [[RULES]]; [[DECISIONS]].
 - Knowledge scope: method and code material only (cards, skills, prompts,
@@ -66,7 +69,9 @@ reviews its own draft.
 
 - The pull request: the draft file, plus a description with the question, the
   Task title of the Council row, the sources by key, and what each reviewer
-  should check. No author model is named.
+  should check. No author model is named. When it opens the pull request, the
+  drafting session writes the pull request's link into the Council row's Draft
+  field; that link is the binding the chair matches on.
 - Reviews: Codex review comments (Review-1) and Gemini Action comments
   (Review-2).
 - Chair comment and [[COUNCIL]] row: Final (decision or execution-ready plan),
@@ -107,3 +112,9 @@ Joe's default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1;
 Operating Card v7.4 WRITE PATHS
 
 v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the council-board skill v0.1 used by the chair | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)
+
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18-R | the Council row is
+found by the pull request's link in its Draft field, never by Task title; no bound
+row or more than one means Blocked | Task titles are not unique, so the chair could
+write Final, Dissent and Status onto the wrong row (Codex review of PR 1) | PCOS
+QUEUE_v6 item QC18-R
