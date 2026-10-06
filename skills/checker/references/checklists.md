@@ -163,9 +163,14 @@ the cost documents named on the task row; [[DECISIONS]] for rulings.
 
 A RAW research file (domain research runs, P2-15).
 
+Required: every source the file cites, opened by its URL in this run.
+
 1. One sub-topic per file, with a date in the title.
 2. Sources listed with URLs and access dates. Verbatim quotes only where quoting
-   is allowed; paraphrase otherwise, marked as such.
+   is allowed; paraphrase otherwise, marked as such. Each substantive claim and
+   each quote matches the cited source as opened in this run. A source that
+   cannot be opened is Blocked; a claim or quote that no opened source supports
+   fails.
 3. No REFINED claims: no recommendation stated as fact, no "we should".
 4. The folder's `_INDEX.md` has the file's line, written in the same run.
 5. Status Candidate.
@@ -196,7 +201,9 @@ council, the two reviews on the pull request), or one review when the chair
 decided after the full-cycle wait (council-board skill section 6); the sources
 the Draft cites.
 
-1. The plan round was Final before execution started.
+1. Board council: the plan round was Final before execution started. GitHub
+   council: there is no plan round (one pull request carries the draft, the
+   reviews and the Final), so this check does not apply.
 2. Both reviews are present, one finding per bullet, each with evidence and a
    verdict. After the full-cycle wait, one review is enough when Dissent says
    "Review-N missing" for the other; it then meets the same standard.

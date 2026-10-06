@@ -26,7 +26,17 @@ pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the w
   Approval; being a preparation is its status, not a second label.
 - Checker `delta`: the sources each line cites are required, reopened and
   compared; a line that a source contradicts or no source shows fails.
-- Tests: one per fix, each failing on the old text. 227 tests pass.
+- Checker golden set, lane run: a case passes only when the output satisfies Joe's
+  correction and the checker's overall verdict is Accept, so a fix that adds a
+  new failure or hard stop cannot be promoted.
+- Checker `council-final` check 1 (plan round) applies to the board council only;
+  the GitHub council has no plan round.
+- Checker `research-raw`: the cited sources are required and opened by URL; each
+  claim and quote must match an opened source.
+- Tests: the private-ID guard also flags runs of 25 characters or more with two of
+  the three character classes, or with no "-" or "_" (Drive IDs are 28 or more), so
+  an ID without a digit or without mixed case is caught; two public names join the
+  reviewed list. One test per fix, each failing on the old text. 237 tests pass.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1)
 
