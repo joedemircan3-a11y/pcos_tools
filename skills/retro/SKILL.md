@@ -181,15 +181,18 @@ item, in this order:
    item. A row this lane creates holds no prediction: Is task, Owner, Route,
    Candidate output, Assumptions, Confidence and Score stay empty, so the
    weekly calibration leaves it out. Scored on such a row means settled.
-2. Actual, by answer, each Confirmed with the card ID and item as source:
+2. Actual, by answer, each Confirmed with the card ID and item as source.
+   When a Worklist row covers the gap and the answer settles it (closed as
+   quoted, closed differently, dropped, moved offline, or let go in section
+   7), also file one [[INBOX]] row for the closeout owner quoting Joe's
+   answer, so the row can be closed with its reason. The lane never changes a
+   Worklist row itself.
    - closed as quoted: "closed on the terms last quoted or proposed in the
      thread", or for a gap with no thread, "done as the row's Next Action
      planned". Status Scored.
    - closed differently: "closed on other terms", with Joe's note verbatim, or
      "terms not recorded" without one. Status Scored.
-   - dropped: "dropped". Status Scored. When a Worklist row covers it, one
-     [[INBOX]] row for the closeout owner quoting Joe's answer. The lane never
-     closes a row.
+   - dropped: "dropped". Status Scored.
    - moved offline: "handled offline". The channel (phone, WhatsApp, in
      person) and the outcome are added only when Joe's note gives them;
      never a guessed channel. Status Scored.

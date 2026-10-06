@@ -247,3 +247,16 @@ def test_the_checker_checks_every_identity_of_a_gap():
     checklist = flat(section(read(ROOT / "skills" / "checker" / "references" / "checklists.md"),
                              "## question-card"))
     assert "any identity the gap carries" in checklist
+
+
+def test_settled_worklist_gaps_reach_the_closeout_owner():
+    filing = flat(section(read(RETRO_SKILL), "## 6. File the answers"))
+    assert "When a Worklist row covers the gap and the answer settles it" in filing
+    assert "never changes a Worklist row itself" in filing
+
+
+def test_the_checker_accepts_a_gap_with_no_thread():
+    checklist = flat(section(read(ROOT / "skills" / "checker" / "references" / "checklists.md"),
+                             "## question-card"))
+    assert "for a gap with no thread, the Worklist row" in checklist
+    assert "for a Worklist row alone, the row and the sources it names were read" in checklist

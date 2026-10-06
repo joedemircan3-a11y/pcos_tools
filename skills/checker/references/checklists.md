@@ -97,8 +97,8 @@ A CAL card, an EXO card, a retro card or a "What happened?" question.
 
 Required: [[CAL_STANDARD]]; [[DECISIONS]]; Joe's replies in the chain and
 [[MAIL_SENT]]; for EXO, the [[STEPS]] rows shown; for a retro item, the whole
-thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]], and the
-[[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
+thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]] when the gap has
+one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
 
 1. Every question passes CAL-R5: it is not already answered in Decisions, in
    Joe's replies or in a later reply.
@@ -113,7 +113,9 @@ thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]], and the
    progress line at the end, no overdue list and no count of late items.
 6. One Open row in [[DECISIONS]] for the card.
 7. Retro: at most five items; the ledger's "What happened?" items first, then
-   the open conflict items. A retro item is one line that sums up the thread,
+   the open conflict items. A retro item is one line that sums up the thread
+   (for a gap with no thread, the Worklist row: the task, what it waited on,
+   since when),
    with the tap options closed as quoted, closed differently, dropped, moved
    offline and still open, plus the template's "Not needed / wrong direction"
    as the sixth, unrelated (never a second unrelated option), and free text or
@@ -121,8 +123,9 @@ thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]], and the
    identity in the card's [[DECISIONS]] row. The skip rule's last-chance item
    offers keep or let go instead of the six options. A progress line ends the
    card; no count of open gaps.
-8. Retro gate, for every thread of the item: every message of the thread and
-   every later reply was read (the message IDs are in the run record); no
+8. Retro gate, for every gap of the item: for a thread, every message and
+   every later reply was read (the message IDs are in the run record); for a
+   Worklist row alone, the row and the sources it names were read; no
    closure evidence exists in the mail, [[WORKLIST]], [[CHANGELOG]] or
    [[DECISIONS]]; no [[PREDICTION]] row has any identity the gap carries (the
    conversation ID, and the Task ID of a linked Worklist row) in Source, unless
