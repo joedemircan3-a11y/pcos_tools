@@ -1,5 +1,122 @@
 # Changelog
 
+## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1)
+
+Why: PCOS queue item QC18-R (QUEUE_v6) fixes the four Codex findings left open on
+pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the web).
+
+- Checker `prediction` checklist: the sent mail and the replies are read together
+  as one conversation and Actual rests on the terminal message, as in the
+  prediction-ledger skill section 2; the old sent-mail-first lookup order is gone.
+- Prediction ledger: a "handled offline" answer scores the row only when the
+  answer, Joe's note and the evidence settle every guess (Owner, Route, Candidate
+  output, each assumption); otherwise the row is Parked with Actual kept and the
+  weekly calibration scores it later. The note under that option asks who handled
+  it and whether the draft was used (prediction-ledger card v0.3).
+- Checker `knowledge-claim` checklist: an inferred claim passes when it is labeled
+  Candidate and follows from the source, matching the knowledge-extract card; an
+  inferred claim labeled Confirmed fails.
+- Council-github card v0.3: the chair finds the Council row by the pull request's
+  link in the row's Draft field, never by Task title; no bound row, or more than
+  one, is Blocked.
+- Checker `council-final` check 6 covers the GitHub council: there the pull
+  request names no author model and neither reviewer drafted; the Reviewer view
+  applies to the board council only.
+- Checker `pricing-prep`: the result carries exactly one evidence label, Needs Joe
+  Approval; being a preparation is its status, not a second label.
+- Checker `delta`: the sources each line cites are required, reopened and
+  compared; a line that a source contradicts or no source shows fails.
+- Checker golden set, lane run: a case passes only when the output satisfies Joe's
+  correction and the checker's overall verdict is Accept, so a fix that adds a
+  new failure or hard stop cannot be promoted.
+- Checker `council-final` check 1 (plan round) applies to the board council only;
+  the GitHub council has no plan round.
+- Checker `research-raw`: the cited sources are required and opened by URL; each
+  claim and quote must match an opened source.
+- Tests: the private-ID guard also flags runs of 25 characters or more with two of
+  the three character classes, or with no "-" or "_" (Drive IDs are 28 or more), so
+  an ID without a digit or without mixed case is caught; two public names join the
+  reviewed list. One test per fix, each failing on the old text. 237 tests pass.
+
+## Unreleased - 2026-10-06: Codex review fixes (PR 1)
+
+Why: PCOS queue item QC18 (QUEUE_v4) applies the six Codex review suggestions on
+pull request 1, recorded at PC-1 (DELTA_PC-1 step B3). Built by Claude (Claude
+Code on the web). Card versions are bumped where a card changed; skill versions
+stay 0.1 because the skills are not released yet.
+
+- Golden set: the lane run now scores whether a lane's output satisfies Joe's
+  correction; a separate checker run scores the checker on the case's Wrong
+  output and on known-good outputs, which it must Accept. Before, a version that
+  kept the defect passed and a version that fixed it failed. Checker card v0.2;
+  checker and weekly-evolve skills follow.
+- Prediction ledger: items match by identity (thread conversation ID, Inbox row
+  ID, or DELTA file ID with the Task ID), never by subject, so two unrelated
+  items with one subject get two rows. Evidence is matched the same way; a
+  subject-only match counts only when it is unique, and only as Candidate.
+  Mail is read as the whole conversation: Joe's sent message counts only while
+  it is the terminal message (prediction-ledger card v0.2). A row left with only
+  nonconclusive evidence after the extra wait is Parked, not stranded, and so is
+  a blind row whose subject another row already covers.
+- Intake-email skill: a sender off the allowlist, a stop-list ask or a checker
+  failure keeps the row at Needs Joe; Drafted only when the Door 1 rule alone is
+  missing.
+- Prediction ledger: a Parked row is never asked again; new evidence or Joe's
+  own action reopens it, and the weekly calibration re-checks Parked rows.
+- Knowledge chair card v0.2: Status Duplicate for claims a review finds to
+  repeat an earlier row (needs the Status option in the Knowledge database).
+- Checker `council-final` checklist: one review is enough after the full-cycle
+  wait when Dissent names the missing review, so the documented fallback can
+  pass.
+- Knowledge-extract card v0.2: model fixed at Claude Sonnet, so the Claude
+  Review-2 (Opus) is never the extracting model; the evidence label is kept
+  apart from Status (a claim the source states is Confirmed evidence, Status
+  Candidate until the chair decides).
+- `agents/INPUTS.md` v0.2: one key per domain folder, `KL_00` to `KL_07`;
+  `KL_DOMAINS` is a group of those keys; `MAIL_ROUTED` documented as the one set.
+- Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`: every
+  run of the URL-safe alphabet with both cases and a digit fails, except a short
+  list of public folder names kept in the test. Notion IDs and UUIDs are caught
+  in upper or lower case. One test per fix above. 219 tests pass, 1 is skipped.
+
+## Unreleased - 2026-10-01: agent cards and skills v0.1
+
+Why: PCOS queue item Q01 (PCOS_DISPATCH_2026-09-29 PROMPT C1, register P2-19,
+P2-03, P2-01, P2-02) puts the phase-2 agent cards and the first skills in this
+repository, so that build day installs them instead of writing them. Built by
+Claude (Claude Code on the web, session_01Urw9UiZSQ2c6DofLwbgk1t). The
+`pcos_tools` package is unchanged and stays at 0.3.0.
+
+- `agents/`: `CARD_TEMPLATE.md` (six parts: mission, inputs by ID, tools,
+  rules and kernel version, output contract with the Law 4 evidence labels,
+  trigger and owner model), `INPUTS.md` (46 source keys), `_INDEX.md`, and one
+  card for each planned lane: prediction-ledger, exo, checker, council-board,
+  council-github, intake-email, weekly-evolve, knowledge-extract,
+  knowledge-review, knowledge-chair.
+- `skills/`: checker (with checklists for 12 job types), prediction-ledger and
+  exo, in the Agent Skills format; `_INDEX.md`.
+- Sources are named by key. The Drive and Notion IDs stay in a private Drive map.
+  Why: this repository is public (Operating Card v7.4: never put real business
+  data in it), and one map means one line to change when a governance file is
+  superseded and its ID changes.
+- `tests/test_agents_skills.py`: card parts, skill frontmatter, keys, links,
+  and a guard against private identifiers. 171 tests pass (was 116), 1 is
+  skipped.
+- `scripts/build_zip.py` also ships `agents/` and `skills/`, so the test suite
+  passes when it is run from the zip.
+- Queue item Q08 (dispatch batch 3, C4; register P2-06, P2-09, P2-05) added
+  three skills:
+  - `council-board`: plan and execution rounds; anonymous reviews in which
+    Review-2 writes before it reads Review-1; chair rules. The stage prompts
+    are in `references/prompts.md`.
+  - `intake-email`: allowlist check, stop list, sourced answers, reply drafts
+    with Joe in cc, and a send gate. Mail content is treated as data.
+  - `weekly-evolve`: candidates with reason and diff, new golden-set cases,
+    the equal-or-better gate (no category may drop), and the three weekly
+    numbers.
+  The four cards that use these skills link them and moved to v0.2. 182 tests
+  pass, 1 is skipped.
+
 ## 0.3.0 - 2026-09-25
 
 Why: on 2026-09-25 v0.2.1 was run against the live PCOS files (102-row
