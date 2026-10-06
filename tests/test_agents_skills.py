@@ -72,8 +72,9 @@ def first_match(pattern):
 # Notion IDs, UUIDs, e-mail addresses and links to Drive, Docs or Notion objects.
 PRIVATE = {
     "Drive-style ID": find_drive_id,
-    "Notion ID": first_match(re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")),
-    "UUID": first_match(re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")),
+    "Notion ID": first_match(re.compile(r"(?<![0-9a-fA-F])[0-9a-fA-F]{32}(?![0-9a-fA-F])")),
+    "UUID": first_match(re.compile(r"[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-"
+                                   r"[0-9a-fA-F]{12}")),
     "e-mail address": first_match(re.compile(r"[\w.+-]+@[\w-]+(\.[\w-]+)+")),
     "Drive or Notion link": first_match(re.compile(r"(docs|drive)\.google\.com|notion\.(so|site|com)")),
 }
@@ -322,6 +323,14 @@ def test_blind_row_blocked_by_another_rows_subject_is_parked():
 def test_intake_stop_list_asks_stay_needs_joe():
     gate = " ".join(section((SKILLS / "intake-email" / "SKILL.md").read_text(encoding="utf-8"),
                             "## 6. Send gate").split())
-    assert "Needs Joe when the message has a stop-list ask" in gate
-    assert "Drafted when only conditions 1 or 2 failed" in gate
+    assert "Needs Joe when the sender is not on the allowlist" in gate
+    assert "a stop-list ask" in gate and "only when condition 1 alone failed" in gate
+
+
+@pytest.mark.parametrize("text", [
+    "ABCDEF1234567890ABCDEF1234567890", "abcdef1234567890abcdef1234567890",
+    "ABCDEF12-3456-7890-ABCD-EF1234567890", "abcdef12-3456-7890-abcd-ef1234567890",
+])
+def test_privacy_guard_catches_hex_ids_in_either_case(text):
+    assert any(find(text) for find in PRIVATE.values())
 

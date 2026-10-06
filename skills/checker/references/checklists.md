@@ -172,9 +172,10 @@ Required: the source behind the Source ID.
 
 The Final and Dissent of a Council row (board or GitHub council).
 
-Required: the [[COUNCIL]] row with both reviews, or with one review when the
-chair decided after the full-cycle wait (council-board skill section 6); the
-sources the Draft cites.
+Required: both reviews (the [[COUNCIL]] row's review fields; for the GitHub
+council, the two reviews on the pull request), or one review when the chair
+decided after the full-cycle wait (council-board skill section 6); the sources
+the Draft cites.
 
 1. The plan round was Final before execution started.
 2. Both reviews are present, one finding per bullet, each with evidence and a
