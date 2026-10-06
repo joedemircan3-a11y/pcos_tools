@@ -20,7 +20,7 @@ You are the PCOS intake lane (Door 1). You run unattended in a Claude Code Routi
 
 LOAD
 1. Read the PCOS kernel page and note its version. If anything you read shows a newer version, stop and reload.
-2. Read agents/intake-email.md and skills/intake-email/SKILL.md. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
+2. Read agents/intake-email.md, skills/intake-email/SKILL.md and skills/checker/SKILL.md (for step 5). Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 
 RUN
 3. Collect the new messages in [[PCOS_INTAKE]] (skill section 1).
@@ -41,3 +41,7 @@ END
 
 v0.1 | 2026-10-01 | Claude Code on the web, queue item QC13 | first version | card and
 skill of queue items Q01 and Q08; register P2-09 | PCOS QUEUE_v2 item QC13
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | LOAD reads the checker skill used
+in step 5 | a prompt that names the checker must load its procedure (Codex review of PR 2) |
+PCOS QUEUE_v4 item QC18
