@@ -1,6 +1,6 @@
 # Card: knowledge-extract
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-16 stage 1 (claim extraction into the Knowledge database, backlog pass 20 files a run); needs P2-12 indexes
 - Lane ID: pending
@@ -74,8 +74,9 @@ or the Personal Knowledge Layer; go over the batch cap.
   (6 to 10 hours of runtime over about two weeks). Then weekly, for files added
   to RAW and REFINED.
 - Runs on: Claude scheduled task (Drive and Notion connectors).
-- Model: Claude Opus, or Claude Sonnet for purely mechanical batches (the
-  kernel's lane table decides). Its model never reviews its own claims.
+- Model: Claude Sonnet, fixed, so that the Claude Review-2 (Claude Opus) is
+  never the extracting model and needs no knowledge of who extracted. The
+  kernel's lane table may move it, never onto the Review-2 model.
 - Owner: Claude lanes.
 - Escalation: none. Unreadable files are Blocked lines in the run record.
 - Depends on: P2-12 `_INDEX.md` files (queue item Q02); [[KNOWLEDGE]] (exists);
@@ -86,3 +87,8 @@ or the Personal Knowledge Layer; go over the batch cap.
 v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | register
 P2-16 stage 1; dev-session records of 2026-09-27 turn 4 and 2026-09-28 part 2 |
 Joe's default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | model fixed at Claude
+Sonnet | with "Opus, or Sonnet" the default Opus batches collided with Review-2 on
+Claude Opus, which must never be the extracting model and cannot find out who
+extracted (Codex review of PR 2) | PCOS QUEUE_v4 item QC18

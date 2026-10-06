@@ -261,6 +261,7 @@ def test_prediction_evidence_matches_the_source_identity():
         assert "thread or subject" not in text and "about the subject" not in text
     assert "Source identity" in check and "unique" in check
     assert "conclusive only while it is still the terminal message" in check
+    assert "only nonconclusive evidence" in check and "is set Parked" in check
     assert "counts only while it is terminal" in card
 
 
@@ -287,3 +288,20 @@ def test_indexes_list_every_card_and_skill():
     skills_index = (SKILLS / "_INDEX.md").read_text(encoding="utf-8")
     for skill in skill_files():
         assert f"| skills/{skill.parent.name}/ |" in skills_index
+
+
+def test_council_final_checklist_accepts_the_one_review_fallback():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    council_final = " ".join(section(text, "## council-final").split())
+    assert 'Dissent says "Review-N missing"' in council_final
+
+
+def test_claim_extraction_and_claude_review_use_different_models():
+    extract = section((AGENTS / "knowledge-extract.md").read_text(encoding="utf-8"),
+                      "## 6. Trigger and owner model")
+    review = section((AGENTS / "knowledge-review.md").read_text(encoding="utf-8"),
+                     "## 6. Trigger and owner model")
+    extract_model = re.search(r"- Model: Claude (\w+)", extract).group(1)
+    review_2_model = re.search(r"Review-2 Claude (\w+)", review).group(1)
+    assert extract_model != review_2_model
+
