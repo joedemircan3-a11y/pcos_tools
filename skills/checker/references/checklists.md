@@ -164,6 +164,30 @@ together), then [[WORKLIST]], then [[CHANGELOG]].
 7. A "What happened?" answer that settles a Worklist task (handled offline or
    dropped, Scored or Parked) filed one [[INBOX]] row for the closeout owner.
 
+## prediction-backtest
+
+One thread of a ledger-backtest run and its score (prediction-ledger skill,
+references/backtest.md). Never checked with the `prediction` checklist: the
+backtest scores by its own rule.
+
+Required: the thread's line in the run report; the whole conversation in
+[[MAIL_SENT]], [[MAIL_INBOX]] and [[MAIL_ROUTED]], before and after the cut;
+the owner map as rebuilt for the cut (backtest section 2).
+
+1. Blind at the cut: the prediction uses no message, Worklist or Changelog row,
+   or owner assignment dated after the cut.
+2. Every field is filled with an allowed value (Is task: Yes, No or Unsure;
+   Route: Radar, Instruct front line or Joe direct); Assumptions are 1 to 4
+   yes/no questions.
+3. The outcome is conclusive and rests on the terminal message (Law 3), cited
+   by message ID.
+4. The Score follows backtest section 3, not the live rule of skill section 4:
+   Is task, Owner and Route compared with the outcome; Candidate output 1 when
+   the output type matches what happened, else 0 ("used unedited" does not
+   apply); only the assumptions the outcome settles are scored.
+5. Nothing was asked of Joe, and no [[PREDICTION]] row was written for the
+   thread.
+
 ## pricing-prep
 
 A quote preparation, price candidate or cost bridge. Preparation only: no price

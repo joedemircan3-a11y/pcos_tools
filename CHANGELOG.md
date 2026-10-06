@@ -66,9 +66,14 @@ there. Changed cards are bumped; skill versions stay 0.1.
   closure evidence; a "What happened?" answer of handled offline, Scored or
   Parked, now hands a Worklist task to the closeout owner as dropped already
   did (prediction-ledger skill section 3, checker `prediction` item 7).
+- Codex review, round 9: the backtest sample is checked with its own
+  checklist, `prediction-backtest`, which scores by the backtest's rule
+  (output type; settled assumptions only), never the live one; an item that
+  reaches the ledger through an Inbox row or DELTA line counts as a Worklist
+  task when that row names a Task ID.
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 60 new tests; with
-  main merged in (pull requests 1 and 2 and the QC18-R fixes), 409 pass.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 61 new tests; with
+  main merged in (pull requests 1 and 2 and the QC18-R fixes), 410 pass.
 
 ## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1 and PR 2)
 

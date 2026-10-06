@@ -289,10 +289,26 @@ def test_ledger_answers_that_settle_a_worklist_task_reach_the_closeout_owner():
     handled = ask[ask.index("- A: Actual"):ask.index("- B: Status Parked")]
     assert "if the subject is a Worklist task, file one [[INBOX]] row" in handled
     assert "Scored or Parked" in handled
-    assert "The subject is a Worklist task when the row's Source is a Task ID" in ask
+    assert "The subject is a Worklist task when the row names a Task ID" in ask
+    # an item reached through an Inbox row or DELTA line has that row as Source
+    assert "in the Inbox row or DELTA line its Source points to" in ask
     filing = flat(section(read(RETRO_SKILL), "## 6. File the answers"))
     assert "every answer that settles it (handled offline or dropped)" in filing
     assert "this lane files no second one" in filing
     checklist = flat(section(read(ROOT / "skills" / "checker" / "references" / "checklists.md"),
                              "## prediction"))
     assert "settles a Worklist task (handled offline or dropped" in checklist
+
+
+def test_the_backtest_sample_is_checked_by_its_own_scoring_rule():
+    checklists = read(ROOT / "skills" / "checker" / "references" / "checklists.md")
+    backtest = flat(section(checklists, "## prediction-backtest"))
+    assert "not the live rule of skill section 4" in backtest
+    assert "Candidate output 1 when the output type matches what happened" in backtest
+    assert "only the assumptions the outcome settles are scored" in backtest
+    for path in (BACKTEST, ROUTINES / "ledger-backtest.md"):
+        text = flat(read(path))
+        assert "job type prediction-backtest" in text
+        assert "job type prediction)" not in text
+    assert "prediction-backtest checklist" in flat(read(BACKTEST_CARD))
+

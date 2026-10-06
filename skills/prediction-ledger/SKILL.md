@@ -129,9 +129,10 @@ Filing the answer:
   subject is a Worklist task, file one [[INBOX]] row for the closeout owner
   quoting Joe's answer. The ledger never closes a task itself.
 
-The subject is a Worklist task when the row's Source is a Task ID, or when a
-[[WORKLIST]] row's sources name the row's conversation ID. One [[INBOX]] row per
-answer, never one per identity.
+The subject is a Worklist task when the row names a Task ID (in its Subject,
+in its Source, or in the Inbox row or DELTA line its Source points to), or when
+a [[WORKLIST]] row's sources name the row's conversation ID. One [[INBOX]] row
+per answer, never one per identity.
 - D: Is task and Route score 0. Status Scored. Joe's note goes into the miss
   patterns.
 - Skipped twice: Status Parked, and the question is withdrawn from the card. No
