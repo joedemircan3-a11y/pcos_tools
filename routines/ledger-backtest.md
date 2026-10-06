@@ -24,7 +24,7 @@ LOAD
 
 RUN
 3. Pick the threads (backtest section 1): the last 90 days, outcome in the mail, not in an earlier run report, newest cut first, at most 200.
-4. Predict blind (section 2): in subagents that receive only the messages up to the cut, in batches of up to 20 threads.
+4. Predict blind (section 2): in subagents that receive only the messages up to the cut and the owner map rebuilt as it stood at the cut, in batches of up to 20 threads. Skip a thread whose owner map cannot be rebuilt.
 5. Score each thread against its outcome (section 3). Ask the checker to re-score 10 threads on a different model; its score stands where the two disagree.
 6. Write the run report to [[ARCHIVE]] and one class row per kind to [[PREDICTION]] (sections 4 and 5).
 

@@ -129,22 +129,23 @@ Write each retro item:
   reply." Self-contained, in plain words; no internal ID without its meaning.
   Quote no more mail text than Joe needs to remember the thread.
 - Tap options, in this order: closed as quoted; closed differently; dropped;
-  moved offline (phone, WhatsApp, in person); still open; unrelated. Put one
-  option first as recommended only when the record leans that way.
+  moved offline (phone, WhatsApp, in person); still open; unrelated. The item
+  lists the first five. The sixth, unrelated, is the CAL template's own "Not
+  needed / wrong direction" option, which the template adds to every item, so
+  it is never added a second time. Put one option first as recommended only
+  when the record leans that way.
 - Free text or a voice note for anything else.
-- A class item names its threads in one line each, and its answer applies to
-  every thread unless the note names an exception.
-
-The CAL template adds its own "Not needed / wrong direction" option; on a retro
-item it is filed as unrelated.
+- A class item names each of its threads in one line, and its answer applies
+  to every thread unless the note names an exception.
 
 End the card with one progress line: what the last answers closed. For example:
 "Last night's answers closed four threads and added two people notes." Never
 the size of the backlog or a count of open gaps.
 
 Build the page from [[CAL_TEMPLATE]] by [[CAL_STANDARD]]. Add one Open row to
-[[DECISIONS]] for the card: link, each item with its identity (conversation ID
-or Task ID), due the next evening.
+[[DECISIONS]] for the card: link, each item with every identity it covers (the
+conversation ID or Task ID of each thread; a class item covers 2 to 5), due
+the next evening.
 
 ## 6. File the answers
 
@@ -152,10 +153,14 @@ At the start of the next run, before the new card. Ledger items are filed by
 the prediction-ledger skill section 3, into their own rows. For each retro
 item, in this order:
 
-1. Prediction row. Find the [[PREDICTION]] row with the item's identity in
-   Source (the conversation ID, else the Task ID or source row ID), and create
-   one if none: Subject (at most 12 words), Source (the identity), Actual,
-   Status. A row this lane creates holds no prediction: Is task, Owner, Route,
+1. Prediction rows, one per identity. A retro item covers one identity (the
+   conversation ID, else the Task ID or source row ID); a class item covers
+   one per thread. For every identity, find the [[PREDICTION]] row with it in
+   Source, and create one if none: Subject (at most 12 words), Source (the
+   identity), Actual, Status. Steps 2 to 5 apply to each identity. A thread
+   that Joe's note names as an exception gets the answer the note gives it;
+   one the note leaves unanswered stays a gap and can come back as a single
+   item. A row this lane creates holds no prediction: Is task, Owner, Route,
    Candidate output, Assumptions, Confidence and Score stay empty, so the
    weekly calibration leaves it out. Scored on such a row means settled.
 2. Actual, by answer, each Confirmed with the card ID and item as source:
@@ -169,11 +174,13 @@ item, in this order:
    - moved offline: "handled offline by CHANNEL", the channel Joe tapped, plus
      the outcome from his note. Status Scored.
    - still open: no Actual. Status Parked, Check date 7 days later, so the
-     evidence check can still settle it. One [[INBOX]] row for the closeout
+     ledger's evidence check can still settle it, without a Score
+     (prediction-ledger skill section 4). One [[INBOX]] row for the closeout
      owner when no open Worklist row covers it, so the open item reaches the
      lanes that work today. Never asked again by this lane.
-   - unrelated: "unrelated; should not have been asked". Status Scored. The miss
-     goes to the gap-query misses for the weekly method loop.
+   - unrelated (the template's "Not needed / wrong direction"): "unrelated;
+     should not have been asked". Status Scored. The miss goes to the
+     gap-query misses for the weekly method loop.
    - free text or voice only: parse it as an EXO voice dump. File the option it
      states; if it states none, Actual holds Joe's words verbatim.
 3. People. When the answer says how someone in the thread works (moves price
@@ -203,21 +210,25 @@ item, in this order:
 
 ## 7. Skip rule (as EXO)
 
-An item still unanswered at the next evening counts as one skip. Skips are
-counted from the card rows in [[DECISIONS]]: an item listed on N earlier cards
-without an answer has N skips.
+An item still unanswered at the next evening counts as one skip for every
+identity it covers. Skips are counted per identity from the card rows in
+[[DECISIONS]]: an identity listed on N earlier cards without an answer has N
+skips, so a class item that is split keeps its count.
 
 - 2 skips: reshape. A shorter summary, a likelier option first, or a class item
   split into single threads.
-- 3 skips: park and ask once. Create the item's [[PREDICTION]] row with Status
-  Parked, no Actual, and a Check date 7 days later, so the evidence check can
-  still settle it. The next card shows one last item: "Keep this open, or let
-  it go?", keep as the default. Let it go: Actual "let go", Confirmed with the
-  card ID, Status Scored. No answer leaves it Parked. Nothing closes on silence,
-  and the lane never asks about it again.
+- 3 skips: park and ask once. Create a [[PREDICTION]] row for each identity of
+  the item with Status Parked, no Actual, and a Check date 7 days later, so the
+  ledger's evidence check can still settle it, without a Score. The next card
+  shows one last item: "Keep this open, or let it go?", keep as the default.
+  Let it go: Actual "let go", Confirmed with the card ID, Status Scored. No
+  answer leaves it Parked. Nothing closes on silence, and the lane never asks
+  about it again.
 
 Ledger items follow the ledger's own skip rule (prediction-ledger skill section
-3).
+3). A conflict item skipped three times is not shown again: its Decision row
+stays Open with its default, and both versions stay in Actual. Nothing changes
+on silence.
 
 ## 8. Learn
 

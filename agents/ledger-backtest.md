@@ -25,8 +25,8 @@ or change a Worklist row; take more than 200 threads in one run.
   IDs already scored); the class rows of earlier runs in [[PREDICTION]].
 - L2, per thread: the whole thread in [[MAIL_INBOX]], [[MAIL_SENT]] and
   [[MAIL_ROUTED]] (the predictor sees it only up to the cut); the routing
-  section of [[KERNEL]] and the owner-map rows in [[RULES]]; [[CHANGELOG]]
-  rows that show an owner change after the cut.
+  section of [[KERNEL]]; the owner-map rows in [[RULES]], rebuilt as they
+  stood at the cut from the before values in [[CHANGELOG]].
 - Knowledge scope: the mail of the last 90 days. No domain folders, no personal
   or Room 10 material.
 
@@ -56,8 +56,9 @@ or change a Worklist row; take more than 200 threads in one run.
     retro lane.
   - Scored without asking Joe.
   - At most 200 threads per run; once at install, then weekly before L4.
-- Method rule (this card): the prediction is made blind at the cut, so that a
-  known outcome cannot leak into it.
+- Method rule (this card): the prediction is made blind at the cut, with the
+  owner map as it stood then, so that nothing known later can leak into it.
+  A thread whose map cannot be rebuilt is skipped.
 
 ## 5. Output contract with evidence labels
 

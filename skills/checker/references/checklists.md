@@ -115,12 +115,16 @@ thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]], and the
 7. Retro: at most five items; the ledger's "What happened?" items first, then
    the open conflict items. A retro item is one line that sums up the thread,
    with the tap options closed as quoted, closed differently, dropped, moved
-   offline, still open and unrelated, plus free text or voice. A progress line
-   ends the card; no count of open gaps.
-8. Retro gate: every message of the thread and every later reply was read (the
-   message IDs are in the run record); no closure evidence exists in the mail,
-   [[WORKLIST]], [[CHANGELOG]] or [[DECISIONS]]; the subject has no
-   [[PREDICTION]] row, unless the item is the ledger's own queued question.
+   offline and still open, plus the template's "Not needed / wrong direction"
+   as the sixth, unrelated (never a second unrelated option), and free text or
+   voice. A class item covers 2 to 5 threads of one class, each listed with its
+   identity in the card's [[DECISIONS]] row. A progress line ends the card; no
+   count of open gaps.
+8. Retro gate, for every thread of the item: every message of the thread and
+   every later reply was read (the message IDs are in the run record); no
+   closure evidence exists in the mail, [[WORKLIST]], [[CHANGELOG]] or
+   [[DECISIONS]]; the subject has no [[PREDICTION]] row, unless the item is the
+   ledger's own queued question.
 
 ## prediction
 

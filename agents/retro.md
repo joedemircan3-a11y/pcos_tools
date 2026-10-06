@@ -25,10 +25,10 @@ row; send or commit anything; treat silence as an answer.
 - L0, always loaded: [[KERNEL]].
 - L1, every run: the previous retro card's row in [[DECISIONS]] (answers and
   skips), its own open conflict rows, and the decided and open rows (never
-  re-ask); the CAL lane's open questions in [[CAL_FOLDER]]; [[PREDICTION]] (the identities
-  the ledger already owns, and the Asked Joe rows whose questions ride on this
-  card); [[WORKLIST]] rows updated in the window; [[STEPS]] rows Queued or
-  Shown (EXO works those tasks).
+  re-ask); the CAL lane's open questions in [[CAL_FOLDER]]; [[PREDICTION]]
+  (the identities the ledger already owns, and the Asked Joe rows whose
+  questions ride on this card); [[WORKLIST]] rows updated in the window;
+  [[STEPS]] rows Queued or Shown (EXO works those tasks).
 - L2, gap query and gate, per candidate: the whole thread in [[MAIL_INBOX]],
   [[MAIL_SENT]] and [[MAIL_ROUTED]]; later threads with the same counterpart or
   Task ID; [[CHANGELOG]] rows about it; the measured closure habits in
@@ -82,10 +82,13 @@ row; send or commit anything; treat silence as an answer.
   ledger's "What happened?" items first, in the ledger's format, then the open
   conflict items. Each retro item is a one-line summary of the thread plus tap
   options: closed as quoted, closed differently, dropped, moved offline (phone,
-  WhatsApp, in person), still open, unrelated; free text or voice for anything
-  else. One progress line at the end; never the size of the backlog.
-- [[PREDICTION]]: Actual on the matching row, or a new row (Subject, Source =
-  the identity, Actual, Status) with no prediction fields.
+  WhatsApp, in person), still open, and unrelated, which is the CAL template's
+  own "Not needed / wrong direction" option and is never added twice; free
+  text or voice for anything else. A class item covers 2 to 5 threads of one
+  class. One progress line at the end; never the size of the backlog.
+- [[PREDICTION]]: for every identity an item covers, Actual on the matching
+  row, or a new row (Subject, Source = the identity, Actual, Status) with no
+  prediction fields.
 - People lines (Candidate) for the closeout owner; golden-set candidates as
   [[CORRECTIONS]] rows; one [[DECISIONS]] row per conflict; [[INBOX]] rows for
   the closeout owner.

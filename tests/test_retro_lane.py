@@ -84,6 +84,9 @@ def test_retro_card_is_five_questions_with_six_tap_options_in_order():
     contract = flat(section(read(RETRO_CARD), "## 5. Output contract with evidence labels"))
     positions = [contract.find(option) for option in TAP_OPTIONS]
     assert -1 not in positions and positions == sorted(positions)
+    # six options, never seven: the CAL template's own option is the sixth
+    assert "lists the first five" in card and "never added a second time" in card
+    assert '"Not needed / wrong direction"' in contract and "never added twice" in contract
 
 
 def test_gaps_come_from_the_last_90_days_first():
@@ -153,3 +156,27 @@ def test_backtest_runs_on_sunday_before_l4():
     l4_minute, l4_hour, l4_weekday, l4_zone = cron("L4-weekly")
     assert weekday == l4_weekday == "0" and zone == l4_zone == "UTC"
     assert int(hour) < int(l4_hour)
+
+
+def test_a_class_item_files_and_counts_every_identity():
+    skill = read(RETRO_SKILL)
+    assert "every identity it covers" in flat(section(skill, "## 5. Build the card"))
+    filing = flat(section(skill, "## 6. File the answers"))
+    assert "Prediction rows, one per identity" in filing and "For every identity" in filing
+    skips = flat(section(skill, "## 7. Skip rule (as EXO)"))
+    assert "counted per identity" in skips and "for each identity" in skips
+
+
+def test_a_row_without_a_prediction_is_settled_without_a_score():
+    score = flat(section(read(LEDGER_SKILL), "## 4. Score"))
+    assert "has no check to score" in score and "leave Score empty" in score
+    filing = flat(section(read(RETRO_SKILL), "## 6. File the answers"))
+    assert "without a Score" in filing
+
+
+def test_backtest_rebuilds_the_owner_map_at_the_cut():
+    method = flat(section(read(BACKTEST), "## 2. Predict blind"))
+    assert "the owner map as it stood at the cut" in method
+    assert "undo every change dated after the cut" in method
+    assert "skip the thread" in method
+    assert "leave the Owner check out" not in method

@@ -33,13 +33,20 @@ Predict each thread as skill section 1 does (Is task, Owner, Route, Candidate
 output, Assumptions, Confidence), from the messages up to the cut only.
 
 - Run the predictor in a subagent that receives only the messages up to and
-  including the cut, the routing section of [[KERNEL]] and the owner-map rows
-  of [[RULES]]. Batches of up to 20 threads per subagent.
+  including the cut, the routing section of [[KERNEL]] and the owner map as it
+  stood at the cut. Batches of up to 20 threads per subagent.
 - Hindsight is the failure to prevent: no message after the cut, no Worklist or
-  Changelog row written after the cut, and no outcome reaches the predictor.
-- The owner map as it stood at the cut: when a [[RULES]] owner-map row or a
-  [[CHANGELOG]] row shows that the owner changed after the cut, leave the Owner
-  check out of the score.
+  Changelog row written after the cut, no owner assignment made after the cut,
+  and no outcome reaches the predictor.
+- The owner map as it stood at the cut: start from the owner-map rows in
+  [[RULES]] and undo every change dated after the cut, using the before value
+  that its [[CHANGELOG]] row records. A row that was Live at the cut counts
+  even if it is Retired now; a row created after the cut does not. When a
+  change after the cut has no recorded before value, skip the thread and note
+  it in the run report: a map that cannot be rebuilt would leak the later
+  owner into Owner, Route, Candidate output and Assumptions alike.
+- The routing section of [[KERNEL]] is the method under test, so it stays
+  current. The owner map is a fact about the past, so it is rebuilt.
 
 ## 3. Score
 

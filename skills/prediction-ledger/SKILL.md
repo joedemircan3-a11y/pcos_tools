@@ -140,6 +140,11 @@ checks that do not apply.
 Score = the sum divided by the number of checks, as a percent. Set Status
 Scored.
 
+A row without a prediction (Is task, Owner, Route, Candidate output and
+Assumptions all empty: the rows the retro lane creates) has no check to
+score. When evidence settles it, write Actual, set Status Scored and leave
+Score empty, so the week's numbers never count it.
+
 ## 5. Calibrate: weekly, Sunday, before the weekly-evolve lane
 
 - Re-run the evidence check (section 2) on every Parked row. Score the rows

@@ -33,9 +33,14 @@ there. Changed cards are bumped; skill versions stay 0.1.
   kept out of the live mean (skill section 5 says so).
 - `skills/checker/references/checklists.md`: the question-card checklist covers
   retro items (six tap options, the read-everything gate).
+- Codex review, round 1: the backtest rebuilds the owner map as it stood at
+  the cut (a later owner would leak into Owner, Route and output); a class
+  item files and counts every thread it covers; the ledger settles a row
+  without a prediction without scoring it; the CAL template's own "Not
+  needed / wrong direction" is the sixth tap option, never a seventh.
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 40 new tests; with
-  pull request 2's latest fixes merged in, 358 pass and 1 is skipped.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 45 new tests; with
+  pull request 2's latest fixes merged in, 365 pass and 1 is skipped.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
