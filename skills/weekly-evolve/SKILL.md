@@ -72,8 +72,10 @@ never dropped.
 
 ## 5. Evaluate old against new
 
-Run the checker's golden-set run twice: once with the live version, once with the
-candidate. Record the passes per category for each.
+Run the checker's golden-set lane run twice: once with the live version, once
+with the candidate. For a change to the checker skill or its checklists, use the
+checker run instead (checker skill, "Golden-set runs"). Record the passes per
+category for each.
 
 The gate is equal-or-better, with no exceptions:
 
@@ -102,7 +104,7 @@ Needs Source Check cases are listed and not scored.
 | --- | --- |
 | Corrections per run | Corrections this week / lane runs this week |
 | Needs Joe rows per week | Rows set to Needs Joe this week, across lanes |
-| Eval pass rate | The live version's golden-set pass rate after this run's promotions |
+| Eval pass rate | The live versions' golden-set lane-run pass rate after this run's promotions |
 
 Compare with last week. Down, down, up means working. Anything else: no
 promotions next week except rollbacks, and one [[TODAY]] line plus one card item

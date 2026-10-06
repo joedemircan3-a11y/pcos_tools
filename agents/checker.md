@@ -1,6 +1,6 @@
 # Card: checker
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-03 (L7 checker lane: generator/checker split, Claude-internal council, checklist per job type); runs the P2-04 golden-set eval
 - Lane ID: L7 (planned)
@@ -76,14 +76,16 @@ a vendor, promotes canon or deletes.
   one Changelog row per verdict.
 - Done means: every output handed over in the run has a verdict. A Reject, or a
   sixth round, becomes one Needs Joe card item with the open findings.
-- Eval: the weekly [[GOLDEN_SET]] run. The checker must raise the defect Joe
-  raised. Pass rate per category (routing, drafting, pricing, sources,
-  re-asking, formatting) goes to the weekly-evolve lane.
+- Eval: the weekly [[GOLDEN_SET]] runs in the skill. The lane run scores each
+  lane's output: it passes when the output satisfies Joe's correction. The
+  checker run scores this lane: it passes when the checker raises the defect in
+  the case's Wrong output. Pass rates per category (routing, drafting, pricing,
+  sources, re-asking, formatting) go to the weekly-evolve lane, one set per run.
 
 ## 6. Trigger and owner model
 
 - Trigger: an output handed over by any lane (end of the generator's run, or a
-  row set ready for check). Weekly golden-set run on Sunday before the
+  row set ready for check). Weekly golden-set runs on Sunday before the
   weekly-evolve lane.
 - Runs on: inside the generating lane's session as a subagent on a different
   model (routine lanes), or as its own Claude scheduled pass for queued outputs.
@@ -100,3 +102,9 @@ a vendor, promotes canon or deletes.
 v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | register
 P2-03; design in the dev-session record of 2026-09-27, turns 1 and 2 | Joe's
 default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | Eval: the golden-set
+lane run scores whether the lane's output satisfies Joe's correction; the checker
+run scores the checker separately | the old criterion passed a version that kept
+the defect and failed one that fixed it (Codex review of PR 1) | PCOS QUEUE_v4
+item QC18

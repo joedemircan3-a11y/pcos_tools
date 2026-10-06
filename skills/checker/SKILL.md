@@ -84,18 +84,39 @@ Labels: N claims, N correct, N wrong (list the wrong ones)
 Re-ask: none, or QUESTION already answered in KEY, ID
 ```
 
-## Golden-set run (weekly)
+## Golden-set runs (weekly)
 
-Run before the weekly-evolve lane, on [[GOLDEN_SET]]:
+Run before the weekly-evolve lane, on [[GOLDEN_SET]]. There are two runs,
+because they test two different things: the lanes' outputs, and this checker.
 
-1. For each case, give the case's Input to the lane its Category belongs to,
-   then run this skill on the result.
-2. The case passes when the checker raises the same defect that Joe's
-   correction names.
-3. Score per Category (routing, drafting, pricing, sources, re-asking,
-   formatting) = passed cases / cases. Cases with Category Needs Source Check
-   are listed but not scored.
-4. Hand the scores and the failing case IDs to the weekly-evolve lane.
+### Lane run: scores a lane version
+
+1. For each case, give the case's Input to the version under test (live or
+   candidate) of the lane its Category belongs to.
+2. Run this skill on the new output, with one added check: the output satisfies
+   Joe's correction (it does what the correction asks and follows the rule it
+   implies) and does not repeat the defect of the case's Wrong output. Open the
+   case's Source ID when the correction is unclear.
+3. The case passes when that check is PASS. A version that no longer makes the
+   mistake passes, even though the checker then has nothing to raise.
+
+### Checker run: scores a checker version
+
+1. For each case, run the checker version under test (live or candidate) on the
+   case's Wrong output, with its Input.
+2. The case passes when the checker raises the defect that Joe's correction
+   names (a FAIL on the matching check) and does not Accept.
+
+### Scores
+
+- Score each run per Category (routing, drafting, pricing, sources, re-asking,
+  formatting) = passed cases / cases. Cases with Category Needs Source Check
+  are listed but not scored. The two runs' scores are never added together.
+- The weekly-evolve gate compares live and candidate with the lane run, except
+  for a change to this skill or its checklists, which it compares with the
+  checker run.
+- Hand the scores and the failing case IDs of both runs to the weekly-evolve
+  lane.
 
 ## Never
 

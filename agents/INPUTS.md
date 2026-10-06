@@ -1,11 +1,18 @@
 # Input keys
 
-Version v0.1, 2026-10-01.
+Version v0.2, 2026-10-06.
 
 Cards and skills name their sources as `[[KEY]]`. A key stands for exactly one
 object: a Drive file or folder, a Notion database, view or page, an Outlook
 folder, or this repository. An agent opens a key's object directly and never
 searches for it.
+
+A **group** is written like a key and stands for a fixed list of keys (table
+"Groups" below). An agent resolves each member key to its one object and opens
+each directly. One key is a set by nature: `MAIL_ROUTED`, the Outlook folders
+named in `[[BRIEF_RULES]]` section A. Outlook folders are opened by exact name,
+so that list is the key's object, and the agent opens every folder it names and
+no other.
 
 **IDs are not kept here.** This repository is public, and Operating Card v7.4
 (WRITE PATHS) says never to put real business data in it. Each key is resolved to
@@ -70,11 +77,24 @@ build session), **planned** (a later queue item or register entry creates it).
 | Key | Object (exact title or name) | System | What it holds | Status |
 | --- | --- | --- | --- | --- |
 | `PCOS_KB` | PCOS_KB | Drive folder | REFINED knowledge home | exists |
-| `KL_DOMAINS` | KL_01 to KL_07 domain folders, each with RAW, REFINED and `_INDEX.md` | Drive folders | Domain knowledge; KL_04 exists, the rest come with queue item Q02 | planned |
+| `KL_00` | KL_00_PCOS_System_and_AI | Drive folder | System and AI research (kernel K8), with RAW, REFINED and `_INDEX.md` | exists |
+| `KL_01` | KL_01_Stone_and_Materials | Drive folder | Domain knowledge, with RAW, REFINED and `_INDEX.md` | exists |
+| `KL_02` | KL_02_Mosaic_and_Waterjet_Production | Drive folder | Domain knowledge, with RAW, REFINED and `_INDEX.md` | exists |
+| `KL_03` | KL_03_Pricing | Drive folder | Domain knowledge, with RAW, REFINED and `_INDEX.md` | exists |
+| `KL_04` | KL_04_Vendors_and_Terms | Drive folder | Domain knowledge, with RAW, REFINED and `_INDEX.md` | exists |
+| `KL_05` | KL_05_Logistics_and_Customs_MX_US_TR | Drive folder | Domain knowledge, with RAW, REFINED and `_INDEX.md` | exists |
+| `KL_06` | KL_06_Sales_and_CS | Drive folder | Domain knowledge, with RAW, REFINED and `_INDEX.md` | exists |
+| `KL_07` | KL_07_Company_and_People | Drive folder | Domain knowledge, with RAW, REFINED and `_INDEX.md` | exists |
 | `AGENT_KNOWLEDGE_LAYER` | Agent Knowledge Layer | Drive folder | Older RAW shells, to be consolidated (P2-13) | exists |
 | `MAIL_MINING` | PCOS_MAIL_MINING | Drive folder | Measured mail behaviour and profiles | exists |
 | `PEOPLE` | PEOPLE_PROFILES, latest version | Drive | Private people profiles; never team-facing | exists |
 | `JOE_DEV_LIST` | PCOS_JOE_DEV_LIST | Drive | Joe's development list | exists |
+
+## Groups
+
+| Group | Member keys | What it covers |
+| --- | --- | --- |
+| `KL_DOMAINS` | `KL_00`, `KL_01`, `KL_02`, `KL_03`, `KL_04`, `KL_05`, `KL_06`, `KL_07` | The eight knowledge domain folders |
 
 ## Question cards
 
@@ -90,7 +110,7 @@ build session), **planned** (a later queue item or register entry creates it).
 | --- | --- | --- | --- | --- |
 | `MAIL_INBOX` | Inbox | Outlook folder | Incoming mail | exists |
 | `MAIL_SENT` | Sent Items | Outlook folder | Joe's sent mail: the first evidence of what he did | exists |
-| `MAIL_ROUTED` | Rule-routed per-person folders (list in `[[BRIEF_RULES]]` section A) | Outlook folders | Mail that never reaches the Inbox | exists |
+| `MAIL_ROUTED` | The rule-routed per-person folders named in `[[BRIEF_RULES]]` section A (a set; see the top of this file) | Outlook folders | Mail that never reaches the Inbox | exists |
 | `MAIL_DRAFTS` | Drafts | Outlook folder | Drafts only; nothing in it is sent by an agent | exists |
 | `PCOS_INTAKE` | [PCOS] intake folder or shared intake mailbox | Outlook | Team requests for Door 1 (P2-09) | planned (PC-2) |
 | `CALENDAR` | Calendar | Outlook | Meetings, used to time cards (P2-26) | exists, not used yet |
@@ -107,3 +127,10 @@ v0.1 | 2026-10-01 | Claude Code on the web, PCOS queue item Q01 | first key tabl
 46 keys | the cards need inputs by ID and the repository is public; keys here,
 IDs in the private map | PCOS_DISPATCH_2026-09-29 PROMPT C1; Operating Card v7.4
 WRITE PATHS
+
+v0.2 | 2026-10-06 | Claude Code on the web, PCOS queue item QC18 | one key per
+domain folder (`KL_00` to `KL_07`, all existing since queue item Q02 and PC-1);
+`KL_DOMAINS` is now a group of those keys; `MAIL_ROUTED` documented as the one
+set | `KL_DOMAINS` named eight folders, so it could not resolve to the one ID that
+the key contract promises (Codex review of PR 1); the kernel 1.1 key map already
+lists the eight folder IDs under `KL_DOMAINS` | PCOS QUEUE_v4 item QC18

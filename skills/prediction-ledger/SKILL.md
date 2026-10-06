@@ -22,15 +22,22 @@ in the private map named there).
 
 Items come from the day's [[INBOX]] rows written by the brief and project-watch
 lanes. Until [[INBOX]] exists, they come from the day's DELTA files in
-[[INBOX_FOLDER]]. Skip an item that already has a [[PREDICTION]] row for the same
-thread or subject.
+[[INBOX_FOLDER]].
+
+Match items by identity, never by subject. An item's identity is the
+conversation ID of its mail thread, when it has one (an Inbox row or DELTA line
+that points to a thread uses that thread's conversation ID). Otherwise it is the
+ID of its source: the Inbox row ID, or the DELTA file ID with the line's Task ID.
+Skip an item only when a [[PREDICTION]] row already has the same identity in
+Source; a later message in a thread that already has a row is not a new item.
+Two items with the same subject and different identities get two rows.
 
 Fill the row:
 
 | Field | How to fill it |
 | --- | --- |
 | Subject | What the item is about, in plain words, at most 12 words, with the Task ID if one exists |
-| Source | The item's key and ID (Inbox row, or the thread's conversation ID) |
+| Source | The item's identity with its key: the thread's conversation ID, or the Inbox row ID, or the DELTA file ID with the line's Task ID |
 | Is task | Yes when someone needs an action from Joe or his front line; No for information only; Unsure otherwise |
 | Owner | From the owner-map rows in [[RULES]] (until cutover, [[BRIEF_RULES]] section I). Use the address when two people share a name |
 | Route | Radar, Instruct front line or Joe direct, by the kernel evaluation order: Route 1 tests first, then Route 3 criteria, then Route 2 as the default |
@@ -84,16 +91,19 @@ The "What happened?" question:
 Filing the answer:
 
 - A: Actual "handled offline", Confirmed, source = the card ID. Status Scored.
-- B: Status Parked and Check date 3 days later. No further question before that
-  date.
+- B: Status Parked and Check date 3 days later.
 - C: Actual "dropped", Confirmed, source = the card ID. Status Scored. If the
   subject is a Worklist task, file one [[INBOX]] row for the closeout owner
   quoting Joe's answer. The ledger never closes a task itself.
 - D: Is task and Route score 0. Status Scored. Joe's note goes into the miss
   patterns.
-- Skipped twice: Status Parked, Check date 7 days later. The evidence check runs
-  again at that date, and the question is asked again only if the row is still
-  blind. No answer is never treated as an answer.
+- Skipped twice: Status Parked, and the question is withdrawn from the card. No
+  answer is never treated as an answer.
+
+A Parked row is never asked again. It stays in the evidence check (section 2):
+on its Check date if it has one, and in every weekly calibration. It leaves
+Parked only on new evidence (then Actual, Confirmed, and Score) or on Joe's own
+action: he answers the question after all, or sets the row back to Predicted.
 
 ## 4. Score
 
@@ -109,6 +119,8 @@ Scored.
 
 ## 5. Calibrate: weekly, Sunday, before the weekly-evolve lane
 
+- Re-run the evidence check (section 2) on every Parked row. Score the rows
+  that now have evidence; the others stay Parked, never asked.
 - The week's numbers: prediction accuracy (mean Score), drafts used unedited
   (count and share), questions asked (count). The target direction is up, up,
   down.
