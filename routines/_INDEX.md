@@ -10,7 +10,7 @@ the cards and skills, so a Routine prompt rarely changes.
 Times: Mexico City time unless stated otherwise. The session that creates a Routine
 may shift a minute value by a few minutes to avoid the top-of-hour load, but it must
 keep the order of dependent lanes (L1, then L2 and L3, then prediction-ledger; the
-council at 08:00, 09:00, 09:30 and 10:00).
+council at 08:00, 09:00, 09:30 and 10:00; on Sunday the ledger backtest before L4).
 
 One line per file, using the PCOS index convention (P2-12): title | ID | what | date
 | status | open when.
@@ -25,7 +25,9 @@ One line per file, using the PCOS index convention (P2-12): title | ID | what | 
 | L4 Weekly | routines/L4-weekly.md | Sunday 15:00 UTC: calibration, golden-set eval, weekly-evolve, knowledge chair later | 2026-10-01 | Candidate | Build day; rule and skill evolution |
 | council-github chair | routines/council-github-chair.md | GitHub PR events, plus a run every 2 hours for the missing-review fallback: chairs council PRs only, writes Final and Dissent to the PR and the Council row | 2026-10-06 | Candidate | PC-1 step 4 (P2-07) |
 | prediction-ledger | routines/prediction-ledger.md | Weekdays 07:45: predict, check, ask when blind, score | 2026-10-01 | Candidate | Build day plus three Brief runs |
-| exo | routines/exo.md | 07:00, 13:00, 19:00 America/Matamoros: one card a slot, answers filed, skip rule | 2026-10-01 | Candidate | Build day |
+| exo | routines/exo.md | 07:00 and 13:00 America/Matamoros: one card a slot about today's work, answers filed, skip rule | 2026-10-06 | Candidate | Build day; QW21 removes the 18:53 run |
+| retro | routines/retro.md | Daily 18:53 America/Matamoros: the evening card, five questions about the past, answers filed | 2026-10-06 | Candidate | QW21, with the EXO 18:53 run removed |
+| ledger-backtest | routines/ledger-backtest.md | Once at install, then Sunday 13:00 UTC: the ledger's predictor over settled threads of the last 90 days, scored without Joe, accuracy by class | 2026-10-06 | Candidate | QW21: run once, then before L4 |
 | council-board Draft | routines/council-board-draft.md | Daily 08:00: drafts queued Council rows, plan round first | 2026-10-01 | Candidate | Build day |
 | council-board Review-2 | routines/council-board-review-2.md | Daily 09:30: anonymous Review-2 (Claude until Gemini) | 2026-10-01 | Candidate | Build day |
 | council-board chair | routines/council-board-chair.md | Daily 10:00: Final, Dissent, Status; creates execution rows | 2026-10-01 | Candidate | Build day |

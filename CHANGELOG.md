@@ -1,5 +1,42 @@
 # Changelog
 
+## Unreleased - 2026-10-06: Retro lane v0.1 (P2-30)
+
+Why: PCOS queue item QC19 (QUEUE_v4) builds the Retro lane that Joe accepted:
+an evening card of five questions about the past, which he answers easily
+("past is just remembering"), last 90 days first, plus a backtest of the
+prediction ledger over the same 90 days of mail. Built by Claude (Claude Code on
+the web) on top of pull request 2, because the Routines it changes exist only
+there. Changed cards are bumped; skill versions stay 0.1.
+
+- `skills/retro/` and `agents/retro.md`: the gap query (threads and Worklist
+  items of the last 90 days with no closure evidence), the order (recency in
+  weeks, then open value, then pattern class), the gate (the full thread chain
+  and every later reply are read before any question, and nothing the record
+  answers is asked), the five-item card with its six tap options, the filing
+  (Prediction rows; People candidates through the closeout owner; golden-set
+  candidates as Corrections rows, which weekly-evolve turns into cases; a
+  Decision row when Joe's memory and the record disagree; the mail is never
+  touched), and the EXO skip rule.
+- `routines/retro.md`: daily 18:53 America/Matamoros, the evening slot that
+  the EXO Routine gives up. `routines/exo.md` now runs at 07:00 and 13:00 only.
+- Past questions have one home: the prediction-ledger lane's "What happened?"
+  questions move from the EXO cards to the evening retro card (ledger card
+  v0.2, skill section 3, Routine step 5; EXO card v0.2, Routine step 6). Why:
+  Joe's decision "evening = past questions, morning and midday = today", and
+  one card that owns every past question cannot ask about a thread twice.
+- `agents/ledger-backtest.md`, `routines/ledger-backtest.md` and
+  `skills/prediction-ledger/references/backtest.md`: the ledger's predictor
+  runs blind at the cut over threads of the last 90 days whose outcome the mail
+  shows, scored without asking Joe, at most 200 threads per run, once at
+  install and then on Sundays before L4. One Prediction row per class of ask,
+  kept out of the live mean (skill section 5 says so).
+- `skills/checker/references/checklists.md`: the question-card checklist covers
+  retro items (six tap options, the read-everything gate).
+- The three indexes list the new cards, skill and Routines.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 325 tests pass (was
+  285), 1 is skipped.
+
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
 Why: PCOS queue item QC18 (QUEUE_v4) applies the six Codex review suggestions on

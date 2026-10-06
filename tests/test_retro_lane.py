@@ -1,0 +1,155 @@
+"""Checks for the Retro lane (register P2-30) and the ledger backtest.
+
+They pin what PCOS queue item QC19 fixed: the evening slot moves from EXO to the
+retro lane; five questions a card, each with six tap options; the last 90 days
+first; nothing asked before the whole thread is read; the EXO skip rule; answers
+filed into the Prediction, People, golden-set and Decisions records; and a
+backtest that is blind at the cut, capped at 200 threads and never asks Joe.
+The general format checks in test_agents_skills.py cover these files too; the
+format, key and privacy checks are repeated here for the new files by name.
+"""
+import re
+from pathlib import Path
+
+import pytest
+
+from tests.test_agents_skills import PRIVATE, defined_keys, parse_frontmatter, section
+
+ROOT = Path(__file__).resolve().parent.parent
+RETRO_SKILL = ROOT / "skills" / "retro" / "SKILL.md"
+RETRO_CARD = ROOT / "agents" / "retro.md"
+BACKTEST = ROOT / "skills" / "prediction-ledger" / "references" / "backtest.md"
+BACKTEST_CARD = ROOT / "agents" / "ledger-backtest.md"
+LEDGER_SKILL = ROOT / "skills" / "prediction-ledger" / "SKILL.md"
+EXO_SKILL = ROOT / "skills" / "exo" / "SKILL.md"
+EXO_CARD = ROOT / "agents" / "exo.md"
+ROUTINES = ROOT / "routines"
+NEW_FILES = [RETRO_SKILL, RETRO_CARD, BACKTEST, BACKTEST_CARD,
+             ROUTINES / "retro.md", ROUTINES / "ledger-backtest.md"]
+
+TAP_OPTIONS = ["closed as quoted", "closed differently", "dropped", "moved offline",
+               "still open", "unrelated"]
+# The inputs QC19 names for the skill, plus the records its gate and filing use.
+RETRO_INPUTS = ["MAIL_MINING", "PREDICTION", "WORKLIST", "MAIL_SENT", "MAIL_INBOX",
+                "MAIL_ROUTED", "PEOPLE", "GOLDEN_SET", "CHANGELOG", "DECISIONS",
+                "CORRECTIONS"]
+KEY_USE = re.compile(r"\[\[([A-Z0-9_]+)\]\]")
+
+
+def read(path):
+    return path.read_text(encoding="utf-8")
+
+
+def flat(text):
+    """Text with every run of whitespace as one space, so line wrapping never matters."""
+    return " ".join(text.split())
+
+
+def cron(name):
+    """(minute, hour, day of week, time zone) of a Routine's Trigger line."""
+    trigger = re.search(r"^- Trigger: (.*)$", read(ROUTINES / f"{name}.md"), re.M).group(1)
+    minute, hour, _, _, weekday = re.search(r"cron `([^`]+)`", trigger).group(1).split()
+    zone = re.search(r"CRON_TZ=([\w/]+)", trigger)
+    return minute, hour, weekday, zone.group(1) if zone else "UTC"
+
+
+def test_retro_skill_frontmatter():
+    fields, body = parse_frontmatter(read(RETRO_SKILL))
+    assert fields["name"] == "retro"
+    assert fields["metadata"]["register"] == "P2-30"
+    assert fields["metadata"]["card"] == "agents/retro.md"
+    assert "last 90 days" in fields["description"]
+    assert body.startswith("\n# Retro\n")
+
+
+@pytest.mark.parametrize("path", NEW_FILES, ids=lambda p: str(p.relative_to(ROOT)))
+def test_new_files_use_only_defined_keys_and_hold_no_private_identifiers(path):
+    text = read(path)
+    assert set(KEY_USE.findall(text)) - {"KEY"} <= set(defined_keys())
+    for what, find in PRIVATE.items():
+        assert not find(text), f"{what} in {path.relative_to(ROOT)}"
+
+
+def test_retro_skill_names_its_inputs_by_key():
+    used = set(KEY_USE.findall(read(RETRO_SKILL)))
+    assert set(RETRO_INPUTS) <= used
+
+
+def test_retro_card_is_five_questions_with_six_tap_options_in_order():
+    card = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    assert "Five items, never more" in card
+    positions = [card.find(option) for option in TAP_OPTIONS]
+    assert -1 not in positions and positions == sorted(positions)
+    assert "Free text or a voice note" in card
+    contract = flat(section(read(RETRO_CARD), "## 5. Output contract with evidence labels"))
+    positions = [contract.find(option) for option in TAP_OPTIONS]
+    assert -1 not in positions and positions == sorted(positions)
+
+
+def test_gaps_come_from_the_last_90_days_first():
+    gaps = flat(section(read(RETRO_SKILL), "## 2. Find the gaps"))
+    assert "the last 90 days" in gaps
+    assert "step back 90 days at a time" in gaps
+    order = section(read(RETRO_SKILL), "## 3. Order")
+    keys = ["Recency", "Open value", "Pattern class"]
+    assert [order.find(k) for k in keys] == sorted(order.find(k) for k in keys)
+
+
+def test_nothing_is_asked_before_the_whole_thread_and_later_replies_are_read():
+    gate = flat(section(read(RETRO_SKILL), "## 4. Gate before any question"))
+    assert "never ask what the record already answers" in gate
+    assert "full thread chain" in gate and "every later reply" in gate
+    assert "do not ask" in gate
+
+
+def test_skip_rule_is_the_exo_rule():
+    exo = flat(section(read(EXO_SKILL), "## 4. Skip rule"))
+    retro = flat(section(read(RETRO_SKILL), "## 7. Skip rule (as EXO)"))
+    for rule in ("2 skips: reshape", "3 skips: park and ask once"):
+        assert rule in exo and rule in retro
+    assert "Nothing closes on silence" in retro
+
+
+def test_answers_are_filed_without_touching_the_mail():
+    filing = flat(section(read(RETRO_SKILL), "## 6. File the answers"))
+    for key in ("PREDICTION", "PEOPLE", "CORRECTIONS", "GOLDEN_SET", "DECISIONS"):
+        assert f"[[{key}]]" in filing
+    assert "create one if none" in filing
+    assert "Never overwrite, move, delete or answer the mail" in filing
+    # golden-set candidates go through weekly-evolve, never straight into the set
+    assert "never writes the golden set directly" in filing
+
+
+def test_the_evening_slot_moved_from_exo_to_retro():
+    assert cron("retro") == ("53", "18", "*", "America/Matamoros")
+    minute, hour, weekday, zone = cron("exo")
+    assert (hour, weekday, zone) == ("7,13", "*", "America/Matamoros")
+    for path in (EXO_CARD, EXO_SKILL):
+        assert "07:00, 13:00 and 19:00" not in read(path)
+
+
+def test_what_happened_questions_ride_on_the_evening_card():
+    ask = flat(section(read(LEDGER_SKILL), "## 3. Ask only when blind"))
+    assert "evening card of the retro lane" in ask and "EXO card" not in ask
+    exo_prompt = read(ROUTINES / "exo.md")
+    assert "counted inside the 4 items" not in exo_prompt
+    assert "evening card of the retro lane" in flat(read(ROUTINES / "prediction-ledger.md"))
+
+
+def test_backtest_is_blind_capped_and_never_asks_joe():
+    text = flat(read(BACKTEST))
+    assert "Stop at 200 threads per run" in text
+    assert "the last 90 days" in text
+    assert "only the messages up to and" in text
+    assert "Ask Joe anything" in section(read(BACKTEST), "## Never")
+    # class rows are measurements: they never enter the live mean
+    assert "never enter the live mean" in text
+    calibrate = section(read(LEDGER_SKILL), "## 5. Calibrate: weekly, Sunday, before the weekly-evolve lane")
+    assert "never average" in flat(calibrate)
+
+
+def test_backtest_runs_on_sunday_before_l4():
+    minute, hour, weekday, zone = cron("ledger-backtest")
+    l4_minute, l4_hour, l4_weekday, l4_zone = cron("L4-weekly")
+    assert weekday == l4_weekday == "0" and zone == l4_zone == "UTC"
+    assert int(hour) < int(l4_hour)

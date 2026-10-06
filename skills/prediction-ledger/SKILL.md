@@ -70,9 +70,11 @@ that the row is either scored or asked.
 ## 3. Ask only when blind
 
 When there is no evidence after the wait, set Status Asked Joe and put one
-question into the next EXO card slot, built from [[CAL_TEMPLATE]] by
-[[CAL_STANDARD]]. Never ask about a subject that has any evidence. Never ask
-twice about one row.
+question into the next evening card of the retro lane, built from
+[[CAL_TEMPLATE]] by [[CAL_STANDARD]]. Past questions belong to the evening
+card; the retro lane shows the question and files the answer by the rules
+below. Never ask about a subject that has any evidence. Never ask twice about
+one row.
 
 The "What happened?" question:
 
@@ -131,6 +133,17 @@ Scored.
 - Group the misses by pattern ("owner wrong when X", "Route 3 overcalled for
   Y"), with row links, and hand them to the weekly-evolve lane as rule
   candidates. The ledger never writes a rule.
+- Backtest class rows (Subject starting with "Backtest") are measurements, not
+  predictions: report the newest ones as their own block, and never average
+  them into the week's numbers.
+
+## 6. Backtest on mail history
+
+The ledger-backtest lane runs sections 1, 2 and 4 over the threads of the
+last 90 days whose outcome the mail already shows, blind at the cut and
+without asking Joe, and writes accuracy by class. The method is in
+[references/backtest.md](references/backtest.md). Threads whose outcome the
+mail does not show are the retro lane's.
 
 ## Never
 

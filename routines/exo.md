@@ -2,7 +2,7 @@
 
 - Status: Candidate. Create on build day.
 - Lane: EXO (register P2-02)
-- Trigger: cron `0 7,13,19 * * *`, CRON_TZ=America/Matamoros (07:00, 13:00 and 19:00 daily)
+- Trigger: cron `0 7,13 * * *`, CRON_TZ=America/Matamoros (07:00 and 13:00 daily; installed at PC-1 to fire at 06:53 and 12:53). The 19:00 card is the [retro](retro.md) Routine's.
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -26,7 +26,7 @@ RUN (one slot)
 3. File the answers from the previous card first (skill section 3) and apply the skip rule (section 4).
 4. Parse the new [[CAPTURE]] rows (section 6).
 5. Break down the open tasks that have no steps yet (section 1), and write interpretation readings for new emails from ownership-level senders (section 5).
-6. Build one card with 2 to 4 items and a progress line (section 2). Include the "What happened?" questions queued by the prediction-ledger lane, counted inside the 4 items. Publish the card page from [[CAL_TEMPLATE]]. If no page can be published in this run, use the letter-card fallback of [[CAL_STANDARD]] in the card's [[DECISIONS]] row. If nothing is open, build no card.
+6. Build one card with 2 to 4 items and a progress line (section 2). Ask only about today's work: the prediction-ledger lane's "What happened?" questions are past questions and go on the evening retro card, never on this one. Publish the card page from [[CAL_TEMPLATE]]. If no page can be published in this run, use the letter-card fallback of [[CAL_STANDARD]] in the card's [[DECISIONS]] row. If nothing is open, build no card.
 7. Send finished candidate outputs to the checker. Offer each Accept as an approve item on the next card.
 
 NEVER
@@ -43,3 +43,7 @@ END
 v0.1 | 2026-10-01 | Claude Code on the web, queue item QC13 | first version | card and
 skill of queue item Q01; register P2-02; CAL_CARD_STANDARD v1 letter-card fallback |
 PCOS QUEUE_v2 item QC13
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC19 | two runs a day; the 19:00
+run and the "What happened?" questions moved to the retro Routine | Joe's decision:
+evening = past questions, morning and midday = today | PCOS QUEUE_v4 item QC19

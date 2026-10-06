@@ -93,22 +93,34 @@ A DELTA row in [[INBOX]] or a DELTA file in [[INBOX_FOLDER]].
 
 ## question-card
 
-A CAL card, an EXO card or a "What happened?" question.
+A CAL card, an EXO card, a retro card or a "What happened?" question.
 
 Required: [[CAL_STANDARD]]; [[DECISIONS]]; Joe's replies in the chain and
-[[MAIL_SENT]]; for EXO, the [[STEPS]] rows shown.
+[[MAIL_SENT]]; for EXO, the [[STEPS]] rows shown; for a retro item, the whole
+thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]], and the
+[[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
 
 1. Every question passes CAL-R5: it is not already answered in Decisions, in
    Joe's replies or in a later reply.
 2. One decision per question. Self-contained, in plain words, with the key
    facts, numbers and dates inside it; no internal ID without its meaning.
 3. 2 to 4 options, the recommended option first; options are concrete actions
-   with owner and date where relevant; no "Other".
+   with owner and date where relevant; no "Other". A retro item has its six
+   fixed tap options instead (item 7).
 4. The "Not needed / wrong direction" option is present (the template adds it).
    A "What happened?" question also offers "unrelated / wrong direction".
 5. EXO: 2 to 4 items, assumption form unless no assumption is defensible, a
    progress line at the end, no overdue list and no count of late items.
 6. One Open row in [[DECISIONS]] for the card.
+7. Retro: at most five items; the ledger's "What happened?" items first, then
+   the open conflict items. A retro item is one line that sums up the thread,
+   with the tap options closed as quoted, closed differently, dropped, moved
+   offline, still open and unrelated, plus free text or voice. A progress line
+   ends the card; no count of open gaps.
+8. Retro gate: every message of the thread and every later reply was read (the
+   message IDs are in the run record); no closure evidence exists in the mail,
+   [[WORKLIST]], [[CHANGELOG]] or [[DECISIONS]]; the subject has no
+   [[PREDICTION]] row, unless the item is the ledger's own queued question.
 
 ## prediction
 
