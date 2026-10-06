@@ -61,9 +61,14 @@ there. Changed cards are bumped; skill versions stay 0.1.
   closeout owner; Inbox, Corrections and Decision rows are filed once per
   gap, only the Prediction write repeats per identity; an explicit "keep"
   on the last-chance item is handed on like "still open".
+- Codex review, round 8 (fixed in the QC19-R retry): a Done-Candidate
+  Worklist row is closed, never a retro gap, and any closed status counts as
+  closure evidence; a "What happened?" answer of handled offline, Scored or
+  Parked, now hands a Worklist task to the closeout owner as dropped already
+  did (prediction-ledger skill section 3, checker `prediction` item 7).
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 58 new tests; with
-  main merged in (pull requests 1 and 2 and the QC18-R fixes), 407 pass.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 60 new tests; with
+  main merged in (pull requests 1 and 2 and the QC18-R fixes), 409 pass.
 
 ## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1 and PR 2)
 

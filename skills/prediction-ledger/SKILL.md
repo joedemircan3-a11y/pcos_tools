@@ -121,11 +121,17 @@ Filing the answer:
   Owner, Route, Candidate output and every assumption. Otherwise never guess the
   missing checks and never leave them out to reach a Score: set Status Parked
   with Actual kept. It is not asked again; the weekly calibration re-checks it
-  and scores it once new evidence settles the rest.
+  and scores it once new evidence settles the rest. Scored or Parked, the item
+  itself was handled: if the subject is a Worklist task, file one [[INBOX]] row
+  for the closeout owner quoting Joe's answer and note, as under C.
 - B: Status Parked and Check date 3 days later.
 - C: Actual "dropped", Confirmed, source = the card ID. Status Scored. If the
   subject is a Worklist task, file one [[INBOX]] row for the closeout owner
   quoting Joe's answer. The ledger never closes a task itself.
+
+The subject is a Worklist task when the row's Source is a Task ID, or when a
+[[WORKLIST]] row's sources name the row's conversation ID. One [[INBOX]] row per
+answer, never one per identity.
 - D: Is task and Route score 0. Status Scored. Joe's note goes into the miss
   patterns.
 - Skipped twice: Status Parked, and the question is withdrawn from the card. No

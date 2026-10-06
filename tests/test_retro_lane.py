@@ -270,3 +270,29 @@ def test_gap_level_records_are_filed_once_and_handoffs_cover_every_settlement():
     assert "filed once per gap, never once per identity" in filing
     skips = flat(section(skill, "## 7. Skip rule (as EXO)"))
     assert "An explicit keep is also filed as \"still open\" is" in skips
+
+
+def test_closed_worklist_statuses_are_never_retro_gaps():
+    from pcos_tools.common import CLOSED_STATUSES
+    gaps = flat(section(read(RETRO_SKILL), "## 2. Find the gaps"))
+    waiting = gaps[gaps.index("Rows of [[WORKLIST]]"):gaps.index("identified by Task ID")]
+    for status in CLOSED_STATUSES:
+        assert status not in waiting
+    closure = gaps[gaps.index("no closure evidence"):gaps.index("[[MAIL_MINING]] sharpens")]
+    for status in CLOSED_STATUSES:
+        assert status in closure
+    assert "no Done on its Worklist row" not in closure
+
+
+def test_ledger_answers_that_settle_a_worklist_task_reach_the_closeout_owner():
+    ask = flat(section(read(LEDGER_SKILL), "## 3. Ask only when blind"))
+    handled = ask[ask.index("- A: Actual"):ask.index("- B: Status Parked")]
+    assert "if the subject is a Worklist task, file one [[INBOX]] row" in handled
+    assert "Scored or Parked" in handled
+    assert "The subject is a Worklist task when the row's Source is a Task ID" in ask
+    filing = flat(section(read(RETRO_SKILL), "## 6. File the answers"))
+    assert "every answer that settles it (handled offline or dropped)" in filing
+    assert "this lane files no second one" in filing
+    checklist = flat(section(read(ROOT / "skills" / "checker" / "references" / "checklists.md"),
+                             "## prediction"))
+    assert "settles a Worklist task (handled offline or dropped" in checklist

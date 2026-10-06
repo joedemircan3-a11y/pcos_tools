@@ -161,6 +161,8 @@ together), then [[WORKLIST]], then [[CHANGELOG]].
    from a sent message that a later reply overtakes fails.
 5. The Score follows the scoring rule in the prediction-ledger skill.
 6. No question was asked about a subject that has evidence.
+7. A "What happened?" answer that settles a Worklist task (handled offline or
+   dropped, Scored or Parked) filed one [[INBOX]] row for the closeout owner.
 
 ## pricing-prep
 

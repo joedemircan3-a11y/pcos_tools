@@ -45,10 +45,11 @@ Two kinds of candidate:
    own unanswered asks included (notifications, marketing and system mail are
    not asks), and that have been quiet for at least 7 days.
 2. Rows of [[WORKLIST]] updated in the window whose Status waits on an event
-   that may have happened offline (Waiting, Blocked, Done-Candidate,
-   Stale-Triage), quiet for at least 7 days, and with no Queued, Shown or
-   Reshaped step in [[STEPS]], identified by Task ID. Active rows are today's
-   work and EXO's.
+   that may have happened offline (Waiting, Blocked, Stale-Triage), quiet for
+   at least 7 days, and with no Queued, Shown or Reshaped step in [[STEPS]],
+   identified by Task ID. Active rows are today's work and EXO's. A
+   Done-Candidate row is closed, never a candidate: the Worklist counts it as
+   closed and hygiene promotes it to Done.
 
 A thread and a Worklist row that concern the same ask (the row's sources name
 the thread, or the thread names the Task ID) are one gap with both identities:
@@ -58,7 +59,8 @@ A candidate is a gap only when the record shows no closure evidence:
 
 - no final reply: the terminal message (Law 3) leaves the ask open;
 - no sales-order, shipment or invoice confirmation for it in the mail;
-- no Done on its Worklist row;
+- its Worklist row in no closed status (Done, Done-Candidate, Expired,
+  Superseded, Archived-Auto);
 - no [[CHANGELOG]] row that closes it.
 
 [[MAIL_MINING]] sharpens the test: it shows where each counterpart usually
@@ -168,8 +170,11 @@ row; a class item covers 2 to 5 gaps), due the next evening.
 ## 6. File the answers
 
 At the start of the next run, before the new card. Ledger items are filed by
-the prediction-ledger skill section 3, into their own rows. For each retro
-item, in this order:
+the prediction-ledger skill section 3, into their own rows. When a ledger
+item's subject is a Worklist task, every answer that settles it (handled
+offline or dropped) files one [[INBOX]] row for the closeout owner by that
+section, so the row can be closed with its reason; this lane files no second
+one. For each retro item, in this order:
 
 1. Prediction rows, one per identity. A retro item covers the identities of
    its gap (the conversation ID, else the Task ID or source row ID; both for a
