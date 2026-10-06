@@ -377,9 +377,37 @@ def test_brief_keeps_new_messages_in_known_threads():
     assert "Skip items that already have a row with the same conversation ID." not in prompt
 
 
+def test_brief_backlog_beyond_five_days_is_never_skipped():
+    prompt = " ".join(routine_prompt((ROUTINES / "L1-brief.md").read_text(encoding="utf-8")).split())
+    assert "at most 5 days." not in prompt and "from the end of the last L1 heartbeat" not in prompt
+    assert "window end in the last L1 heartbeat" in prompt
+    assert "read the oldest 5 days only and record their end as this run's window end" in prompt
+    assert 'the result starts with "window end"' in prompt
+
+
+def test_render_keeps_every_open_needs_joe_row_on_today():
+    prompt = " ".join(routine_prompt((ROUTINES / "L2-render.md").read_text(encoding="utf-8")).split())
+    assert "[[INBOX]] (rows since the last render)" not in prompt
+    assert "every row whose Status is still Needs Joe, however old" in prompt
+
+
+def test_github_chair_trusts_only_its_own_final_and_reviews_of_the_current_head():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    steps = {line.split(". ", 1)[0]: line for line in prompt.splitlines() if re.match(r"\d+\. ", line)}
+    assert "posted by the chair's account" in steps["1"] and "from any other account is ignored" in steps["1"]
+    assert "Codex review whose commit is the head" in steps["5"]
+    assert "A review of an earlier commit does not count" in steps["5"]
+    assert "head reached the pull request less than 2 hours ago" in steps["5"]
+    assert "opened less than 2 hours ago" not in steps["5"]
+    assert steps["10"].startswith("10. Re-read the pull request's head.")
+    assert "write nothing and skip" in steps["10"]
+    replay = steps["4"]
+    assert replay.index("add any that is missing") < replay.index('post that Final')
+
+
 def test_github_chair_never_chairs_without_a_review():
     prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
-    fallback = next(line for line in prompt.splitlines() if line.startswith("5. Find the two reviews"))
+    fallback = next(line for line in prompt.splitlines() if line.startswith("5. "))
     assert "If exactly one is still missing" in fallback and "If both are missing" in fallback
     assert "never chair" in fallback and "skip" in fallback
     assert "scheduled run goes on to the next pull request" in prompt

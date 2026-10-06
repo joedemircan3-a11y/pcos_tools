@@ -25,7 +25,7 @@ LOAD
 
 READ (view mode only; SQL and rows mode hit the plan's query cap)
 4. Read the newest [[CHANGELOG]] rows first and note the time of the last hub update. Never show a row as open when a newer Changelog row closed it.
-5. Read [[NOTION_WORKLIST]] (open rows), [[DECISIONS]] (open, with default and due date), [[INBOX]] (rows since the last render), [[LANES]] (the last heartbeat of each lane), and today's EXO card row in [[DECISIONS]].
+5. Read [[NOTION_WORKLIST]] (open rows), [[DECISIONS]] (open, with default and due date), [[INBOX]] (every row whose Status is still Needs Joe, however old, plus the other rows since the last render; a Needs Joe row leaves Today only when a newer row or [[CHANGELOG]] row closes it), [[LANES]] (the last heartbeat of each lane), and today's EXO card row in [[DECISIONS]].
 
 WRITE
 6. [[TODAY]]: at most 12 lines that Joe can read on his phone in under two minutes:
@@ -54,3 +54,8 @@ v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | LOAD step 3 reads 
 agents/L2-render.md once it exists; later steps renumbered | the prompt never loaded the card that
 P2-19 requires, so card changes could not reach the lane (Codex review of PR 2) | PCOS
 QUEUE_v4 item QC18
+
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18-R | step 5 reads every Inbox row
+still at Needs Joe, whatever its age, not only the rows since the last render | an unresolved
+Needs Joe row dropped off Today after one render although nothing closed it (Codex review of
+PR 2) | PCOS QUEUE_v6 item QC18-R
