@@ -305,3 +305,23 @@ def test_claim_extraction_and_claude_review_use_different_models():
     review_2_model = re.search(r"Review-2 Claude (\w+)", review).group(1)
     assert extract_model != review_2_model
 
+
+def test_extracted_claims_keep_the_evidence_label_apart_from_status():
+    contract = " ".join(section((AGENTS / "knowledge-extract.md").read_text(encoding="utf-8"),
+                                "## 5. Output contract with evidence labels").split())
+    assert "every extracted claim is Candidate" not in contract
+    assert "separate from Status" in contract and "labeled Confirmed" in contract
+
+
+def test_blind_row_blocked_by_another_rows_subject_is_parked():
+    ask = " ".join(section((SKILLS / "prediction-ledger" / "SKILL.md").read_text(encoding="utf-8"),
+                           "## 3. Ask only when blind").split())
+    assert "through another row" in ask and "It is set Parked" in ask
+
+
+def test_intake_stop_list_asks_stay_needs_joe():
+    gate = " ".join(section((SKILLS / "intake-email" / "SKILL.md").read_text(encoding="utf-8"),
+                            "## 6. Send gate").split())
+    assert "Needs Joe when the message has a stop-list ask" in gate
+    assert "Drafted when only conditions 1 or 2 failed" in gate
+

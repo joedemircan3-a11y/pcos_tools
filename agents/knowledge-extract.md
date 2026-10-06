@@ -58,8 +58,11 @@ or the Personal Knowledge Layer; go over the batch cap.
 - [[KNOWLEDGE]] rows: Claim (one atomic statement, in the source's terms), Type
   (rule, fact, method, decision or open question), Source ID, Source date (the
   source's own date, not today), Status Candidate.
-- Evidence labels: every extracted claim is Candidate. Status Confirmed is set
-  only by the chair.
+- Evidence labels (Law 4) are separate from Status. A claim that the opened
+  source states is labeled Confirmed as evidence of what the source says; a
+  claim that needs inference from the source is labeled Candidate. Every new row
+  still has Status Candidate (review pending); Status Confirmed is set only by
+  the chair.
 - Run record: files opened (keys and IDs), claims per file, files skipped and
   why (no index line, out of scope, unreadable = Blocked), kernel version; one
   heartbeat; one Changelog row per run.
@@ -89,6 +92,8 @@ P2-16 stage 1; dev-session records of 2026-09-27 turn 4 and 2026-09-28 part 2 |
 Joe's default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
 
 v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | model fixed at Claude
-Sonnet | with "Opus, or Sonnet" the default Opus batches collided with Review-2 on
-Claude Opus, which must never be the extracting model and cannot find out who
-extracted (Codex review of PR 2) | PCOS QUEUE_v4 item QC18
+Sonnet; the evidence label is kept apart from Status | with "Opus, or Sonnet" the
+default Opus batches collided with Review-2 on Claude Opus, which must never be
+the extracting model and cannot find out who extracted; labeling every claim
+Candidate broke Law 4 for claims the source states (Codex reviews of PR 2 and
+PR 1) | PCOS QUEUE_v4 item QC18
