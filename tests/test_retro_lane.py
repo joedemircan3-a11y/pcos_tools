@@ -180,3 +180,25 @@ def test_backtest_rebuilds_the_owner_map_at_the_cut():
     assert "undo every change dated after the cut" in method
     assert "skip the thread" in method
     assert "leave the Owner check out" not in method
+
+
+def test_prior_questions_and_rows_match_by_identity_never_by_subject():
+    gaps = flat(section(read(RETRO_SKILL), "## 2. Find the gaps"))
+    assert "Match by identity (the conversation ID or Task ID), never by subject" in gaps
+    assert "identity is already in the Source of a [[PREDICTION]] row" in gaps
+    gate = flat(section(read(RETRO_SKILL), "## 4. Gate before any question"))
+    assert "concerns the same ask" in gate
+    # a gate catch is filed like an answer, so the ledger can match it later
+    assert "Source = the identity" in gate
+
+
+def test_filing_never_invents_a_channel_and_always_sets_a_status():
+    filing = flat(section(read(RETRO_SKILL), "## 6. File the answers"))
+    assert "the channel Joe tapped" not in filing and "never a guessed channel" in filing
+    free_text = filing[filing.index("free text or voice only"):filing.index("3. People.")]
+    assert "Status Parked" in free_text
+
+
+def test_backtest_checker_sample_fits_the_run():
+    for path in (BACKTEST, BACKTEST_CARD, ROUTINES / "ledger-backtest.md"):
+        assert "min(10, threads scored" in flat(read(path))

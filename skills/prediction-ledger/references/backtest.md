@@ -57,8 +57,9 @@ Score as skill section 4, with two changes:
   Nothing was drafted, so "used unedited" does not apply.
 - Assumptions: score only those the outcome settles.
 
-The checker re-scores 10 threads per run on a different model (job type
-prediction). Disagreements go into the run report, and the checker's score
+The checker re-scores a sample of min(10, threads scored in this run) on a
+different model (job type prediction): every thread when the run scored
+fewer than 10. Disagreements go into the run report, and the checker's score
 stands.
 
 ## 4. Classes

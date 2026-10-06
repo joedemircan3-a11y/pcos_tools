@@ -63,10 +63,15 @@ the company system). It never replaces reading the thread.
 
 Never a candidate:
 
-- a subject that is answered or that another card already asks: a decided row
-  in [[DECISIONS]]; an open row there that is not this lane's own card or
-  conflict row; an open question in the CAL lane's state ([[CAL_FOLDER]]);
-- a thread or item that already has a [[PREDICTION]] row, whatever its Status.
+- a thread or item that is answered or that another card already asks: a
+  decided row in [[DECISIONS]]; an open row there that is not this lane's own
+  card or conflict row; an open question in the CAL lane's state
+  ([[CAL_FOLDER]]). Match by identity (the conversation ID or Task ID), never
+  by subject: two threads with one subject are two gaps. A question that names
+  no identity counts only when its subject matches this candidate alone, with
+  no other thread or row in the window under that subject;
+- a thread or item whose identity is already in the Source of a [[PREDICTION]]
+  row, whatever its Status.
   The ledger owns it. Its "What happened?" question, if it queued one, rides on
   this card as a ledger item (section 5), and a Parked row is never asked;
 - personal or Room 10 material.
@@ -97,14 +102,18 @@ becomes a question:
    folder (Inbox, Sent Items, the routed folders), every branch and forward,
    through the terminal message. Record each message ID read.
 2. Read every later reply: later messages in the same conversation, and later
-   threads with the same counterpart or the same Task ID, up to today.
+   threads with the same counterpart or the same Task ID, up to today. A
+   later thread answers the gap only when it concerns the same ask (the Task
+   ID, or the order, document or request it names), not merely the same
+   counterpart.
 3. Check the other records: the Worklist row and the sources it names,
    [[CHANGELOG]], [[DECISIONS]], [[PREDICTION]] and the CAL lane's questions
    in [[CAL_FOLDER]].
 4. If anything read answers the question, do not ask. Write what the record
-   shows instead: a new [[PREDICTION]] row with Actual, Confirmed, the evidence
-   key and ID, Status Scored. Note it as a gate catch for the weekly method
-   loop.
+   shows instead, on a new [[PREDICTION]] row built as section 6 step 1 builds
+   one (Subject, Source = the identity, no prediction fields): Actual,
+   Confirmed, with the evidence key and ID; Status Scored. Note it as a gate
+   catch for the weekly method loop.
 5. Hand every item to the checker (job type question-card, retro items) on a
    different model. Only Accepted items are shown. A Rejected item is dropped
    and the next gap takes its place.
@@ -171,8 +180,9 @@ item, in this order:
    - dropped: "dropped". Status Scored. When a Worklist row covers it, one
      [[INBOX]] row for the closeout owner quoting Joe's answer. The lane never
      closes a row.
-   - moved offline: "handled offline by CHANNEL", the channel Joe tapped, plus
-     the outcome from his note. Status Scored.
+   - moved offline: "handled offline". The channel (phone, WhatsApp, in
+     person) and the outcome are added only when Joe's note gives them;
+     never a guessed channel. Status Scored.
    - still open: no Actual. Status Parked, Check date 7 days later, so the
      ledger's evidence check can still settle it, without a Score
      (prediction-ledger skill section 4). One [[INBOX]] row for the closeout
@@ -181,8 +191,11 @@ item, in this order:
    - unrelated (the template's "Not needed / wrong direction"): "unrelated;
      should not have been asked". Status Scored. The miss goes to the
      gap-query misses for the weekly method loop.
-   - free text or voice only: parse it as an EXO voice dump. File the option it
-     states; if it states none, Actual holds Joe's words verbatim.
+   - free text or voice only: parse it as an EXO voice dump and file the option
+     it states. If it states none, Actual holds Joe's words verbatim,
+     Confirmed as his statement; Status Parked, Check date 7 days later, so
+     the ledger's evidence check can still settle it, without a Score. It
+     counts as answered and is never asked again by this lane.
 3. People. When the answer says how someone in the thread works (moves price
    talks to the phone, confirms orders only by invoice, answers through a
    colleague), write a Candidate line for that person, by role and address as

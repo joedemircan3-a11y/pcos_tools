@@ -38,9 +38,14 @@ there. Changed cards are bumped; skill versions stay 0.1.
   item files and counts every thread it covers; the ledger settles a row
   without a prediction without scoring it; the CAL template's own "Not
   needed / wrong direction" is the sixth tap option, never a seventh.
+- Codex review, round 2: earlier questions and rows match a gap by identity,
+  never by subject; a later thread answers a gap only when it concerns the
+  same ask; a gate catch is filed with its identity in Source; "moved
+  offline" never guesses a channel; an unmatched free-text answer is Parked;
+  the checker's backtest sample is min(10, threads scored).
 - The three indexes list the new cards, skill and Routines.
-  `tests/test_retro_lane.py` pins the lane's fixed parts: 45 new tests; with
-  pull request 2's latest fixes merged in, 365 pass and 1 is skipped.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 48 new tests; with
+  pull request 2's latest fixes merged in, 373 pass and 1 is skipped.
 
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 

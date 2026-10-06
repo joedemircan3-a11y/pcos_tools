@@ -77,8 +77,8 @@ or change a Worklist row; take more than 200 threads in one run.
   one Changelog row per row written.
 - Done means: up to 200 new threads scored and their class rows written, or a
   heartbeat that says no new settled thread was found.
-- Eval: the checker re-scores 10 threads per run on a different model;
-  disagreements trend to zero.
+- Eval: the checker re-scores min(10, threads scored) per run on a different
+  model; disagreements trend to zero.
 
 ## 6. Trigger and owner model
 
