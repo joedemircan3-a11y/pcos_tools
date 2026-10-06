@@ -35,9 +35,11 @@ pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the w
   claim and quote must match an opened source.
 - Routines (Codex review of PR 2): L1-brief v0.4 resumes from the window end in
   its last heartbeat, so mail beyond the 5-day cap is read by later runs and never
-  dropped; L2-render v0.3 keeps every open Needs Joe row on Today, however old;
-  council-github-chair v0.8 ends a council only on its own "Chair: Final", counts
-  only reviews of the current head, re-checks the head before writing, and
+  dropped; L2-render v0.4 keeps every open Needs Joe row on Today, however old, and
+  links the rest in the Inbox when they do not fit in 12 lines;
+  council-github-chair v0.9 ends a council only on its own "Chair: Final", counts
+  only reviews tied to the current head commit (Codex by commit, Gemini by its
+  Action run), re-checks the head before writing and again before posting, and
   restores missing Changelog rows before replaying a Final.
 - Tests: the private-ID guard also flags runs of 25 characters or more with two of
   the three character classes, or with no "-" or "_" (Drive IDs are 28 or more), so

@@ -41,7 +41,7 @@ TRUST AND RECOVERY
 4. If the row already holds a Final for this pull request (an earlier run wrote it, then failed before posting) and the head commit on the Final's first line equals the pull request's current head, first make sure [[CHANGELOG]] has one row each for Final, Dissent and Status with that head commit, and add any that is missing; then post that Final as the "Chair: Final" comment (as in step 10) and skip. If the head has changed since, chair again from step 5.
 
 REVIEWS
-5. Note the pull request's current head commit and the time it reached the pull request (the push in the pull request's timeline). Find the two reviews of that head: Review-1 is a Codex review whose commit is the head; Review-2 is a Gemini CLI Action comment posted after the head reached the pull request. A review of an earlier commit does not count; for this head it is missing. If one is missing and the head reached the pull request less than 2 hours ago, skip: the next event, or the scheduled run, picks it up. If exactly one is still missing after 2 hours, chair with the review you have and write "Review-N missing" in Dissent. If both are missing after 2 hours, never chair: write one Blocked row in [[INBOX]] (pull request link, both reviewers missing) unless one exists for this pull request, and skip.
+5. Note the pull request's current head commit and the time it reached the pull request (the push in the pull request's timeline). Find the two reviews of that head: Review-1 is a Codex review whose commit is the head; Review-2 is a Gemini CLI Action comment from an Action run whose head commit is the current head (the run's head commit in its metadata, or the commit the comment names); a comment whose run cannot be tied to the head does not count, whenever it was posted. A review of an earlier commit does not count; for this head it is missing. If one is missing and the head reached the pull request less than 2 hours ago, skip: the next event, or the scheduled run, picks it up. If exactly one is still missing after 2 hours, chair with the review you have and write "Review-N missing" in Dissent. If both are missing after 2 hours, never chair: write one Blocked row in [[INBOX]] (pull request link, both reviewers missing) unless one exists for this pull request, and skip.
 
 CHAIR
 6. Read the draft file in the pull request, its description and the reviews present. Re-open the sources the draft cites by key. For each finding marked Fix or Reject, answer: accepted (with the change) or rejected (with the reason and the evidence).
@@ -50,7 +50,7 @@ CHAIR
 9. Run the checker (job type council-final) on Final and Dissent, on a different model. Give it the reviews the pull request has: both, or in the one-review fallback the one present together with the "Review-N missing" line in Dissent. On Fix, repair and re-check, at most 5 rounds. Write only after an Accept. With no Accept after 5 rounds, post nothing: write one Blocked row in [[INBOX]] with the open findings (the checker's card item for Joe) unless one exists for this pull request, and skip. A later run chairs it again.
 
 WRITE
-10. Re-read the pull request's head. If it is no longer the head noted in step 5, write nothing and skip: the next run chairs the new head once it has its reviews. Update the [[COUNCIL]] row with Final, Dissent and Status: read it right before writing and read it back after. Add one [[CHANGELOG]] row per field, with the kernel version and the head commit. Only then post one comment on the pull request, "Chair: Final" with Final, Dissent and Status; the comment is the terminal marker. This repository is public: no Drive or Notion ID, name, price, customer or mail text in the comment.
+10. Re-read the pull request's head. If it is no longer the head noted in step 5, write nothing and skip: the next run chairs the new head once it has its reviews. Update the [[COUNCIL]] row with Final, Dissent and Status: read it right before writing and read it back after. Add one [[CHANGELOG]] row per field, with the kernel version and the head commit. Right before posting, re-read the head once more. If it moved, post nothing and skip: the row's Final names the old head on its first line, so the next run chairs the new head again (step 4). Otherwise post one comment on the pull request, "Chair: Final" with Final, Dissent and Status; the comment is the terminal marker. This repository is public: no Drive or Notion ID, name, price, customer or mail text in the comment.
 11. Never merge, push, approve, close the pull request or change repository settings. Joe merges or closes it.
 
 END OF RUN
@@ -108,3 +108,10 @@ restores missing Changelog rows | anyone could post "Chair: Final" on a public p
 and silence the chair; a push after the reviews could get a Final on an unreviewed head; a
 replay could leave the audit rows incomplete (Codex review of PR 2) | PCOS QUEUE_v6 item
 QC18-R
+
+v0.9 | 2026-10-06 | Claude Code on the web, queue item QC18-R | Review-2 counts only when its
+Gemini Action run is tied to the current head commit, not by comment time; the head is
+re-read once more right before the "Chair: Final" comment | a Gemini run on an older head
+that posted after a push counted as a review of the new head, and a push during the Notion
+writes could get the old head's Final posted as the terminal marker (Codex review of PR 2) |
+PCOS QUEUE_v6 item QC18-R

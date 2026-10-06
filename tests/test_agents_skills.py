@@ -398,6 +398,17 @@ def test_render_keeps_every_open_needs_joe_row_on_today():
     prompt = " ".join(routine_prompt((ROUTINES / "L2-render.md").read_text(encoding="utf-8")).split())
     assert "[[INBOX]] (rows since the last render)" not in prompt
     assert "every row whose Status is still Needs Joe, however old" in prompt
+    assert "show as many as fit and end with one line that links [[INBOX]]" in prompt
+
+
+def test_github_chair_ties_gemini_to_the_head_and_rechecks_it_before_posting():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    steps = {line.split(". ", 1)[0]: line for line in prompt.splitlines() if re.match(r"\d+\. ", line)}
+    assert "posted after the head reached the pull request" not in steps["5"]
+    assert "Action run whose head commit is the current head" in steps["5"]
+    write = steps["10"]
+    assert write.index("[[CHANGELOG]] row per field") < write.index("Right before posting, re-read the head once more")
+    assert write.index("Right before posting, re-read the head once more") < write.index('post one comment')
 
 
 def test_github_chair_trusts_only_its_own_final_and_reviews_of_the_current_head():

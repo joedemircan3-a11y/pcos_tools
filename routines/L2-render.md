@@ -32,7 +32,9 @@ WRITE
    - the time of the last hub update;
    - at most 5 decisions due, each with its default and date;
    - today's EXO card link;
-   - the Needs Joe items, one line each;
+   - the Needs Joe items, one line each, oldest first. When they do not all fit in
+     the 12 lines, show as many as fit and end with one line that links [[INBOX]]
+     filtered to Status Needs Joe (no count), so every open item stays one tap away;
    - the lanes that missed their run.
    No overdue lists and no counts of late items.
 7. After Joe's typed cutover yes only: render PCOS_NOW [MIRROR] and KERNEL.md in Drive from the rows and the kernel page, as new files. Rename the previous mirrors (created by this lane) with the suffix [SUPERSEDED] and the date, and move them to [[ARCHIVE]]. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
@@ -59,3 +61,8 @@ v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18-R | step 5 reads eve
 still at Needs Joe, whatever its age, not only the rows since the last render | an unresolved
 Needs Joe row dropped off Today after one render although nothing closed it (Codex review of
 PR 2) | PCOS QUEUE_v6 item QC18-R
+
+v0.4 | 2026-10-06 | Claude Code on the web, queue item QC18-R | when the open Needs Joe items
+do not fit in the 12 lines, Today ends with a link to all of them in the Inbox | with more
+Needs Joe rows than lines, some open items fell off Today (Codex review of PR 2) | PCOS
+QUEUE_v6 item QC18-R
