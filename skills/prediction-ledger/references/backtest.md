@@ -21,8 +21,9 @@ backtest.
   kernel's Route 1 tests. A thread without such a message is skipped.
 - Outcome in the mail: after the cut, the evidence of skill section 2 (Joe's
   sent mail and the later replies, read as one conversation; the terminal
-  message controls) reaches a conclusive outcome: the ask was answered, done, declined or dropped, and it
-  is visible who acted. Partial or no evidence: skip the thread.
+  message controls) reaches a conclusive outcome: the ask was answered, done,
+  declined or dropped, and it is visible who acted. Partial or no evidence:
+  skip the thread.
 - Not scored before: the conversation ID is in no earlier run report.
 - Order: newest cut first. Stop at 200 threads per run.
 
