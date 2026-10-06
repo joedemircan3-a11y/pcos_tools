@@ -62,8 +62,9 @@ stay 0.1 because the skills are not released yet.
   it is the terminal message (prediction-ledger card v0.2). A row left with only
   nonconclusive evidence after the extra wait is Parked, not stranded, and so is
   a blind row whose subject another row already covers.
-- Intake-email skill: a stop-list ask keeps the row at Needs Joe; Drafted only
-  when the send gate's rule or allowlist conditions alone failed.
+- Intake-email skill: a sender off the allowlist, a stop-list ask or a checker
+  failure keeps the row at Needs Joe; Drafted only when the Door 1 rule alone is
+  missing.
 - Prediction ledger: a Parked row is never asked again; new evidence or Joe's
   own action reopens it, and the weekly calibration re-checks Parked rows.
 - Knowledge chair card v0.2: Status Duplicate for claims a review finds to
@@ -79,8 +80,8 @@ stay 0.1 because the skills are not released yet.
   `KL_DOMAINS` is a group of those keys; `MAIL_ROUTED` documented as the one set.
 - Tests: the private-ID guard now covers Drive IDs that contain `-` or `_`: every
   run of the URL-safe alphabet with both cases and a digit fails, except a short
-  list of public folder names kept in the test. One test per fix above. 215 tests
-  pass, 1 is skipped.
+  list of public folder names kept in the test. Notion IDs and UUIDs are caught
+  in upper or lower case. One test per fix above. 219 tests pass, 1 is skipped.
 - Routines (Codex review of pull request 2, same queue item):
   - L1, L2 and L3 read their lane card (`agents/L1-brief.md` and so on) in
     LOAD once P2-19 writes it; L4 reads every card in its header and runs both
@@ -97,7 +98,11 @@ stay 0.1 because the skills are not released yet.
   - council-board chair: the Final is written only after a checker Accept;
     after five failed rounds the row keeps its Status and Joe gets one card
     item (Needs Joe stays for factual disagreements). The council-github
-    chair runs the same check before it posts a Final.
+    chair runs the same check before it posts a Final, with the pull
+    request's two reviews as the checklist's reviews; it writes and reads back
+    the Council row before posting, and repairs a run that failed in between.
+  - Every Routine that names the checker loads `skills/checker/SKILL.md`
+    (council-board chair, exo, intake-email, prediction-ledger added).
   - L3 Health: the stale-kernel check looks at the last 24 hours only.
   - L1: a thread is skipped only when a row already has its current terminal
     message; a newer terminal message gets a new row that names the earlier one.
@@ -105,7 +110,7 @@ stay 0.1 because the skills are not released yet.
   - Tests: every Routine prompt reads the cards in its header (except the
     anonymous Review-2), has a schedule and numbers its steps in order; the
     chair's queue needs both reviews. The public-name list adds the dispatch
-    file name the routines cite. 320 tests pass, 1 is skipped.
+    file name the routines cite. 325 tests pass, 1 is skipped.
 
 ## Unreleased - 2026-10-01: agent cards and skills v0.1
 

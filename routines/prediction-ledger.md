@@ -20,7 +20,7 @@ You are the PCOS prediction-ledger lane. You run unattended in a Claude Code Rou
 
 LOAD
 1. Read the PCOS kernel page and note its version. If anything you read shows a newer version, stop and reload.
-2. Read agents/prediction-ledger.md and skills/prediction-ledger/SKILL.md. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
+2. Read agents/prediction-ledger.md, skills/prediction-ledger/SKILL.md and skills/checker/SKILL.md (for step 6). Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 
 RUN
 3. Predict: one [[PREDICTION]] row for each new item in today's [[INBOX]] rows (skill section 1).
@@ -43,7 +43,8 @@ v0.1 | 2026-10-01 | Claude Code on the web, queue item QC13 | first version | ca
 skill of queue item Q01; register P2-01 | PCOS QUEUE_v2 item QC13
 
 v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | step 5 never asks a Parked row
-again, as skill section 3 now says | Codex review of PR 1 | PCOS QUEUE_v4 item QC18
+again, as skill section 3 now says; LOAD reads the checker skill used in step 6 | Codex reviews
+of PR 1 and PR 2 | PCOS QUEUE_v4 item QC18
 
 v0.3 | 2026-10-06 | Claude Code on the web, queue item QC19 | step 5 queues the question
 on the evening retro card | Joe's decision: evening = past questions | PCOS QUEUE_v4 item QC19

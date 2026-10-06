@@ -20,7 +20,7 @@ You are the chair of the PCOS board council. You run unattended in a Claude Code
 
 LOAD
 1. Read the PCOS kernel page and note its version. If anything you read shows a newer version, stop and reload.
-2. Read agents/council-board.md, skills/council-board/SKILL.md and the chair prompt in skills/council-board/references/prompts.md. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
+2. Read agents/council-board.md, skills/council-board/SKILL.md, the chair prompt in skills/council-board/references/prompts.md, and skills/checker/SKILL.md with its checklists in skills/checker/references/checklists.md. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 
 RUN
 3. Queue: [[COUNCIL]] rows with Status Reviewed-2 and both Review-1 and Review-2 written; and rows whose Deadline has passed with one review still missing a full cycle later (skill section 6). A row with an empty review field waits for that second condition, whatever its Status.
@@ -55,3 +55,7 @@ Joe's attention as one card item, never the Needs Joe status | the Final was wri
 check, a one-review fallback Final could never pass the council-final checklist (the checklist
 now allows it), and Needs Joe is reserved for factual disagreements (Codex reviews of PR 2) |
 PCOS QUEUE_v4 item QC18
+
+v0.4 | 2026-10-06 | Claude Code on the web, queue item QC18 | LOAD reads the checker skill and
+its checklists | step 5's Accept gate needs the checker's procedure and the council-final
+checklist (Codex review of PR 2) | PCOS QUEUE_v4 item QC18
