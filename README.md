@@ -395,7 +395,10 @@ data to this public repository.
 six parts in order. Each skill's frontmatter must follow the Agent Skills format.
 Every source key must be defined, and every relative link must resolve. It also
 fails on anything that looks like a Drive or Notion ID, an e-mail address or a
-Drive or Notion link in `agents/` or `skills/`.
+Drive or Notion link in `agents/` or `skills/`. `tests/test_retro_lane.py` pins
+what the Retro lane and the ledger backtest fixed: the evening slot, five
+questions with six tap options, the 90-day window, the read-everything gate, and
+a backtest that is blind at the cut, capped at 200 threads and never asks Joe.
 
 ## Build the zip
 

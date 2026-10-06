@@ -1,5 +1,80 @@
 # Changelog
 
+## Unreleased - 2026-10-06: Retro lane v0.1 (P2-30)
+
+Why: PCOS queue item QC19 (QUEUE_v4) builds the Retro lane that Joe accepted:
+an evening card of five questions about the past, which he answers easily
+("past is just remembering"), last 90 days first, plus a backtest of the
+prediction ledger over the same 90 days of mail. Built by Claude (Claude Code on
+the web) on top of pull request 2, because the Routines it changes exist only
+there. Changed cards are bumped; skill versions stay 0.1.
+
+- `skills/retro/` and `agents/retro.md`: the gap query (threads and Worklist
+  items of the last 90 days with no closure evidence), the order (recency in
+  weeks, then open value, then pattern class), the gate (the full thread chain
+  and every later reply are read before any question, and nothing the record
+  answers is asked), the five-item card with its six tap options, the filing
+  (Prediction rows; People candidates through the closeout owner; golden-set
+  candidates as Corrections rows, which weekly-evolve turns into cases; a
+  Decision row when Joe's memory and the record disagree; the mail is never
+  touched), and the EXO skip rule.
+- `routines/retro.md`: daily 18:53 America/Matamoros, the evening slot that
+  the EXO Routine gives up. `routines/exo.md` now runs at 07:00 and 13:00 only.
+- Past questions have one home: the prediction-ledger lane's "What happened?"
+  questions move from the EXO cards to the evening retro card (ledger card
+  v0.4, skill section 3, Routine step 5; EXO card v0.2, Routine step 6). Why:
+  Joe's decision "evening = past questions, morning and midday = today", and
+  one card that owns every past question cannot ask about a thread twice.
+- `agents/ledger-backtest.md`, `routines/ledger-backtest.md` and
+  `skills/prediction-ledger/references/backtest.md`: the ledger's predictor
+  runs blind at the cut over threads of the last 90 days whose outcome the mail
+  shows, scored without asking Joe, at most 200 threads per run, once at
+  install and then on Sundays before L4. One Prediction row per class of ask,
+  kept out of the live mean (skill section 5 says so).
+- `skills/checker/references/checklists.md`: the question-card checklist covers
+  retro items (six tap options, the read-everything gate).
+- Codex review, round 1: the backtest rebuilds the owner map as it stood at
+  the cut (a later owner would leak into Owner, Route and output); a class
+  item files and counts every thread it covers; the ledger settles a row
+  without a prediction without scoring it; the CAL template's own "Not
+  needed / wrong direction" is the sixth tap option, never a seventh.
+- Codex review, round 2: earlier questions and rows match a gap by identity,
+  never by subject; a later thread answers a gap only when it concerns the
+  same ask; a gate catch is filed with its identity in Source; "moved
+  offline" never guesses a channel; an unmatched free-text answer is Parked;
+  the checker's backtest sample is min(10, threads scored).
+- Codex review, round 3: the Never list and the checker match a gap by
+  identity too, so no subject-based veto is left; at three skips the
+  last-chance "Keep this open, or let it go?" item is shown before any row
+  parks the gap (a Parked row would have hidden it).
+- Codex review, round 4: the backtest undoes owner-map changes newest first;
+  a thread and the Worklist row that names it are one gap with both
+  identities, never two questions.
+- Codex review, round 5: a gap with no thread (a Worklist row alone) is
+  summed up from the row, and "closed as quoted" means done as its Next
+  Action planned; a row with a Reshaped EXO step stays EXO's; the checker
+  checks every identity a gap carries.
+- Codex review, round 6: every answer that settles a Worklist-covered gap
+  reaches the closeout owner as an Inbox row; the checker accepts a gap
+  with no thread (row summary, row and its sources read).
+- Codex review, round 7: a gate catch on a Worklist row reaches the
+  closeout owner; Inbox, Corrections and Decision rows are filed once per
+  gap, only the Prediction write repeats per identity; an explicit "keep"
+  on the last-chance item is handed on like "still open".
+- Codex review, round 8 (fixed in the QC19-R retry): a Done-Candidate
+  Worklist row is closed, never a retro gap, and any closed status counts as
+  closure evidence; a "What happened?" answer of handled offline, Scored or
+  Parked, now hands a Worklist task to the closeout owner as dropped already
+  did (prediction-ledger skill section 3, checker `prediction` item 7).
+- Codex review, round 9: the backtest sample is checked with its own
+  checklist, `prediction-backtest`, which scores by the backtest's rule
+  (output type; settled assumptions only), never the live one; an item that
+  reaches the ledger through an Inbox row or DELTA line counts as a Worklist
+  task when that row names a Task ID.
+- The three indexes list the new cards, skill and Routines.
+  `tests/test_retro_lane.py` pins the lane's fixed parts: 61 new tests; with
+  main merged in (pull requests 1 and 2 and the QC18-R fixes), 410 pass.
+
 ## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1 and PR 2)
 
 Why: PCOS queue item QC18-R (QUEUE_v6) fixes the four Codex findings left open on

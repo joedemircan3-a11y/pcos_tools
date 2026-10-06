@@ -101,22 +101,44 @@ listed under what changed, and the authority named under why.
 
 ## question-card
 
-A CAL card, an EXO card or a "What happened?" question.
+A CAL card, an EXO card, a retro card or a "What happened?" question.
 
 Required: [[CAL_STANDARD]]; [[DECISIONS]]; Joe's replies in the chain and
-[[MAIL_SENT]]; for EXO, the [[STEPS]] rows shown.
+[[MAIL_SENT]]; for EXO, the [[STEPS]] rows shown; for a retro item, the whole
+thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]] when the gap has
+one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
 
 1. Every question passes CAL-R5: it is not already answered in Decisions, in
    Joe's replies or in a later reply.
 2. One decision per question. Self-contained, in plain words, with the key
    facts, numbers and dates inside it; no internal ID without its meaning.
 3. 2 to 4 options, the recommended option first; options are concrete actions
-   with owner and date where relevant; no "Other".
+   with owner and date where relevant; no "Other". A retro item has its six
+   fixed tap options instead (item 7).
 4. The "Not needed / wrong direction" option is present (the template adds it).
    A "What happened?" question also offers "unrelated / wrong direction".
 5. EXO: 2 to 4 items, assumption form unless no assumption is defensible, a
    progress line at the end, no overdue list and no count of late items.
 6. One Open row in [[DECISIONS]] for the card.
+7. Retro: at most five items; the ledger's "What happened?" items first, then
+   the open conflict items. A retro item is one line that sums up the thread
+   (for a gap with no thread, the Worklist row: the task, what it waited on,
+   since when),
+   with the tap options closed as quoted, closed differently, dropped, moved
+   offline and still open, plus the template's "Not needed / wrong direction"
+   as the sixth, unrelated (never a second unrelated option), and free text or
+   voice. A class item covers 2 to 5 threads of one class, each listed with its
+   identity in the card's [[DECISIONS]] row. The skip rule's last-chance item
+   offers keep or let go instead of the six options. A progress line ends the
+   card; no count of open gaps.
+8. Retro gate, for every gap of the item: for a thread, every message and
+   every later reply was read (the message IDs are in the run record); for a
+   Worklist row alone, the row and the sources it names were read; no
+   closure evidence exists in the mail, [[WORKLIST]], [[CHANGELOG]] or
+   [[DECISIONS]]; no [[PREDICTION]] row has any identity the gap carries (the
+   conversation ID, and the Task ID of a linked Worklist row) in Source, unless
+   the item is the ledger's own queued question. Matching is by identity, never
+   by subject.
 
 ## prediction
 
@@ -139,6 +161,32 @@ together), then [[WORKLIST]], then [[CHANGELOG]].
    from a sent message that a later reply overtakes fails.
 5. The Score follows the scoring rule in the prediction-ledger skill.
 6. No question was asked about a subject that has evidence.
+7. A "What happened?" answer that settles a Worklist task (handled offline or
+   dropped, Scored or Parked) filed one [[INBOX]] row for the closeout owner.
+
+## prediction-backtest
+
+One thread of a ledger-backtest run and its score (prediction-ledger skill,
+references/backtest.md). Never checked with the `prediction` checklist: the
+backtest scores by its own rule.
+
+Required: the thread's line in the run report; the whole conversation in
+[[MAIL_SENT]], [[MAIL_INBOX]] and [[MAIL_ROUTED]], before and after the cut;
+the owner map as rebuilt for the cut (backtest section 2).
+
+1. Blind at the cut: the prediction uses no message, Worklist or Changelog row,
+   or owner assignment dated after the cut.
+2. Every field is filled with an allowed value (Is task: Yes, No or Unsure;
+   Route: Radar, Instruct front line or Joe direct); Assumptions are 1 to 4
+   yes/no questions.
+3. The outcome is conclusive and rests on the terminal message (Law 3), cited
+   by message ID.
+4. The Score follows backtest section 3, not the live rule of skill section 4:
+   Is task, Owner and Route compared with the outcome; Candidate output 1 when
+   the output type matches what happened, else 0 ("used unedited" does not
+   apply); only the assumptions the outcome settles are scored.
+5. Nothing was asked of Joe, and no [[PREDICTION]] row was written for the
+   thread.
 
 ## pricing-prep
 

@@ -1,16 +1,17 @@
 # Card: exo
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
-- Register: P2-02 (EXO lane: Steps database, breakdown, three cards a day, skip logic 2/3, interpretation cards, progress line, voice-dump parsing)
+- Register: P2-02 (EXO lane: Steps database, breakdown, cards at 07:00 and 13:00 (the 19:00 card went to the retro lane, P2-30), skip logic 2/3, interpretation cards, progress line, voice-dump parsing)
 - Lane ID: pending
 - Skills: [exo v0.1](../skills/exo/SKILL.md); finished outputs checked with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Date: 2026-10-06
 
 ## 1. Mission
 
 Work as Joe's second in command. Break open work into single small steps. Get the
-missing facts from Joe with short assumption cards three times a day. Turn the
+missing facts from Joe with short assumption cards twice a day, morning and
+midday; the evening card is the [retro](retro.md) lane's. Turn the
 facts into finished candidate outputs, so that Joe's last step is "approve" or
 "send", not "write".
 
@@ -46,7 +47,7 @@ answered; close, drop or expire a task on silence; send or commit anything.
   original thread, only when Joe picks "draft it". Never send.
 - Not allowed: send; change Status, Owner or Priority on a [[WORKLIST]] row
   (facts go to Steps; row changes go to the closeout owner as an Inbox row); mint
-  Task IDs; show cards outside the three slots, except when Joe asks.
+  Task IDs; show cards outside its two slots, except when Joe asks.
 
 ## 4. Rules and kernel version
 
@@ -59,13 +60,19 @@ answered; close, drop or expire a task on silence; send or commit anything.
   5 and 7, accepted by default by Joe):
   - One step visible. Assumptions, not questions. 2 to 4 items per card, about
     30 seconds to answer.
-  - Cards at 07:00, 13:00 and 19:00, America/Matamoros.
+  - Cards at 07:00 and 13:00, America/Matamoros. The design had a 19:00 card
+    too; it went to the retro lane (next rule).
   - Skip rule: 2 skips, reshape the step; 3 skips, park it and ask once whether
     to drop it. Parked is the default; nothing closes on silence.
   - Every card ends with a progress line.
   - Interpretation cards for every email from a sender the owner map marks as
     ownership (ask-only): two or three readings, each with a default.
   - Topics Joe avoids get the smallest steps and the friendliest framing.
+- Lane rule from the dev-session record of 2026-10-06, part 7 (turn 21; Joe's
+  decision, dated 2026-10-01 in QUEUE_v4): evening = past questions, morning
+  and midday = today. The 19:00 card belongs to the [retro](retro.md) lane,
+  and so do the prediction-ledger lane's "What happened?" questions. A card
+  here asks only about today's work.
 
 ## 5. Output contract with evidence labels
 
@@ -92,8 +99,9 @@ answered; close, drop or expire a task on silence; send or commit anything.
 
 ## 6. Trigger and owner model
 
-- Trigger: 07:00, 13:00 and 19:00, America/Matamoros. A new [[CAPTURE]] row is
-  parsed in the next slot. On demand when Joe says "exo" or "next step".
+- Trigger: 07:00 and 13:00, America/Matamoros (the 19:00 slot is the retro
+  lane's). A new [[CAPTURE]] row is parsed in the next slot. On demand when Joe
+  says "exo" or "next step".
 - Runs on: Claude scheduled task (Notion, Microsoft 365 and Drive connectors).
   The card is published as an Artifact page.
 - Model: Claude Opus writes breakdowns and cards. The checker lane verifies
@@ -110,3 +118,8 @@ answered; close, drop or expire a task on silence; send or commit anything.
 v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | register
 P2-02; design in the dev-session record of 2026-09-27, turn 5 | Joe's default
 acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-06 | Claude Code on the web, queue item QC19 | two cards a day,
+07:00 and 13:00; the 19:00 card and the "What happened?" questions moved to the
+retro lane | Joe's decision: evening = past questions, morning and midday = today
+(dev-session record of 2026-10-06, part 7, turn 21) | PCOS QUEUE_v4 item QC19

@@ -1,11 +1,11 @@
 # Card: prediction-ledger
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-01 (prediction ledger: Prediction database, evidence check in the daily run, "What happened?" card, calibration block in the weekly pass)
 - Lane ID: pending
-- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md); outputs checked with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md); outputs checked with [checker v0.1](../skills/checker/SKILL.md); the [ledger-backtest](ledger-backtest.md) lane runs the same predictor over settled mail history
+- Date: 2026-10-06
 
 ## 1. Mission
 
@@ -47,8 +47,10 @@ an answer.
   task.
 - Outlook (Microsoft 365 connector): read Inbox, Sent Items and the routed
   folders. Nothing else.
-- Question cards: add "What happened?" questions to the next card slot of the
-  EXO lane, built from [[CAL_TEMPLATE]] by [[CAL_STANDARD]].
+- Question cards: add "What happened?" questions to the next evening card of
+  the [retro](retro.md) lane (past questions belong to the evening card), built
+  from [[CAL_TEMPLATE]] by [[CAL_STANDARD]]. The retro lane shows them and
+  files the answers by this lane's rules.
 - Not allowed: send or draft mail; change [[WORKLIST]] or any row outside
   [[PREDICTION]]; mint Task IDs; edit Drive files; read Room 10 or personal
   material.
@@ -103,13 +105,15 @@ an answer.
 
 - Trigger: daily after the brief lane, weekdays about 07:45 Mexico City. A
   30-minute calibration pass runs on Sunday before the weekly-evolve lane
-  (Sunday 15:00 UTC). Times are Candidate until the Lanes row exists.
+  (Sunday 15:00 UTC). Times are Candidate until the Lanes row exists. The
+  [ledger-backtest](ledger-backtest.md) lane scores the same predictor against
+  settled mail history on Sundays before the calibration pass.
 - Runs on: Claude scheduled task (Notion and Microsoft 365 connectors).
 - Model: Claude Opus generates. The checker lane verifies Actual and Score on a
   different Claude model. The weekly-evolve chair reads the calibration block.
 - Owner: Claude lanes. The lane is built by the build session's closeout owner.
   Joe only answers "What happened?" questions.
-- Escalation: one question per blind subject, inside the EXO card slots. Never
+- Escalation: one question per blind subject, on the evening retro card. Never
   a separate list.
 - Depends on: build day (kernel page, [[INBOX]], [[LANES]]), [[PREDICTION]]
   (exists), the brief lane running.
@@ -131,3 +135,8 @@ answer scores the row only when the answer, Joe's note and the evidence settle e
 guess; otherwise the row is Parked with Actual kept | the row was marked Scored with
 Owner, Route, output use and assumptions unknown (Codex review of PR 1) | PCOS
 QUEUE_v6 item QC18-R
+
+v0.4 | 2026-10-06 | Claude Code on the web, queue item QC19 | "What happened?"
+questions go on the evening retro card; the backtest lane named | Joe's decision:
+evening = past questions (dev-session record of 2026-10-06, part 7, turn 21); the
+backtest loop of turn 20 | PCOS QUEUE_v4 item QC19

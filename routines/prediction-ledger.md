@@ -25,7 +25,7 @@ LOAD
 RUN
 3. Predict: one [[PREDICTION]] row for each new item in today's [[INBOX]] rows (skill section 1).
 4. Check: every row past its Check date, with the evidence order in skill section 2.
-5. Ask: for rows still blind that were never asked, add one "What happened?" question to the next EXO card slot (skill section 3). A Parked row is never asked again.
+5. Ask: for rows still blind that were never asked, add one "What happened?" question to the next evening card of the retro lane (skill section 3); the retro lane shows it and files the answer. A Parked row is never asked again.
 6. Score the rows that now have evidence (skill section 4). The checker verifies Actual and Score on a different model.
 
 NEVER
@@ -45,3 +45,6 @@ skill of queue item Q01; register P2-01 | PCOS QUEUE_v2 item QC13
 v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | step 5 never asks a Parked row
 again, as skill section 3 now says; LOAD reads the checker skill used in step 6 | Codex reviews
 of PR 1 and PR 2 | PCOS QUEUE_v4 item QC18
+
+v0.3 | 2026-10-06 | Claude Code on the web, queue item QC19 | step 5 queues the question
+on the evening retro card | Joe's decision: evening = past questions | PCOS QUEUE_v4 item QC19
