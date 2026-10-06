@@ -14,8 +14,9 @@
 
 Only council pull requests: opened by the repository owner's account from a
 branch of this repository, with a line starting with "Council row:" followed by the
-Task title of a [[COUNCIL]] row, and bound to that row (the row's Draft field holds
-the pull request's link). This repository is public, so a pull request from anyone
+Task title of a [[COUNCIL]] row, and bound to exactly one row: the row whose Draft
+field holds the pull request's link. Task titles are not unique, so the row is found
+by that link, never by its title. This repository is public, so a pull request from anyone
 else never reaches Notion. Every other pull request, including ordinary code reviews
 that use "@codex review", is ignored and gets no heartbeat.
 
@@ -36,7 +37,7 @@ LOAD
 For each pull request kept in step 1, run steps 3 to 11. "Skip" means: stop work on this pull request; an event run then goes to END OF RUN, a scheduled run goes on to the next pull request.
 
 TRUST AND RECOVERY
-3. Open the [[COUNCIL]] row named after "Council row:". Chair only when that row already has this pull request's link in its Draft field (the drafting session writes it when it opens the pull request). Otherwise read and write nothing else in that row: write one Blocked row in [[INBOX]] (pull request link, "no Council row binding") unless one exists for this pull request, and skip.
+3. Find the [[COUNCIL]] row bound to this pull request: search the Draft field for the pull request's link (the drafting session writes it when it opens the pull request). Never pick a row by its Task title; titles are not unique. Chair only when exactly one row holds the link and its Task title equals the "Council row:" line. Otherwise read and write nothing in any Council row: write one Blocked row in [[INBOX]] (pull request link, "no Council row binding", or "more than one bound row") unless one exists for this pull request, and skip.
 4. If the row already holds a Final for this pull request (an earlier run wrote it, then failed before posting) and the head commit on the Final's first line equals the pull request's current head, post that Final as the "Chair: Final" comment (as in step 10) and skip. If the head has changed since, chair again from step 5.
 
 REVIEWS
@@ -93,3 +94,9 @@ anyone could open a council-looking pull request in this public repository and r
 Council row; keys were used before they were loaded; a stored Final could be posted for a newer
 head; the fallback asked the checker for a review that does not exist (Codex review of PR 2) |
 PCOS QUEUE_v4 item QC18
+
+v0.7 | 2026-10-06 | Claude Code on the web, queue item QC18-R | step 3 finds the Council
+row by the pull request's link in its Draft field, never by Task title, and chairs only
+when exactly one row is bound | two Council rows with one Task title could send Final,
+Dissent and Status to the wrong row (Codex review of PR 1, council-github card v0.3) |
+PCOS QUEUE_v6 item QC18-R

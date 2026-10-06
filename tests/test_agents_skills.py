@@ -455,8 +455,44 @@ def test_intake_stop_list_asks_stay_needs_joe():
     assert "a stop-list ask" in gate and "only when condition 1 alone failed" in gate
 
 
-    assert "Needs Joe when the sender is not on the allowlist" in gate
-    assert "a stop-list ask" in gate and "only when condition 1 alone failed" in gate
+def test_prediction_checklist_reads_the_conversation_and_takes_the_terminal_message():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    prediction = " ".join(section(text, "## prediction").split())
+    assert "lookup order" not in prediction
+    assert "Joe's sent mail, thread replies" not in prediction
+    assert "read together" in prediction and "terminal message" in prediction
+    assert "counts only while no later reply follows it" in prediction
+
+
+def test_handled_offline_answer_is_scored_only_when_every_guess_is_settled():
+    ask = " ".join(section((SKILLS / "prediction-ledger" / "SKILL.md").read_text(encoding="utf-8"),
+                           "## 3. Ask only when blind").split())
+    answer_a = ask[ask.index('- A: Actual "handled offline"'):ask.index("- B:")]
+    assert "Status Scored" not in answer_a
+    assert "Owner, Route, Candidate output and every assumption" in answer_a
+    assert "set Status Parked with Actual kept" in answer_a
+    contract = " ".join(section((AGENTS / "prediction-ledger.md").read_text(encoding="utf-8"),
+                                "## 5. Output contract with evidence labels").split())
+    assert '"handled offline"' in contract and "never scored on part of its checks" in contract
+
+
+def test_knowledge_checklist_accepts_inferred_claims_labeled_candidate():
+    text = (SKILLS / "checker" / "references" / "checklists.md").read_text(encoding="utf-8")
+    claim = " ".join(section(text, "## knowledge-claim").split())
+    assert "and the source states the claim." not in claim
+    assert "a claim that needs inference is labeled Candidate" in claim
+    assert "an inferred claim labeled Confirmed" in claim
+    extract = " ".join((AGENTS / "knowledge-extract.md").read_text(encoding="utf-8").split())
+    assert "a claim that needs inference from the source is labeled Candidate" in extract
+
+
+def test_github_council_row_is_bound_by_the_pull_request_link_not_the_title():
+    card = " ".join((AGENTS / "council-github.md").read_text(encoding="utf-8").split())
+    inputs = card[card.index("- L1:"):card.index("- L2:")]
+    assert "matched by the Task title" not in inputs
+    assert "Draft field holds the pull request's link" in inputs
+    assert "never picked by its title" in inputs and "more than one, means Blocked" in inputs
+    assert "writes the pull request's link into the Council row's Draft field" in card
 
 
 @pytest.mark.parametrize("text", [
@@ -484,3 +520,12 @@ def test_github_chair_trusts_only_owner_pull_requests_bound_to_their_row():
     load = prompt.index("\nLOAD\n")
     assert all(prompt.index(key) > load for key in ("[[COUNCIL]]", "[[INBOX]]")), "load keys first"
     assert "Draft field" in next(line for line in lines if line.startswith("3. "))
+
+
+def test_github_chair_finds_the_council_row_by_link_never_by_title():
+    prompt = routine_prompt((ROUTINES / "council-github-chair.md").read_text(encoding="utf-8"))
+    step_3 = next(line for line in prompt.splitlines() if line.startswith("3. "))
+    assert 'row named after "Council row:"' not in step_3
+    assert "search the Draft field for the pull request's link" in step_3
+    assert "Never pick a row by its Task title" in step_3
+    assert "exactly one row holds the link" in step_3 and "more than one bound row" in step_3

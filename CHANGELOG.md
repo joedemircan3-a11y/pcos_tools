@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased - 2026-10-06: Codex review fixes, retry (PR 1 and PR 2)
+
+Why: PCOS queue item QC18-R (QUEUE_v6) fixes the four Codex findings left open on
+pull request 1 when QC18 hit its time box. Built by Claude (Claude Code on the web).
+
+- Checker `prediction` checklist: the sent mail and the replies are read together
+  as one conversation and Actual rests on the terminal message, as in the
+  prediction-ledger skill section 2; the old sent-mail-first lookup order is gone.
+- Prediction ledger: a "handled offline" answer scores the row only when the
+  answer, Joe's note and the evidence settle every guess (Owner, Route, Candidate
+  output, each assumption); otherwise the row is Parked with Actual kept and the
+  weekly calibration scores it later. The note under that option asks who handled
+  it and whether the draft was used (prediction-ledger card v0.3).
+- Checker `knowledge-claim` checklist: an inferred claim passes when it is labeled
+  Candidate and follows from the source, matching the knowledge-extract card; an
+  inferred claim labeled Confirmed fails.
+- Council-github card v0.3 and the `council-github-chair` Routine (step 3): the
+  chair finds the Council row by the pull request's link in the row's Draft field,
+  never by Task title; no bound row, or more than one, is Blocked.
+- Tests: one per fix, each failing on the old text.
+
 ## Unreleased - 2026-10-06: Codex review fixes (PR 1 and PR 2)
 
 Why: PCOS queue item QC18 (QUEUE_v4) applies the six Codex review suggestions on

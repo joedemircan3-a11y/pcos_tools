@@ -107,11 +107,19 @@ The "What happened?" question:
   - C. Dropped; not needed.
   - D. Unrelated or wrong direction: the guess itself was wrong. This option is
     mandatory and is never removed.
-- Note: free text or a voice note.
+- Note: free text or a voice note. Under option A the note asks: "Who handled
+  it, and was the system's draft or output used?"
 
 Filing the answer:
 
-- A: Actual "handled offline", Confirmed, source = the card ID. Status Scored.
+- A: Actual "handled offline", Confirmed, source = the card ID, plus what Joe's
+  note adds: who handled it, whether the Candidate output was used, which
+  assumptions held. Score the row only when the answer, the note and the
+  evidence (section 2) together settle each of the row's guesses: Is task,
+  Owner, Route, Candidate output and every assumption. Otherwise never guess the
+  missing checks and never leave them out to reach a Score: set Status Parked
+  with Actual kept. It is not asked again; the weekly calibration re-checks it
+  and scores it once new evidence settles the rest.
 - B: Status Parked and Check date 3 days later.
 - C: Actual "dropped", Confirmed, source = the card ID. Status Scored. If the
   subject is a Worklist task, file one [[INBOX]] row for the closeout owner

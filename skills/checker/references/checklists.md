@@ -114,15 +114,21 @@ Required: [[CAL_STANDARD]]; [[DECISIONS]]; Joe's replies in the chain and
 
 A Prediction row or its scoring.
 
-Required: the [[PREDICTION]] row; for scoring, the evidence sources in lookup
-order (Joe's sent mail, thread replies, [[WORKLIST]], [[CHANGELOG]]).
+Required: the [[PREDICTION]] row; for scoring, the evidence sources of
+prediction-ledger section 2: the row's whole conversation (Joe's sent mail in
+[[MAIL_SENT]] and the replies in [[MAIL_INBOX]] and [[MAIL_ROUTED]], read
+together), then [[WORKLIST]], then [[CHANGELOG]].
 
 1. Every field is filled with an allowed value (Is task: Yes, No or Unsure;
    Route: Radar, Instruct front line or Joe direct).
 2. Assumptions are yes/no questions; 1 to 4 of them.
 3. The Check date is the source date plus 3 days, or plus 1 day for a crisis
    item (Route 3 money-or-deadline test).
-4. Actual cites its evidence by key and ID, found in lookup order.
+4. Actual cites its evidence by key and ID, matched by the row's Source
+   identity. For mail, the sent messages and the replies were read together as
+   one conversation, and Actual rests on the terminal message (Law 3): Joe's
+   sent message counts only while no later reply follows it. An Actual taken
+   from a sent message that a later reply overtakes fails.
 5. The Score follows the scoring rule in the prediction-ledger skill.
 6. No question was asked about a subject that has evidence.
 
@@ -163,7 +169,11 @@ Required: the source behind the Source ID.
 
 1. One atomic claim per row.
 2. Type is rule, fact, method, decision or open question.
-3. The Source ID resolves, and the source states the claim.
+3. The Source ID resolves, and the source supports the claim with the right
+   evidence label: a claim labeled Confirmed is stated by the source; a claim
+   that needs inference is labeled Candidate and follows from what the source
+   states. A claim the source does not support fails, and so does an inferred
+   claim labeled Confirmed.
 4. Source date is the source's own date, not the run date.
 5. Status is Candidate at extraction.
 6. No duplicate of an existing row for the same source.
