@@ -46,6 +46,12 @@ web) from main 4a78c92.
   source, the write-back (also after a timeout) and that a torn or
   concurrently changed sign-in is never written over a good one. Each test
   run uses a stand-in home, never the tester's own sign-ins.
+- Codex review, round 1 (P2): the write-back compared the real sign-in file
+  before writing its temporary copy, so a refresh by another process during
+  that write could be overwritten. The temporary copy is now prepared first
+  and the comparison runs last, right before the replace. Neither CLI offers
+  a lock to share, so a refresh in that one instant is the only write that
+  could still be lost.
 
 ## Unreleased - 2026-10-09: PC council v0.1 (P2-08)
 

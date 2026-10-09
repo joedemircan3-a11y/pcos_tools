@@ -282,7 +282,9 @@ def return_sign_in(copied):
 
     A refresh token can be good for one use only, so a refreshed copy thrown away with
     the scratch home would leave the real sign-in dead. Only a complete JSON file goes
-    back, and only when nothing else changed the real file during the run.
+    back, and only when nothing else changed the real file during the run. Neither CLI
+    offers a lock to share, so that check comes last, right before the replace: a
+    refresh by another process in that instant is the one write that could still be lost.
     """
     notes = {}
     for real, copy, before in copied:
@@ -295,18 +297,22 @@ def return_sign_in(copied):
         temp = real.with_name(real.name + ".council-pc")
         try:
             json.loads(after)
-            if real.read_bytes() != before:
-                notes[real.name] = "refreshed in the run; the real file changed too, so it was kept"
-                continue
             temp.write_bytes(after)
             shutil.copymode(real, temp)
-            os.replace(temp, real)
-            notes[real.name] = "refreshed in the run and written back"
+            if real.read_bytes() == before:
+                os.replace(temp, real)
+                notes[real.name] = "refreshed in the run and written back"
+            else:
+                notes[real.name] = "refreshed in the run; the real file changed too, so it was kept"
         except ValueError:
             notes[real.name] = "changed in the run but not complete JSON; not written back"
         except OSError as exc:
             notes[real.name] = f"refreshed in the run; writing it back failed: {exc}"[:300]
-            temp.unlink(missing_ok=True)
+        finally:
+            try:
+                temp.unlink(missing_ok=True)  # gone already after a replace
+            except OSError:
+                pass
     return notes
 
 

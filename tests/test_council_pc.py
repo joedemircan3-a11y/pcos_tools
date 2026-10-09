@@ -382,6 +382,23 @@ def test_a_refreshed_sign_in_never_overwrites_a_good_one(council, real_home, mod
     _, out, _ = council({"codex": mode})
     assert (real_home / ".codex" / "auth.json").read_text(encoding="utf-8") == kept
     assert note in read_json(out / "run.json")["seats"]["codex"]["answer"]["sign_in"]["auth.json"]
+    assert not list((real_home / ".codex").glob("*.council-pc")), "no temporary file is left"
+
+
+def test_a_refresh_that_lands_while_the_write_back_is_prepared_is_kept(council, real_home, monkeypatch):
+    real = real_home / ".codex" / "auth.json"
+    copymode = council_pc.shutil.copymode
+
+    def another_codex_refreshes_meanwhile(source, target):
+        copymode(source, target)
+        if Path(source) == real:
+            real.write_text('{"tokens": "other"}', encoding="utf-8")
+
+    monkeypatch.setattr(council_pc.shutil, "copymode", another_codex_refreshes_meanwhile)
+    _, out, _ = council({"codex": "refresh"})
+    assert real.read_text(encoding="utf-8") == '{"tokens": "other"}', "the check runs last, right before the replace"
+    assert "the real file changed too" in read_json(out / "run.json")["seats"]["codex"]["answer"]["sign_in"]["auth.json"]
+    assert not list(real.parent.glob("*.council-pc"))
 
 
 def test_the_codex_seat_has_no_tool_that_reads_a_file():
