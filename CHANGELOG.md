@@ -45,6 +45,15 @@ web) from main 98a1943.
   intake-email, knowledge-chair, prediction-ledger, retro, weekly-evolve and
   commitments.
 - `tests/test_commitments_lane.py`.
+- Codex review, three rounds under the QUEUE_v7 stop rule (round 1, then two
+  after the first fix pass), nine findings (1 P1, 8 P2), all fixed with tests:
+  every promise Joe makes is tracked even without a date; a refusal by the
+  party who owes drops the row; the index rows keep their width (a test now
+  checks every index row); an approved draft or step waits off the cards
+  without inventing a date, overdue follow-ups included; the retro card keeps
+  room for commitment items; a row without a Due never reaches a card before
+  its Next check; a later message that reopens a deliverable reopens its row;
+  EXO shows a lone item when only one is open.
 
 ## Unreleased - 2026-10-06: Retro lane v0.1 (P2-30)
 
