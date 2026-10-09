@@ -1,11 +1,11 @@
 # Card: council-board
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-06 (board council on Notion: Draft, Review-1, Review-2, Final, Dissent; plan round before execution; chair)
 - Lane ID: pending
 - Skills: [council-board v0.1](../skills/council-board/SKILL.md); the chair's Final is checked with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -26,6 +26,9 @@ sources settle.
   Author, Final and Dissent hidden).
 - L2: the sources the Draft cites by key and ID; reviewers re-open them. Live
   rows in [[RULES]]; [[DECISIONS]]; [[CANON]] until rules are rows.
+- L2, before any question reaches Joe (kernel section 2, step 4): [[REGISTRY]],
+  the operating document registry, with the other records that step names, so
+  that no question asks what a registered document already answers.
 - Knowledge scope: the REFINED material in [[KL_DOMAINS]] and [[PCOS_KB]] that
   the task names. RAW only to verify a quoted source.
 
@@ -99,3 +102,9 @@ P2-06; design in the dev-session record of 2026-09-27, turns 2 to 4 | Joe's
 default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
 
 v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the council-board skill v0.1 | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | [[REGISTRY]] read
+before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry among
+the records searched before asking Joe, and the kernel key map holds the REGISTRY key
+since QK23 (its open point: the cards that need the registry add the key) | PCOS
+QUEUE_v7, item QC24 amendment

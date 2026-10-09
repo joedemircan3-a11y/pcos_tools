@@ -1,11 +1,11 @@
 # Card: weekly-evolve
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-05 (L4 Weekly Evolve rewrite: output = versioned kernel and rule candidates with reason and source, not reports); runs the P2-04 gate; later carries P2-17 (method loop)
 - Lane ID: L4 (planned)
 - Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md); evals run with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -30,6 +30,9 @@ candidate belongs.
 - L2: run reports in [[ARCHIVE]] that the L1 rows point to; [[GOLDEN_SET]]
   cases; the cards and skills in [[REPO]] that a miss points to; [[BRIEF_RULES]]
   section E (what may change without Joe) until cutover.
+- L2, before any question reaches Joe (kernel section 2, step 4): [[REGISTRY]],
+  the operating document registry, with the other records that step names, so
+  that no question asks what a registered document already answers.
 - Knowledge scope: system material only (rules, cards, skills, prompts, run
   records). Domain knowledge belongs to the knowledge lanes.
 
@@ -102,3 +105,9 @@ P2-05 and P2-04; dev-session record of 2026-09-27, turns 1, 4 and 5 | Joe's
 default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
 
 v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the weekly-evolve skill v0.1 | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | [[REGISTRY]] read
+before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry among
+the records searched before asking Joe, and the kernel key map holds the REGISTRY key
+since QK23 (its open point: the cards that need the registry add the key) | PCOS
+QUEUE_v7, item QC24 amendment

@@ -8,11 +8,12 @@ Changelog.
 | Title | ID | What | Date | Status | Open when |
 | --- | --- | --- | --- | --- | --- |
 | Card template | agents/CARD_TEMPLATE.md | The six-part card, evidence labels, rules every card inherits | 2026-10-01 | Candidate | Writing or reviewing a card |
-| Input keys | agents/INPUTS.md | The `[[KEY]]` names for sources; IDs stay in the private map | 2026-10-01 | Candidate | Resolving a source key, adding a source |
+| Input keys | agents/INPUTS.md | The `[[KEY]]` names for sources; IDs stay in the private map | 2026-10-09 | Candidate | Resolving a source key, adding a source |
 | prediction-ledger | agents/prediction-ledger.md | Predict each incoming item, check what happened, score, calibrate; asks on the evening retro card (P2-01) | 2026-10-06 | Candidate | Building or running the prediction lane |
 | ledger-backtest | agents/ledger-backtest.md | The ledger's predictor run blind over settled mail threads of the last 90 days, scored without Joe; accuracy by class (P2-01, P2-30) | 2026-10-06 | Candidate | Building or running the backtest; reading class accuracy |
-| retro | agents/retro.md | Evening card of five questions about the past, last 90 days first; answers feed the ledger, People profiles and golden set (P2-30) | 2026-10-06 | Candidate | Building or running the Retro lane; the 19:00 card |
-| exo | agents/exo.md | Single steps and two assumption cards a day, 07:00 and 13:00, that pull Joe into today's work (P2-02) | 2026-10-06 | Candidate | Building or running the EXO lane |
+| retro | agents/retro.md | Evening card of five questions about the past, last 90 days first, commitments past their date included; answers feed the ledger, People profiles and golden set (P2-30) | 2026-10-09 | Candidate | Building or running the Retro lane; the 19:00 card |
+| exo | agents/exo.md | Single steps and two assumption cards a day, 07:00 and 13:00, that pull Joe into today's work, commitment items first (P2-02) | 2026-10-09 | Candidate | Building or running the EXO lane |
+| commitments | agents/commitments.md | Every promise in Joe's mail as a tracked row with a due date; closure only on evidence; at most two items per EXO or retro card (P2-31) | 2026-10-09 | Candidate | Building or running the Commitments lane; what Joe owes or is owed |
 | checker | agents/checker.md | Accept, Fix or Reject on every lane output; golden-set eval (P2-03, P2-04) | 2026-10-01 | Candidate | Any lane hands over an output |
 | council-board | agents/council-board.md | Draft, two reviews and a chair on a Notion Council row (P2-06) | 2026-10-01 | Candidate | Judgment work with a day's time |
 | council-pc | agents/council-pc.md | Live council on Joe's PC: Codex, Gemini and a separate Claude answer one brief, each ranks the two answers it did not write, the session chairs (P2-08) | 2026-10-09 | Candidate | Urgent judgment work with Joe at his PC; "pc council" |

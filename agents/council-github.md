@@ -1,11 +1,11 @@
 # Card: council-github
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-07 (on-demand council through a GitHub pull request: "@codex review", Gemini CLI Action on a free API key, a Claude Code Routine on the PR event chairs and writes Notion)
 - Lane ID: pending
 - Skills: none of its own yet; the chair uses [council-board v0.1](../skills/council-board/SKILL.md). The PC council skill is P2-08.
-- Date: 2026-10-01
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -30,6 +30,9 @@ reviews its own draft.
   nothing to any Council row.
 - L2: the sources the draft cites by key; the reviewers and the chair re-open
   them inside their own access. Live rows in [[RULES]]; [[DECISIONS]].
+- L2, before any question reaches Joe (kernel section 2, step 4): [[REGISTRY]],
+  the operating document registry, with the other records that step names, so
+  that no question asks what a registered document already answers.
 - Knowledge scope: method and code material only (cards, skills, prompts,
   pcos_tools), while [[REPO]] is public. Business judgment goes to
   council-board.
@@ -118,3 +121,9 @@ found by the pull request's link in its Draft field, never by Task title; no bou
 row or more than one means Blocked | Task titles are not unique, so the chair could
 write Final, Dissent and Status onto the wrong row (Codex review of PR 1) | PCOS
 QUEUE_v6 item QC18-R
+
+v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | [[REGISTRY]] read
+before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry among
+the records searched before asking Joe, and the kernel key map holds the REGISTRY key
+since QK23 (its open point: the cards that need the registry add the key) | PCOS
+QUEUE_v7, item QC24 amendment

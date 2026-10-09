@@ -124,7 +124,8 @@ section 5, with these differences:
    author of Answer B missing"). Write "none" for the disputed points if there
    are none.
 5. Status: Final, or Needs Joe only when the reviews disagree on a fact that
-   neither the kernel nor the sources settle. Joe started the run, so ask him
+   neither the kernel, the sources nor [[REGISTRY]] settle (search it before
+   asking, kernel section 2, step 4). Joe started the run, so ask him
    that one question here: the fact in one line, 2 or 3 options, your default
    first. His answer goes into Final with Joe as its source, and the Status is
    Final. If he does not answer in the session, the Status stays Needs Joe and

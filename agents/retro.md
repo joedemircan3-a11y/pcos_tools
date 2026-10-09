@@ -1,11 +1,11 @@
 # Card: retro
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-30 (Retro lane: evening card of five past-closure questions, last 90 days first; answers feed the ledger, the People profiles and the golden set)
 - Lane ID: pending
-- Skills: [retro v0.1](../skills/retro/SKILL.md); every item checked with [checker v0.1](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
-- Date: 2026-10-06
+- Skills: [retro v0.2](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.1](../skills/commitments/SKILL.md) sections 7 and 8; every item checked with [checker v0.1](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -28,11 +28,15 @@ row; send or commit anything; treat silence as an answer.
   re-ask); the CAL lane's open questions in [[CAL_FOLDER]]; [[PREDICTION]]
   (the identities the ledger already owns, and the Asked Joe rows whose
   questions ride on this card); [[WORKLIST]] rows updated in the window;
-  [[STEPS]] rows Queued, Shown or Reshaped (EXO works those tasks).
+  [[STEPS]] rows Queued, Shown or Reshaped (EXO works those tasks);
+  [[COMMITMENTS]] rows (their threads and Linked tasks are never gaps; the
+  rows marked for the evening ride on the card).
 - L2, gap query and gate, per candidate: the whole thread in [[MAIL_INBOX]],
   [[MAIL_SENT]] and [[MAIL_ROUTED]]; later threads with the same counterpart or
   Task ID; [[CHANGELOG]] rows about it; the measured closure habits in
   [[MAIL_MINING]].
+- L2, before any item reaches Joe (kernel section 2, step 4): [[REGISTRY]]
+  for any document the thread or row names, with the records above.
 - L2, filing: the profile of each person in the thread in [[PEOPLE]]
   (private); [[CAL_STANDARD]] and [[CAL_TEMPLATE]] for the card page.
 - Knowledge scope: mail, the Worklist and the PCOS rows above, last 90 days
@@ -47,7 +51,9 @@ row; send or commit anything; treat silence as an answer.
   [[DECISIONS]] per card, and one per conflict between Joe's memory and the
   record, with Joe's answer written into its Answer; [[CORRECTIONS]] rows for
   golden-set candidates; [[INBOX]] rows for the closeout owner (row changes,
-  open items, people lines); [[CHANGELOG]] rows; one heartbeat in [[LANES]].
+  open items, people lines); [[CHANGELOG]] rows; one heartbeat in [[LANES]];
+  on [[COMMITMENTS]] rows, Status, Due, Evidence, Next check, Card and Skips
+  only, by the commitments skill section 7.
 - Card page: publish the card from [[CAL_TEMPLATE]] (in Claude: an Artifact
   with the database capability) and read the answers back.
 - Not allowed: send, draft, reply to, forward, move or delete mail; write
@@ -80,7 +86,8 @@ row; send or commit anything; treat silence as an answer.
 
 - Card: five items; fewer when fewer gaps pass the gate; none when none do. The
   ledger's "What happened?" items first, in the ledger's format, then the open
-  conflict items. Each retro item is a one-line summary of the thread plus tap
+  conflict items, then at most two commitment items in the commitments
+  skill's format. Each retro item is a one-line summary of the thread plus tap
   options: closed as quoted, closed differently, dropped, moved offline (phone,
   WhatsApp, in person), still open, and unrelated, which is the CAL template's
   own "Not needed / wrong direction" option and is never added twice; free
@@ -129,3 +136,11 @@ register P2-30; design in the dev-session record of 2026-10-06, part 7, turns
 20 and 21 | Joe's decisions (QUEUE_v4, 2026-10-01): Retro lane in Wave A after
 the ledger and before EXO; evening card = past questions; five per evening,
 last 90 days first; QUEUE_v4 item QC19
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | the evening card
+carries the commitments lane's past questions (at most two, after the conflict items),
+filed into their Commitments rows; a thread with a Commitments row is never a gap;
+[[REGISTRY]] read before any item reaches Joe | Joe's gap of 2026-10-06: commitments
+more than 14 days overdue go to the Retro lane as past questions, not to EXO; kernel 1.2
+section 2 step 4 names the Registry among the records searched before asking Joe (QK23
+open point) | PCOS QUEUE_v6 item QC24, QUEUE_v7 amendment

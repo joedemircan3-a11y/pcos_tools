@@ -1,9 +1,9 @@
 ---
 name: retro
-description: Close gaps in the PCOS historical record by asking Joe about the past, which he answers easily ("past is just remembering"). Use for the evening card at 19:00 America/Matamoros, when Joe says "retro", and when filing retro answers. Finds threads and Worklist items of the last 90 days with no closure evidence, reads every thread in full before asking, asks five one-line questions with fixed tap options, and files the answers into Prediction rows, People candidates, golden-set candidates and Decision rows.
-compatibility: Needs the PCOS Notion hub (Prediction, Decisions, Corrections, Changelog, Inbox, Lanes, Steps), the Drive Worklist, mail-mining outputs and people profiles, the CAL card template, and read access to Outlook through the Microsoft 365 connector.
+description: Close gaps in the PCOS historical record by asking Joe about the past, which he answers easily ("past is just remembering"). Use for the evening card at 19:00 America/Matamoros, when Joe says "retro", and when filing retro answers. Finds threads and Worklist items of the last 90 days with no closure evidence, reads every thread in full before asking, asks five one-line questions with fixed tap options, and files the answers into Prediction rows, People candidates, golden-set candidates and Decision rows. Also carries the commitments lane's past questions (commitments more than 14 days overdue).
+compatibility: Needs the PCOS Notion hub (Prediction, Decisions, Corrections, Changelog, Inbox, Lanes, Steps, Commitments), the Drive Worklist, mail-mining outputs and people profiles, the CAL card template, and read access to Outlook through the Microsoft 365 connector.
 metadata:
-  version: "0.1"
+  version: "0.2"
   status: Candidate
   register: P2-30
   kernel: "1.1"
@@ -25,8 +25,10 @@ in the private map named there).
 - Morning and midday cards (EXO, 07:00 and 13:00) are about today. The evening
   card (19:00 America/Matamoros) is about the past, and it is this lane's.
 - The evening card is the only place for past questions. It carries the
-  prediction-ledger lane's queued "What happened?" questions first, then the
-  retro questions of this skill: five items in all.
+  prediction-ledger lane's queued "What happened?" questions first, then this
+  lane's conflict items and the commitments lane's past questions
+  (commitments more than 14 days overdue), then the retro questions of this
+  skill: five items in all.
 - The ledger backtest
   ([backtest](../prediction-ledger/references/backtest.md)) scores the threads
   whose outcome the mail shows, without asking Joe. This lane asks about the
@@ -80,6 +82,9 @@ Never a candidate:
   row, whatever its Status.
   The ledger owns it. Its "What happened?" question, if it queued one, rides on
   this card as a ledger item (section 5), and a Parked row is never asked;
+- a thread that is the Thread of a [[COMMITMENTS]] row, or a Worklist row that
+  is the Linked task of one, whatever the row's Status. The commitments lane owns it, and
+  its past question rides on this card as a commitment item (section 5);
 - personal or Room 10 material.
 
 ## 3. Order
@@ -113,8 +118,9 @@ becomes a question:
    ID, or the order, document or request it names), not merely the same
    counterpart.
 3. Check the other records: the Worklist row and the sources it names,
-   [[CHANGELOG]], [[DECISIONS]], [[PREDICTION]] and the CAL lane's questions
-   in [[CAL_FOLDER]].
+   [[CHANGELOG]], [[DECISIONS]], [[PREDICTION]], [[COMMITMENTS]], the
+   [[REGISTRY]] entry of any document the thread or row names, and the CAL
+   lane's questions in [[CAL_FOLDER]].
 4. If anything read answers the question, do not ask. Write what the record
    shows instead, on a new [[PREDICTION]] row built as section 6 step 1 builds
    one (Subject, Source = the identity, no prediction fields): Actual,
@@ -127,7 +133,10 @@ becomes a question:
 
 ## 5. Build the card
 
-Five items, never more, in this order:
+Five items, never more, in this order. The card keeps room for the
+commitment rows marked for this evening (at most two): ledger and conflict
+items fill only the other places, so a backlog of them never keeps a
+commitment off the card.
 
 1. Ledger items: [[PREDICTION]] rows with Status Asked Joe whose question has
    not been answered, oldest first, each in the ledger's own format
@@ -135,7 +144,10 @@ Five items, never more, in this order:
    evening; waiting is not a skip.
 2. Conflict items: the "Which version stands?" rows this lane opened in
    [[DECISIONS]] (section 6, step 5), each as one assumption item.
-3. Retro items, in the order of section 3, until the card holds five.
+3. Commitment items: the [[COMMITMENTS]] rows the commitments lane marked for
+   this evening, at most two, each written with the options of the
+   commitments skill section 7.
+4. Retro items, in the order of section 3, until the card holds five.
 
 Write each retro item:
 
@@ -165,7 +177,8 @@ the size of the backlog or a count of open gaps.
 Build the page from [[CAL_TEMPLATE]] by [[CAL_STANDARD]]. Add one Open row to
 [[DECISIONS]] for the card: link, each item with every identity it covers (the
 conversation ID or Task ID of each gap, both for a linked thread and Worklist
-row; a class item covers 2 to 5 gaps), due the next evening.
+row; a class item covers 2 to 5 gaps; a commitment item, its [[COMMITMENTS]]
+row), due the next evening.
 
 ## 6. File the answers
 
@@ -174,7 +187,9 @@ the prediction-ledger skill section 3, into their own rows. When a ledger
 item's subject is a Worklist task, every answer that settles it (handled
 offline or dropped) files one [[INBOX]] row for the closeout owner by that
 section, so the row can be closed with its reason; this lane files no second
-one. For each retro item, in this order:
+one. Commitment items are filed into their [[COMMITMENTS]] row by the
+commitments skill sections 7 and 8, never into a Prediction row. For each
+retro item, in this order:
 
 1. Prediction rows, one per identity. A retro item covers the identities of
    its gap (the conversation ID, else the Task ID or source row ID; both for a
@@ -264,7 +279,7 @@ skips, so a class item that is split keeps its count.
   silence, and the lane never asks about it again.
 
 Ledger items follow the ledger's own skip rule (prediction-ledger skill section
-3). A conflict item skipped three times is not shown again: its Decision row
+3), and commitment items the commitments skill's (section 8). A conflict item skipped three times is not shown again: its Decision row
 stays Open with its default, and both versions stay in Actual. Nothing changes
 on silence.
 
@@ -282,6 +297,8 @@ candidates; the lane never writes a rule.
 - Ask about a thread or item whose identity is in the Source of a
   [[PREDICTION]] row, except by carrying the ledger's own queued question; ask
   about a Parked row.
+- Ask about a thread that has a [[COMMITMENTS]] row, except by carrying the
+  commitments lane's own marked item.
 - Overwrite, move, delete, forward or reply to mail; send or draft anything.
 - Close, drop or change a Worklist row; mint a Task ID.
 - Ask about today's work: that is the morning and midday cards' job.

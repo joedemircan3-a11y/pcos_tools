@@ -1,11 +1,11 @@
 # Card: intake-email
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-09 (team access Door 1: Outlook intake, hourly lane, allowlist, reply with Joe in cc, Needs Joe outside the allowlist or on pricing, payment or vendors)
 - Lane ID: pending
 - Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); every reply checked with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -30,6 +30,9 @@ source.
   are referred to, never re-priced); REFINED material in [[PCOS_KB]] and
   [[KL_DOMAINS]]; the full thread of the request (the terminal message
   controls).
+- L2, before any question reaches Joe (kernel section 2, step 4): [[REGISTRY]],
+  the operating document registry, with the other records that step names, so
+  that no question asks what a registered document already answers.
 - Knowledge scope: REFINED only. Requests that need RAW research become a
   Needs Joe row with the question restated.
 
@@ -104,3 +107,9 @@ the exception | register P2-09; dev-session record of 2026-09-27, turn 3 | Joe's
 default acceptance 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
 
 v0.2 | 2026-10-01 | Claude Code on the web, queue item Q08 | Skills line links the intake-email skill v0.1 | the skill was written in Q08 | PCOS QUEUE_v2 item Q08 (dispatch batch 3, C4)
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | [[REGISTRY]] read
+before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry among
+the records searched before asking Joe, and the kernel key map holds the REGISTRY key
+since QK23 (its open point: the cards that need the registry add the key) | PCOS
+QUEUE_v7, item QC24 amendment

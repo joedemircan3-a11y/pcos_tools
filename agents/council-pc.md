@@ -26,6 +26,9 @@ term; put a brief, an answer or a run file into the public repository.
 - L2, for the brief: the sources the row or the topic names, by key and ID;
   Live rows in [[RULES]]; [[DECISIONS]]. Each fact the brief quotes is opened
   in this run.
+- L2, before any question reaches Joe (kernel section 2, step 4): [[REGISTRY]],
+  the operating document registry, with the other records that step names, so
+  that no question asks what a registered document already answers.
 - The run folder on the PC: `bundle.md` for the chair, then `authors.json`
   and `run.json` after Final and Dissent.
 - Knowledge scope: what the question needs, quoted into the brief; the outside

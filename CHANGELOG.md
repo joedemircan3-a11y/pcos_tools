@@ -47,12 +47,69 @@ Code on the web) from main 98a1943.
   identity clause ("I am Claude, and Plan A is best" keeps "Plan A is
   best"). "Undefeated" needs every comparison of the answer; missing
   comparisons are listed in the bundle.
+- Main (34768f5, the commitments lane of QC24) merged in: the card reads
+  [[REGISTRY]] before any question reaches Joe, as QC24's rule asks of every
+  card that can ask him, and the chair searches it before Needs Joe.
 - `skills/checker/references/checklists.md`: council-final covers the PC
   council (no plan round, cross-reviews, the chair worked from letters).
 - The indexes list the new card and skill; the README names the runner.
   `tests/test_council_pc.py` runs the script against a mocked CLI (answers,
   reviews, 503s, failures, timeouts, the last-message file) and pins the
   skill's fixed parts.
+## Unreleased - 2026-10-09: Commitments lane v0.1 (P2-31)
+
+Why: PCOS queue item QC24 (QUEUE_v6, amended in QUEUE_v7). Joe, 2026-10-06: the
+mail he receives and sends commits to deadlines and tasks, but they do not turn
+into tasks, and nothing checks their status, asks him about them or pulls him to
+finish them. The auditor confirmed the gap: L1 triages incoming mail and the
+prediction ledger scores incoming items, but no lane extracts commitments from
+sent mail, keeps a due date or follows up. Built by Claude (Claude Code on the
+web) from main 98a1943.
+
+- `skills/commitments/` and `agents/commitments.md`: one Commitments row for
+  every promise Joe makes in sent mail (with or without a date), every dated
+  ask he makes, and every dated ask or promise to him in incoming mail with Joe
+  in To
+  (Commitment, Direction, Counterparty, Due, Thread, Source message, Status,
+  Evidence, Linked task, Draft link, Next check; Card and Skips for the card
+  hand-off). Due dates are read from the words of the mail in the sender's time
+  zone, by a fixed table; a vague word leaves Due empty with a check two
+  business days out. Threads by conversation ID with the References /
+  In-Reply-To fallback, never by subject; dedupe by thread plus deliverable.
+  Rows close only on evidence: delivery shown by the thread (its terminal
+  message controls), the linked Worklist row Done, or Joe's answer.
+- Follow-up through the cards Joe already answers, never a list: at most two
+  commitment items per card. What Joe owes and is due within 48 hours is the
+  first item of the next EXO card, with a checked reply draft when a reply is
+  the deliverable; overdue items get one item each, owed-to-Joe and team-member
+  items with an internal follow-up draft; team-member items surface only once
+  overdue; more than 14 days overdue goes to the evening retro card as a past
+  question. The EXO skip rule applies. Drafts only, never sent.
+- `routines/commitments.md` (weekdays 06:40, 12:40, 18:40 America/Matamoros)
+  and `routines/commitments-backfill.md` (once: the last 30 days of sent mail,
+  fed to EXO two at a time through the regular runs).
+- EXO (card v0.3, skill v0.2, Routine v0.4) and retro (card v0.2, skill v0.2,
+  Routine v0.2) show the marked rows and file the answers into the
+  Commitments row; a thread with a Commitments row is never a retro gap. The
+  checker's mail-draft and question-card checklists cover the new drafts and
+  items.
+- `agents/INPUTS.md` v0.3: keys `COMMITMENTS` (planned; QW21 creates the
+  database) and `REGISTRY` (the operating document registry, in the kernel key
+  map since kernel 1.2). Every card whose lane asks Joe now reads
+  `[[REGISTRY]]` before a question reaches him (kernel 1.2 section 2 step 4;
+  the QK23 open point): checker, council-board, council-github, exo,
+  intake-email, knowledge-chair, prediction-ledger, retro, weekly-evolve and
+  commitments.
+- `tests/test_commitments_lane.py`.
+- Codex review, three rounds under the QUEUE_v7 stop rule (round 1, then two
+  after the first fix pass), nine findings (1 P1, 8 P2), all fixed with tests:
+  every promise Joe makes is tracked even without a date; a refusal by the
+  party who owes drops the row; the index rows keep their width (a test now
+  checks every index row); an approved draft or step waits off the cards
+  without inventing a date, overdue follow-ups included; the retro card keeps
+  room for commitment items; a row without a Due never reaches a card before
+  its Next check; a later message that reopens a deliverable reopens its row;
+  EXO shows a lone item when only one is open.
 
 ## Unreleased - 2026-10-06: Retro lane v0.1 (P2-30)
 

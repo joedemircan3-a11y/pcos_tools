@@ -1,11 +1,11 @@
 # Card: exo
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-02 (EXO lane: Steps database, breakdown, cards at 07:00 and 13:00 (the 19:00 card went to the retro lane, P2-30), skip logic 2/3, interpretation cards, progress line, voice-dump parsing)
 - Lane ID: pending
-- Skills: [exo v0.1](../skills/exo/SKILL.md); finished outputs checked with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-06
+- Skills: [exo v0.2](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.1](../skills/commitments/SKILL.md) sections 7 and 8; finished outputs checked with [checker v0.1](../skills/checker/SKILL.md)
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -26,12 +26,16 @@ answered; close, drop or expire a task on silence; send or commit anything.
   in [[WORKLIST]] (Status, Next Action, Owner, Updated); decided rows in
   [[DECISIONS]] (never re-ask); the per-project calibration profile from
   [[PREDICTION]] (it decides what to ask first); [[CAPTURE]] rows with Status
-  New.
+  New; the [[COMMITMENTS]] rows the commitments lane marked for the slot, and
+  those shown on the previous card.
 - L2, per step: the sources named on the task's Worklist row (task folder,
   threads); [[JOE_DEV_LIST]] for development steps; [[CAL_STANDARD]] and
   [[CAL_TEMPLATE]] for the card page.
 - L2, interpretation cards: the whole thread in [[MAIL_INBOX]] and
   [[MAIL_ROUTED]]; the sender's measured profile in [[PEOPLE]] (private).
+- L2, before any item reaches Joe (kernel section 2, step 4): [[REGISTRY]] and
+  [[CHANGELOG]], with the rows above, so that no item asks what the record
+  already answers.
 - Knowledge scope: the REFINED material in [[KL_DOMAINS]] and [[PCOS_KB]] that
   the task's row names, when a step needs a domain fact. Never RAW.
 
@@ -40,7 +44,9 @@ answered; close, drop or expire a task on silence; send or commit anything.
 - Notion: create and update [[STEPS]] rows (Step, Task row link, Order, Form,
   Status, Skips, Facts, Progress line); update Status and Parsed into on
   [[CAPTURE]] rows; one Open row in [[DECISIONS]] per card; [[CHANGELOG]] rows;
-  one heartbeat in [[LANES]]; [[INBOX]] rows for the closeout owner.
+  one heartbeat in [[LANES]]; [[INBOX]] rows for the closeout owner; on
+  [[COMMITMENTS]] rows, Status, Due, Evidence, Next check, Card and Skips only,
+  by the commitments skill section 7.
 - Card page: publish the card from [[CAL_TEMPLATE]] (in Claude: an Artifact with
   the database capability) and read the answers back.
 - Outlook: read. Write one-sentence clarifying drafts into [[MAIL_DRAFTS]] on the
@@ -73,12 +79,18 @@ answered; close, drop or expire a task on silence; send or commit anything.
   and midday = today. The 19:00 card belongs to the [retro](retro.md) lane,
   and so do the prediction-ledger lane's "What happened?" questions. A card
   here asks only about today's work.
+- Lane rule from Joe on 2026-10-06 (PCOS QUEUE_v6, item QC24): what Joe owes
+  and is due within 48 hours becomes the first item of the next card, one
+  small step with a ready draft when a reply is the deliverable; at most two
+  commitment items per card; no list views.
 
 ## 5. Output contract with evidence labels
 
-- Card: 2 to 4 items. Each item is an assumption to confirm or fix (Form
+- Card: 2 to 4 items, or one when only one is open. Each item is an assumption to confirm or fix (Form
   assumption), a question only when no assumption is defensible (Form question),
-  or an approval of a finished candidate (Form approve). Context is
+  or an approval of a finished candidate (Form approve). At most two of them are
+  commitment items, first when one is due within 48 hours, with the options of
+  the commitments skill section 7. Context is
   self-contained and in plain words. The last line is the progress line.
 - [[STEPS]] rows hold the full ordered breakdown. Facts holds every answer
   verbatim, with the date and the card ID.
@@ -123,3 +135,10 @@ v0.2 | 2026-10-06 | Claude Code on the web, queue item QC19 | two cards a day,
 07:00 and 13:00; the 19:00 card and the "What happened?" questions moved to the
 retro lane | Joe's decision: evening = past questions, morning and midday = today
 (dev-session record of 2026-10-06, part 7, turn 21) | PCOS QUEUE_v4 item QC19
+
+v0.3 | 2026-10-09 | Claude Code on the web, queue item QC24 | commitment items: at
+most two per card from the rows the commitments lane marks, a Joe-owes item due
+within 48 hours first, filed into the Commitments row; [[REGISTRY]] read before any
+item reaches Joe | Joe's gap of 2026-10-06 (promises in mail never become tracked
+items); kernel 1.2 section 2 step 4 names the Registry among the records searched
+before asking Joe (QK23 open point) | PCOS QUEUE_v6 item QC24, QUEUE_v7 amendment

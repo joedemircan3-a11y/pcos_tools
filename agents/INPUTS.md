@@ -1,6 +1,6 @@
 # Input keys
 
-Version v0.2, 2026-10-06.
+Version v0.3, 2026-10-09.
 
 Cards and skills name their sources as `[[KEY]]`. A key stands for exactly one
 object: a Drive file or folder, a Notion database, view or page, an Outlook
@@ -36,6 +36,7 @@ build session), **planned** (a later queue item or register entry creates it).
 | `BRIEF_RULES` | PCOS_BRIEF_RULES, live version | Drive | Sweep scope, evaluation order, routes, measured owner map, draft desk | exists |
 | `CANON` | [CANON] Master v1 | Drive | Business rules authority until rules become Rules rows | exists |
 | `REGISTER` | PCOS_PHASE2_REGISTER, latest version | Drive | Phase-2 items P2-01 onward, with status | exists |
+| `REGISTRY` | [REGISTRY] PCOS Document Registry, live version | Drive | The operating document registry: each governed document with its title, ID and status; searched before asking Joe (kernel section 2, step 4). Not `REGISTER` | exists |
 | `BUILD_KIT` | PCOS_BUILD_KIT_2026-09-28 | Drive folder | Kernel draft, build material, this ID map | exists |
 | `DEV_SESSIONS` | _PCOS_DEV_SESSIONS | Drive folder | Full development-session records (why each lane exists) | exists |
 | `QUEUE` | _PCOS_QUEUE | Drive folder | Queue file, CLAIM, DONE and FAILED files | exists |
@@ -71,6 +72,7 @@ build session), **planned** (a later queue item or register entry creates it).
 | `COUNCIL_REVIEWER_VIEW` | Council, view "Reviewer" | Notion view | Council rows without Author, Final, Dissent | exists |
 | `KNOWLEDGE` | Knowledge | Notion database | Claim rows with source ID and status | exists |
 | `CAPTURE` | Capture | Notion database | Voice and text dumps waiting to be parsed | exists |
+| `COMMITMENTS` | Commitments | Notion database | One row per commitment in Joe's mail: deliverable, direction, counterparty, due date, thread, status, evidence (P2-31) | planned (QW21) |
 
 ## Knowledge and people
 
@@ -134,3 +136,9 @@ domain folder (`KL_00` to `KL_07`, all existing since queue item Q02 and PC-1);
 set | `KL_DOMAINS` named eight folders, so it could not resolve to the one ID that
 the key contract promises (Codex review of PR 1); the kernel 1.1 key map already
 lists the eight folder IDs under `KL_DOMAINS` | PCOS QUEUE_v4 item QC18
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | `REGISTRY`
+(exists; in the kernel key map since kernel 1.2) and `COMMITMENTS` (planned; queue
+item QW21 creates the database) | the cards that ask Joe search the registry first
+(kernel 1.2 section 2 step 4; QK23 open point), and the Commitments lane (P2-31)
+writes its own database | PCOS QUEUE_v6 item QC24, QUEUE_v7 amendment
