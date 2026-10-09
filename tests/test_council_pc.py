@@ -3,10 +3,14 @@ CLIs, plus the fixed parts of its skill and card.
 
 The mock CLI is a small Python script that stands in for codex, gemini and
 claude. It reads the prompt from stdin, as the real CLIs do here, records each
-call, and answers, reviews, fails with a 503, fails for good, sleeps past the
-timeout or writes its answer to the last-message file, as each test asks.
+call (with its working folder, its home and its environment), and answers,
+reviews, fails with a 503, fails for good, sleeps past the timeout, writes its
+answer to the last-message file or refreshes its sign-in, as each test asks.
+Each run gets a stand-in for Joe's real home, so no test reads or writes the
+sign-in of the person running the tests.
 """
 import json
+import os
 import re
 import sys
 import time
@@ -24,14 +28,35 @@ SCRIPT = ROOT / "scripts" / "council_pc.py"
 SEATS = ["codex", "gemini", "claude"]
 BRIEF = "Question: which of two shipping plans holds up better? Facts: plan one, plan two."
 
+SEEN_ENV = ["HOME", "USERPROFILE", "CODEX_HOME", "CLAUDE_CONFIG_DIR", "GEMINI_CLI_HOME", "XDG_CONFIG_HOME",
+            "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_CACHE_HOME", "GEMINI_API_KEY", "CLAUDECODE",
+            "GEMINI_SYSTEM_MD", "GEMINI_CLI_SYSTEM_SETTINGS_PATH", "GEMINI_CLI_IDE_SERVER_PORT",
+            "CLAUDE_CODE_SSE_PORT", "CLAUDE_CODE_DISABLE_CLAUDE_MDS", "PATH"]
+
 FAKE_CLI = r'''
-import pathlib, re, sys, time
+import json, os, pathlib, re, sys, time
 name, state, mode = sys.argv[1], pathlib.Path(sys.argv[2]), sys.argv[3]
 prompt = sys.stdin.read()
 calls = state / f"{name}.calls"
 n = int(calls.read_text()) + 1 if calls.exists() else 1
 calls.write_text(str(n))
 (state / f"{name}.prompt{n}").write_text(prompt, encoding="utf-8")
+cwd, home = pathlib.Path.cwd(), pathlib.Path(os.environ["HOME"])
+brief = cwd / "brief.md"
+(state / f"{name}.seen{n}").write_text(json.dumps({
+    "cwd": str(cwd),
+    "cwd_files": sorted(p.name for p in cwd.iterdir()),
+    "brief": brief.read_text(encoding="utf-8") if brief.is_file() else None,
+    "home_files": {p.relative_to(home).as_posix(): p.read_text(encoding="utf-8")
+                   for p in sorted(home.rglob("*")) if p.is_file()},
+    "env": {key: os.environ.get(key) for key in json.loads(sys.argv[-1])},
+    "config_folders_exist": all(os.path.isdir(os.environ[key]) for key in ("CODEX_HOME", "CLAUDE_CONFIG_DIR")),
+}), encoding="utf-8")
+if mode in ("refresh", "torn", "race", "refreshsleep") and n == 1:  # the CLI renews its token
+    signed_in = pathlib.Path(os.environ["CODEX_HOME"]) / "auth.json"
+    signed_in.write_text('{"tokens": "new"' + ("" if mode == "torn" else "}"), encoding="utf-8")
+    if mode == "race":  # meanwhile another codex on the PC renews the real file
+        pathlib.Path(sys.argv[4]).write_text('{"tokens": "other"}', encoding="utf-8")
 reviewing = "RANKING:" in prompt
 if mode == "nested" and "CLAUDECODE" in __import__("os").environ:
     sys.stderr.write("Error: Claude Code cannot be launched inside another Claude Code session.\n")
@@ -44,7 +69,7 @@ if mode == "policy" and 'toolName = "*"' not in pathlib.Path(sys.argv[4]).read_t
 if mode == "fail" or (mode == "noreview" and reviewing):
     sys.stderr.write("error: not signed in\n")
     sys.exit(1)
-if mode == "sleep":
+if mode in ("sleep", "refreshsleep"):
     time.sleep(5)
 if mode == "sleeptree":  # a child that keeps the pipes open, as node under a Windows .cmd shim does
     import subprocess
@@ -67,7 +92,31 @@ else:
 
 
 @pytest.fixture
-def council(tmp_path):
+def real_home(tmp_path, monkeypatch):
+    """A stand-in for Joe's home, with his sign-ins, settings and a private file."""
+    home = tmp_path / "joe"
+    files = {
+        ".codex/auth.json": '{"tokens": "codex-old"}',
+        ".codex/config.toml": '[mcp_servers.files]\ncommand = "files-mcp"\n',
+        ".claude/.credentials.json": '{"claudeAiOauth": "claude-old"}',
+        ".claude/settings.json": '{"permissions": {}}',
+        ".claude.json": '{"projects": {"C:/Business": {}}}',
+        ".gemini/settings.json": '{"mcpServers": {}}',
+        "Documents/prices.xlsx": "private",
+    }
+    for relative, text in files.items():
+        (home / relative).parent.mkdir(parents=True, exist_ok=True)
+        (home / relative).write_text(text, encoding="utf-8")
+    for variable in ("CODEX_HOME", "CLAUDE_CONFIG_DIR", "GEMINI_CLI_HOME", "GEMINI_API_KEY",
+                     "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_CACHE_HOME"):
+        monkeypatch.delenv(variable, raising=False)
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.setenv("USERPROFILE", str(home))
+    return home
+
+
+@pytest.fixture
+def council(tmp_path, real_home):
     """Run the script with mocked seats. Returns run(modes, **options) -> (exit code, out folder, state)."""
     fake = tmp_path / "fake_cli.py"
     fake.write_text(FAKE_CLI, encoding="utf-8")
@@ -85,6 +134,9 @@ def council(tmp_path):
                 command.append(council_pc.LAST_MESSAGE)
             if mode == "policy":
                 command.append(council_pc.NO_TOOLS)
+            if mode == "race":
+                command.append(str(real_home / ".codex" / "auth.json"))
+            command.append(json.dumps(SEEN_ENV))
             if mode == "missing":
                 command = ["no-such-council-cli-for-tests"]
             argv += ["--seat", f"{seat}={json.dumps(command)}"]
@@ -100,6 +152,11 @@ def calls(state, seat):
 
 def read_json(path):
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def seen(state, seat, n):
+    """What the seat's CLI saw on its n-th call: working folder, home files, environment."""
+    return read_json(state / f"{seat}.seen{n}")
 
 
 # --- the run ---------------------------------------------------------------
@@ -224,6 +281,168 @@ def test_the_no_tools_policy_file_is_written_and_passed_to_the_seat(council):
     _, out, state = council({"gemini": "policy"})
     assert read_json(out / "run.json")["seats"]["gemini"]["answer"]["status"] == "ok"
     assert calls(state, "gemini") == 2
+
+
+# --- isolation: what each seat can see (issue 6) -------------------------------
+
+def test_each_seat_runs_in_a_new_folder_that_holds_only_the_brief(council, tmp_path):
+    code, _, state = council()
+    assert code == 0
+    folders = set()
+    for seat in SEATS:
+        for n in (1, 2):  # the answer, then the review
+            what = seen(state, seat, n)
+            assert what["cwd_files"] == ["brief.md"] and what["brief"] == BRIEF
+            cwd = Path(what["cwd"])
+            assert not cwd.is_relative_to(tmp_path) and not cwd.is_relative_to(ROOT)
+            assert not cwd.exists(), "the folder is removed after the call"
+            folders.add(cwd)
+    assert len(folders) == 6, "a new folder for every call"
+
+
+def test_each_seat_gets_a_scratch_home_with_every_config_folder_inside_it(council, real_home):
+    _, _, state = council()
+    homes = set()
+    for seat in SEATS:
+        env = seen(state, seat, 1)["env"]
+        home = Path(env["HOME"])
+        assert not home.is_relative_to(real_home) and not home.exists()
+        assert env["USERPROFILE"] == env["GEMINI_CLI_HOME"] == env["HOME"]
+        assert env["CODEX_HOME"] == str(home / ".codex") and env["CLAUDE_CONFIG_DIR"] == str(home / ".claude")
+        for variable in ("XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_CACHE_HOME"):
+            assert Path(env[variable]).is_relative_to(home)
+        assert env["CLAUDECODE"] is None
+        homes.add(home)
+    assert len(homes) == 3
+
+
+@pytest.mark.parametrize("seat, carried", [
+    ("codex", {".codex/auth.json": '{"tokens": "codex-old"}'}),
+    ("claude", {".claude/.credentials.json": '{"claudeAiOauth": "claude-old"}'}),
+    ("gemini", {}),
+])
+def test_the_scratch_home_carries_only_the_seats_own_sign_in(council, seat, carried):
+    _, _, state = council()
+    for n in (1, 2):  # no settings, MCP servers, history or business files
+        assert seen(state, seat, n)["home_files"] == carried
+
+
+def test_a_sign_in_folder_moved_by_its_variable_is_read_from_there(council, tmp_path, monkeypatch):
+    moved = tmp_path / "elsewhere" / "codex"
+    moved.mkdir(parents=True)
+    (moved / "auth.json").write_text('{"tokens": "moved"}', encoding="utf-8")
+    monkeypatch.setenv("CODEX_HOME", str(moved))
+    _, _, state = council()
+    what = seen(state, "codex", 1)
+    assert what["home_files"] == {".codex/auth.json": '{"tokens": "moved"}'}
+    assert what["env"]["CODEX_HOME"] != str(moved)
+
+
+def test_a_seat_without_a_sign_in_file_starts_signed_out_and_run_json_says_so(council, real_home):
+    (real_home / ".claude" / ".credentials.json").unlink()
+    (real_home / ".codex" / "auth.json").unlink()
+    _, out, state = council()
+    assert seen(state, "claude", 1)["home_files"] == {}
+    # codex stops at once when CODEX_HOME does not exist, so the folders are always made
+    assert all(seen(state, seat, 1)["config_folders_exist"] for seat in SEATS)
+    note = read_json(out / "run.json")["seats"]["claude"]["answer"]["sign_in"][".credentials.json"]
+    assert note.startswith("not found")
+
+
+def test_the_gemini_key_comes_from_the_environment_or_the_gemini_env_file(council, real_home, monkeypatch):
+    (real_home / ".gemini" / ".env").write_text('OTHER=1\nexport GEMINI_API_KEY="key-from-file"\n',
+                                               encoding="utf-8")
+    _, _, state = council(out_name="from-file")
+    assert seen(state, "gemini", 1)["env"]["GEMINI_API_KEY"] == "key-from-file"
+    assert seen(state, "codex", 1)["env"]["GEMINI_API_KEY"] is None, "only the Gemini seat reads the file"
+    monkeypatch.setenv("GEMINI_API_KEY", "key-from-env")
+    council(out_name="from-env")
+    assert seen(state, "gemini", 3)["env"]["GEMINI_API_KEY"] == "key-from-env"  # calls 3 and 4: the second run
+
+
+@pytest.mark.parametrize("line", [
+    'GEMINI_API_KEY="key-1" # personal',
+    "GEMINI_API_KEY=key-1 # personal",
+    "export GEMINI_API_KEY='key-1'",
+    "GEMINI_API_KEY = key-1\r",
+])
+def test_the_gemini_key_is_read_as_dotenv_reads_it(real_home, line):
+    (real_home / ".gemini" / ".env").write_text(f"OTHER=1\n{line}\n", encoding="utf-8")
+    assert council_pc.gemini_key() == "key-1"
+
+
+def test_no_seat_inherits_a_variable_that_loads_files_or_joins_an_ide(council, monkeypatch):
+    for variable in ("GEMINI_SYSTEM_MD", "GEMINI_CLI_SYSTEM_SETTINGS_PATH", "GEMINI_CLI_IDE_SERVER_PORT",
+                     "CLAUDE_CODE_SSE_PORT"):
+        monkeypatch.setenv(variable, "set-by-joe")
+    _, _, state = council()
+    for seat in SEATS:
+        env = seen(state, seat, 1)["env"]
+        assert env["GEMINI_SYSTEM_MD"] is None and env["GEMINI_CLI_SYSTEM_SETTINGS_PATH"] is None
+        assert env["GEMINI_CLI_IDE_SERVER_PORT"] is None and env["CLAUDE_CODE_SSE_PORT"] is None
+        assert env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] == "1"
+        assert env["PATH"] == os.environ["PATH"], "everything else is inherited"
+
+
+def test_a_sign_in_the_cli_refreshes_goes_back_where_the_cli_keeps_it(council, real_home):
+    code, out, _ = council({"codex": "refresh"})
+    assert code == 0
+    assert (real_home / ".codex" / "auth.json").read_text(encoding="utf-8") == '{"tokens": "new"}'
+    notes = read_json(out / "run.json")["seats"]["codex"]["answer"]["sign_in"]
+    assert notes == {"auth.json": "refreshed in the run and written back"}
+    assert not list((real_home / ".codex").glob("*.council-pc")), "no temporary file is left"
+    assert (real_home / ".claude" / ".credentials.json").read_text(encoding="utf-8") == '{"claudeAiOauth": "claude-old"}'
+
+
+def test_a_sign_in_refreshed_before_a_timeout_still_goes_back(council, real_home):
+    _, out, _ = council({"codex": "refreshsleep"}, extra=["--timeout", "1"])
+    assert read_json(out / "run.json")["seats"]["codex"]["answer"]["status"] == "timeout"
+    assert (real_home / ".codex" / "auth.json").read_text(encoding="utf-8") == '{"tokens": "new"}'
+
+
+@pytest.mark.parametrize("mode, kept, note", [
+    ("torn", '{"tokens": "codex-old"}', "not complete JSON"),
+    ("race", '{"tokens": "other"}', "the real file changed too"),
+])
+def test_a_refreshed_sign_in_never_overwrites_a_good_one(council, real_home, mode, kept, note):
+    _, out, _ = council({"codex": mode})
+    assert (real_home / ".codex" / "auth.json").read_text(encoding="utf-8") == kept
+    assert note in read_json(out / "run.json")["seats"]["codex"]["answer"]["sign_in"]["auth.json"]
+    assert not list((real_home / ".codex").glob("*.council-pc")), "no temporary file is left"
+
+
+def test_each_write_back_stages_in_a_file_of_its_own(council, real_home):
+    # another council run's staging file, under the name a fixed staging path would use
+    other = real_home / ".codex" / "auth.json.council-pc"
+    other.write_text('{"tokens": "other run"}', encoding="utf-8")
+    _, out, _ = council({"codex": "refresh"})
+    assert (real_home / ".codex" / "auth.json").read_text(encoding="utf-8") == '{"tokens": "new"}'
+    assert other.read_text(encoding="utf-8") == '{"tokens": "other run"}', "never touched"
+    assert sorted(p.name for p in real_home.joinpath(".codex").glob("*.council-pc")) == [other.name]
+
+
+def test_a_refresh_that_lands_while_the_write_back_is_prepared_is_kept(council, real_home, monkeypatch):
+    real = real_home / ".codex" / "auth.json"
+    copymode = council_pc.shutil.copymode
+
+    def another_codex_refreshes_meanwhile(source, target):
+        copymode(source, target)
+        if Path(source) == real:
+            real.write_text('{"tokens": "other"}', encoding="utf-8")
+
+    monkeypatch.setattr(council_pc.shutil, "copymode", another_codex_refreshes_meanwhile)
+    _, out, _ = council({"codex": "refresh"})
+    assert real.read_text(encoding="utf-8") == '{"tokens": "other"}', "the check runs last, right before the replace"
+    assert "the real file changed too" in read_json(out / "run.json")["seats"]["codex"]["answer"]["sign_in"]["auth.json"]
+    assert not list(real.parent.glob("*.council-pc"))
+
+
+def test_the_codex_seat_has_no_tool_that_reads_a_file():
+    codex = council_pc.SEATS["codex"]
+    disabled = {codex[i + 1] for i, arg in enumerate(codex) if arg == "--disable"}
+    assert {"shell_tool", "view_image", "apps"} <= disabled
+    assert codex[codex.index("--sandbox") + 1] == "read-only"
+    assert "--ignore-user-config" in codex and "--ephemeral" in codex
 
 
 def test_the_last_message_file_is_the_answer_when_the_cli_writes_one(council):
@@ -411,6 +630,18 @@ def test_skill_runs_on_demand_only_and_nothing_is_scheduled():
     assert "routines/council-pc" not in read(ROOT / "routines" / "_INDEX.md")
     trigger = flat(section(read(CARD), "## 6. Trigger and owner model"))
     assert "on demand only" in trigger and "never scheduled" in trigger
+
+
+def test_skill_and_card_keep_the_seats_away_from_files_on_the_pc():
+    run = flat(section(read(SKILL), "## 3. Run the script"))
+    assert "`--disable shell_tool`" in run and "`--disable view_image`" in run
+    assert "holds only the brief" in run and "holds only a copy of that CLI's sign-in file" in run
+    assert "Pre-run check" in run and "features list" in run and "Unknown feature flag" in run
+    assert "Residual risk" in run and "apply_patch" in run
+    assert "--disable shell_tool" in flat(section(read(SKILL), "## Never"))
+    tools = flat(section(read(CARD), "## 3. Tools allowed"))
+    assert "no shell, no image reader" in tools and "apply_patch" in tools
+    assert "give a seat a tool that reads files" in tools
 
 
 def test_skill_retries_gemini_503_twice_and_runs_the_script():

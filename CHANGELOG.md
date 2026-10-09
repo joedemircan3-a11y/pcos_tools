@@ -1,5 +1,70 @@
 # Changelog
 
+## Unreleased - 2026-10-09: PC council isolation v0.2 (P2-08, issue #6)
+
+Why: PCOS queue item QC27 (QUEUE_v9) closes issue #6, the QC22 follow-up:
+the Codex seat could read any file on Joe's PC through its shell, and what it
+read would go to OpenAI and, in its answer, to the other seats. The gap had to
+close before the first live council run. Built by Claude (Claude Code on the
+web) from main 4a78c92.
+
+- Checked against codex-cli 0.162.0, the version on Joe's PC, by running
+  the Linux build against a mock model: with the old flags
+  (`--sandbox read-only --disable apps`) a `cat` of a file outside the work
+  folder returned the file to the model. `codex exec` has a switch the issue
+  missed: `--disable shell_tool` removes `exec_command` and `write_stdin`,
+  also inside its JavaScript tool and in the agents it spawns;
+  `--disable view_image` removes the image reader. With both, the same reads
+  fail ("tools.exec_command is not a function", "unsupported call").
+  `unified_exec` cannot be turned off in 0.162.0 and needs no flag. An
+  unknown feature name stops codex with an error, so a renamed flag fails the
+  seat instead of giving it a shell back.
+- `scripts/council_pc.py`: the Codex seat runs with `--disable shell_tool`,
+  `--disable view_image`, `--ignore-user-config` and `--ephemeral`. Every
+  call of every seat runs in a new temporary folder that holds only
+  `brief.md`, with HOME, USERPROFILE, CODEX_HOME, CLAUDE_CONFIG_DIR,
+  GEMINI_CLI_HOME and the XDG folders pointed at a scratch home that holds
+  only a copy of that CLI's sign-in file (Codex `auth.json`, Claude
+  `.credentials.json`; Gemini gets `GEMINI_API_KEY` from the environment or
+  `~/.gemini/.env`). A sign-in the CLI refreshed during the run is written
+  back, but only as complete JSON and only when the real file did not change
+  meanwhile; `run.json` notes it under `sign_in`, and also a sign-in file
+  that was not found.
+- Residual risk (Candidate, in issue #6): Codex keeps `apply_patch`, which has
+  no switch. The read-only sandbox and the approval policy stop it from
+  writing, and it returns no file content, but its error shows whether a
+  guessed line is in a named file. The Windows build was not run here; the
+  skill's pre-run check (`codex --disable shell_tool --disable view_image
+  features list`) confirms the flags on Joe's PC.
+- `skills/council-pc/` v0.2 and `agents/council-pc.md` v0.2: the isolation,
+  the pre-run check, the residual risk, and a Never line against a `--seat`
+  override that gives a seat back a tool that reads files.
+- `tests/test_council_pc.py`: the mocked CLI records its working folder, its
+  home and its environment; tests assert the folder holds only the brief and
+  is new for every call, the scratch home holds only the seat's own sign-in
+  (no settings, MCP servers, history or business files), the Gemini key
+  source, the write-back (also after a timeout) and that a torn or
+  concurrently changed sign-in is never written over a good one. Each test
+  run uses a stand-in home, never the tester's own sign-ins.
+- Codex review, round 1 (P2): the write-back compared the real sign-in file
+  before writing its temporary copy, so a refresh by another process during
+  that write could be overwritten. The temporary copy is now prepared first
+  and the comparison runs last, right before the replace. Neither CLI offers
+  a lock to share, so a refresh in that one instant is the only write that
+  could still be lost.
+- Codex review, round 2 (P2): the staging file had a fixed name
+  (`auth.json.council-pc`), so two council runs writing back the same
+  sign-in at once could overwrite or delete each other's staged token. Each
+  write-back now stages in a temporary file of its own next to the real one.
+- Codex review, round 3 (P2): (1) the seats inherited variables that make a
+  CLI read a file into its prompt or join an IDE that shares open files
+  (`GEMINI_SYSTEM_MD`, `GEMINI_CLI_SYSTEM_SETTINGS_PATH`, `GEMINI_CLI_IDE_*`,
+  `CLAUDE_CODE_SSE_PORT` and others, checked in each CLI). No seat inherits
+  them now, and `CLAUDE_CODE_DISABLE_CLAUDE_MDS=1` keeps Claude from reading a
+  CLAUDE.md in the folders above the working folder. (2) The Gemini key in
+  `~/.gemini/.env` is read as dotenv reads it, so a quoted value with an
+  inline comment works. Per the stop rule this is the last Codex round.
+
 ## Unreleased - 2026-10-09: PC council v0.1 (P2-08)
 
 Why: PCOS queue item QC22 (QUEUE_v4, carried to QUEUE_v8) builds the live
