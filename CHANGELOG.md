@@ -52,6 +52,10 @@ web) from main 4a78c92.
   and the comparison runs last, right before the replace. Neither CLI offers
   a lock to share, so a refresh in that one instant is the only write that
   could still be lost.
+- Codex review, round 2 (P2): the staging file had a fixed name
+  (`auth.json.council-pc`), so two council runs writing back the same
+  sign-in at once could overwrite or delete each other's staged token. Each
+  write-back now stages in a temporary file of its own next to the real one.
 
 ## Unreleased - 2026-10-09: PC council v0.1 (P2-08)
 

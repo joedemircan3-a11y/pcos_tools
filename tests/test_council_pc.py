@@ -385,6 +385,16 @@ def test_a_refreshed_sign_in_never_overwrites_a_good_one(council, real_home, mod
     assert not list((real_home / ".codex").glob("*.council-pc")), "no temporary file is left"
 
 
+def test_each_write_back_stages_in_a_file_of_its_own(council, real_home):
+    # another council run's staging file, under the name a fixed staging path would use
+    other = real_home / ".codex" / "auth.json.council-pc"
+    other.write_text('{"tokens": "other run"}', encoding="utf-8")
+    _, out, _ = council({"codex": "refresh"})
+    assert (real_home / ".codex" / "auth.json").read_text(encoding="utf-8") == '{"tokens": "new"}'
+    assert other.read_text(encoding="utf-8") == '{"tokens": "other run"}', "never touched"
+    assert sorted(p.name for p in real_home.joinpath(".codex").glob("*.council-pc")) == [other.name]
+
+
 def test_a_refresh_that_lands_while_the_write_back_is_prepared_is_kept(council, real_home, monkeypatch):
     real = real_home / ".codex" / "auth.json"
     copymode = council_pc.shutil.copymode

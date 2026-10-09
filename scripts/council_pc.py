@@ -294,10 +294,15 @@ def return_sign_in(copied):
             continue
         if after == before:
             continue
-        temp = real.with_name(real.name + ".council-pc")
+        temp = None
         try:
             json.loads(after)
-            temp.write_bytes(after)
+            # A staging file of its own, next to the real one: another council run may be
+            # writing back the same sign-in at the same time.
+            handle, name = tempfile.mkstemp(dir=real.parent, prefix=f"{real.name}.", suffix=".council-pc")
+            temp = Path(name)
+            with os.fdopen(handle, "wb") as staged:
+                staged.write(after)
             shutil.copymode(real, temp)
             if real.read_bytes() == before:
                 os.replace(temp, real)
@@ -310,7 +315,8 @@ def return_sign_in(copied):
             notes[real.name] = f"refreshed in the run; writing it back failed: {exc}"[:300]
         finally:
             try:
-                temp.unlink(missing_ok=True)  # gone already after a replace
+                if temp is not None:
+                    temp.unlink(missing_ok=True)  # gone already after a replace
             except OSError:
                 pass
     return notes
