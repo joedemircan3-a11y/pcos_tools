@@ -1,5 +1,40 @@
 # Changelog
 
+## Unreleased - 2026-10-09: PC council v0.1 (P2-08)
+
+Why: PCOS queue item QC22 (QUEUE_v4, carried to QUEUE_v8) builds the live
+council on Joe's PC that Joe accepted on 2026-09-28 (dev-session record of
+2026-09-27, turns 2 and 3: Mechanism B). Codex and Gemini CLIs were installed
+on his PC at PC-1; the skill was the missing piece. Built by Claude (Claude
+Code on the web) from main 98a1943.
+
+- `scripts/council_pc.py`: one brief to three seats at once, `codex exec`
+  (read-only sandbox), `gemini -p` and `claude -p` (a separate Claude process,
+  so the chairing session writes no answer), each in an empty temporary
+  folder with the prompt on stdin (a Windows `.cmd` shim caps the command
+  line). A 503 or overload answer is retried twice (20 and 40 seconds); other
+  failures, timeouts and missing CLIs are not retried, and the run goes on
+  without that seat. A timeout kills the CLI's whole process tree (a Windows
+  `.cmd` shim's node child would otherwise keep the pipes open). Self-identification is removed (model and vendor names
+  only when the brief does not use them), the answers are shuffled under the
+  letters A, B and C, and every seat that answered reviews and ranks the
+  answers it did not write. Output: `bundle.md` for the chair (letters only,
+  a pairwise ranking table), `authors.json` and `run.json`. Fewer than two
+  answers is Blocked (exit 3, no bundle). Standard library only; it writes
+  nothing outside the new run folder.
+- `skills/council-pc/` and `agents/council-pc.md`: the brief (facts quoted
+  with keys and IDs, since the outside models open nothing; what leaves the
+  PC), the run, the chair (council-board section 5 from the bundle alone;
+  Author filled only after Final and Dissent; one Needs Joe question asked in
+  the session), the Council row write behind the checker's Accept, and the
+  Never list. On demand only: no Routine file.
+- `skills/checker/references/checklists.md`: council-final covers the PC
+  council (no plan round, cross-reviews, the chair worked from letters).
+- The indexes list the new card and skill; the README names the runner.
+  `tests/test_council_pc.py` runs the script against a mocked CLI (answers,
+  reviews, 503s, failures, timeouts, the last-message file) and pins the
+  skill's fixed parts.
+
 ## Unreleased - 2026-10-06: Retro lane v0.1 (P2-30)
 
 Why: PCOS queue item QC19 (QUEUE_v4) builds the Retro lane that Joe accepted:

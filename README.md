@@ -14,7 +14,7 @@ scheduled Routines.
 | Path | What | Status |
 | --- | --- | --- |
 | `pcos_tools/` | The toolkit, v0.3.0: `hygiene`, `recon_parse`, `now_build`, `now_check`. Draft-only; documented in "The toolkit" below. | Live |
-| `scripts/` | Build helpers (`build_zip.py`) | Live |
+| `scripts/` | Build helpers (`build_zip.py`); the PC council runner (`council_pc.py`, P2-08), which starts the Codex, Gemini and Claude CLIs on Joe's PC and so is not part of the draft-only toolkit; its use is in `skills/council-pc/` | Live (runner: Candidate) |
 | `tests/` | Test suite; synthetic fixtures only | Live |
 | `agents/` | One six-part card per lane (`CARD_TEMPLATE.md`), the source keys (`INPUTS.md`), `_INDEX.md` | Candidate |
 | `skills/` | Lane skills in the Agent Skills format (`SKILL.md` per folder), `_INDEX.md` | Candidate |

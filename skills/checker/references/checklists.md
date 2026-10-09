@@ -242,19 +242,22 @@ Required: the source behind the Source ID.
 
 ## council-final
 
-The Final and Dissent of a Council row (board or GitHub council).
+The Final and Dissent of a Council row (board, GitHub or PC council).
 
 Required: both reviews (the [[COUNCIL]] row's review fields; for the GitHub
-council, the two reviews on the pull request), or one review when the chair
-decided after the full-cycle wait (council-board skill section 6); the sources
-the Draft cites.
+council, the two reviews on the pull request; for the PC council, the
+run's `bundle.md`), or one review when the chair decided after the full-cycle
+wait (council-board skill section 6); the sources the Draft cites.
 
 1. Board council: the plan round was Final before execution started. GitHub
    council: there is no plan round (one pull request carries the draft, the
-   reviews and the Final), so this check does not apply.
+   reviews and the Final), so this check does not apply. PC council: there is
+   no plan round (one live run), so this check does not apply.
 2. Both reviews are present, one finding per bullet, each with evidence and a
    verdict. After the full-cycle wait, one review is enough when Dissent says
-   "Review-N missing" for the other; it then meets the same standard.
+   "Review-N missing" for the other; it then meets the same standard. PC
+   council: every seat that answered reviewed the answers it did not write;
+   Dissent names each seat without an answer and each missing review.
 3. The chair answered each Fix or Reject finding: accepted, or rejected with a
    reason.
 4. Dissent records each disagreement that is still open.
@@ -263,7 +266,9 @@ the Draft cites.
 6. The reviewers did not see the author. Board council: they worked from the
    Reviewer view (Author hidden). GitHub council: the pull request names no
    author model (council-github card section 5), and neither reviewer is the
-   drafting model.
+   drafting model. PC council: the chair worked from the bundle (letters, no
+   seat names), wrote no answer itself, and filled Author only after Final and
+   Dissent (council-pc skill section 4).
 
 ## rule-candidate
 
