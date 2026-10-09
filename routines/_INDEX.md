@@ -49,6 +49,7 @@ One line per file, using the PCOS index convention (P2-12): title | ID | what | 
 | Lane | Runs on | Prompt lives in | Note |
 | --- | --- | --- | --- |
 | L5 CAL | Claude Routine, already installed | The CAL lane's own folder ([[CAL_FOLDER]]) | Not rewritten here |
+| Drive recorder (Claude side) | Claude Routine, installed 2026-10-08 (Lanes row "Drive recorder (Claude side)"), 08:10, 14:10 and 20:10 | The installed Routine, created outside this repository because existing Routines cannot take new connectors; it has Google Docs and Google Sheets | Consumes every [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:" (TEXT RULES b): writes the text in place in the same file, reads it back, sets the row Applied, one Changelog row; a row it cannot apply stays Blocked with the reason. The GPT-side recorder is planned (queue item Q31) |
 | L6 07-SAP-01 | Cowork desktop task on Joe's computer | Its existing task | The only lane that needs Joe's computer |
 | G1 Project Watch | ChatGPT scheduled task, every 6 hours | ChatGPT project | Writes Inbox rows |
 | G2 Weekly leadership page | ChatGPT scheduled task, Sunday | ChatGPT project | |

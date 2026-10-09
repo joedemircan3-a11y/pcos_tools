@@ -27,6 +27,10 @@ hour apart until 2026-11-01. Built by Claude (Claude Code on the web) from main
   item 6 names `[[EMAIL_RULES]]`; question-card item 2 fails a bare code. Checklists
   v0.2, checker skill 0.2.
 - `agents/INPUTS.md` v0.4: key `EMAIL_RULES`.
+- Codex review, round 1: the Drive recorder lane that applies "DRIVE WRITE:" rows
+  (installed 2026-10-08 outside this repository) is listed in `routines/_INDEX.md`
+  and named as L2's dependency for its mirrors, so no lane hands writes to a
+  consumer the repository does not show.
 - `tests/test_rules_and_clock.py`: fails when a card or Routine drops the rules,
   when an output template shows an item code without a DESCRIPTION slot, or when a
   Routine, card or skill names a time zone other than America/Mexico_City.

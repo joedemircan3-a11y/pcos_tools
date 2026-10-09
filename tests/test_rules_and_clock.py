@@ -141,6 +141,14 @@ def test_today_shows_codes_with_their_description_and_keeps_one_mirror_file():
     assert "TASK-ID (DESCRIPTION), never the code alone" in prompt
     assert "as new files" not in prompt and "[SUPERSEDED]" not in prompt
     assert "keeps its link" in prompt and '"DRIVE WRITE:" row in [[INBOX]]' in prompt
+    assert "Drive recorder lane" in read(ROUTINES / "L2-render.md").split("## Prompt")[0]
+
+
+def test_the_drive_recorder_that_applies_drive_write_rows_is_listed():
+    index = read(ROUTINES / "_INDEX.md")
+    row = next((line for line in index.splitlines() if line.startswith("| Drive recorder (Claude side) |")), None)
+    assert row, "routines/_INDEX.md does not list the Drive recorder lane"
+    assert '"DRIVE WRITE:"' in row and "Applied" in row and "reads it back" in row
 
 
 # --- item codes in output templates ---------------------------------------------------

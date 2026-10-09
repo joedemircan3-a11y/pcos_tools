@@ -8,7 +8,7 @@
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: agents/L2-render.md, not written yet. P2-19 requires it before the Lanes row; the build-day closeout writes it from this prompt. LOAD step 3 reads it.
 - Skills: none
-- Needs first: build day (kernel page, [[TODAY]], [[LANES]], [[INBOX]])
+- Needs first: build day (kernel page, [[TODAY]], [[LANES]], [[INBOX]]); for step 7 after cutover, the Drive recorder lane (installed 2026-10-08; routines/_INDEX.md, lanes that are not Claude Code Routines), which applies the mirror's "DRIVE WRITE:" rows
 
 ## Prompt
 
