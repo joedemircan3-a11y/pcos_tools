@@ -28,10 +28,10 @@ HEADER_FIELDS = ["Version", "Status", "Register", "Lane ID", "Skills", "Date"]
 PLANNED_LANES = [
     "prediction-ledger", "exo", "checker", "council-board", "council-github",
     "intake-email", "weekly-evolve", "knowledge-extract", "knowledge-review",
-    "knowledge-chair", "retro", "ledger-backtest", "commitments",
+    "knowledge-chair", "retro", "ledger-backtest", "commitments", "council-pc",
 ]
 SKILLS_WRITTEN = ["checker", "prediction-ledger", "exo", "council-board", "intake-email", "weekly-evolve",
-                  "retro", "commitments"]
+                  "retro", "commitments", "council-pc"]
 LABELS = ["Confirmed", "Candidate", "Needs Source Check", "Needs Thread Check",
           "Needs Joe Approval", "Blocked"]
 NOT_CARDS = {"CARD_TEMPLATE.md", "INPUTS.md", "_INDEX.md"}

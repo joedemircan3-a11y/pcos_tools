@@ -13,8 +13,9 @@ date | status | open when. The ID is the folder path.
 | commitments | skills/commitments/ | Extraction from sent and incoming mail, due dates from the words of the mail, closure only on evidence, at most two card items with ready drafts, filing and skip rule, the 30-day backfill | 2026-10-09 | Candidate | Weekday commitments runs; commitment items on the EXO and retro cards; the backfill |
 | exo | skills/exo/ | Breakdown into steps, assumption cards with commitment items first, skip rule, interpretation cards, voice-dump parsing | 2026-10-09 | Candidate | The 07:00 and 13:00 EXO cards; "exo" or "next step"; new Capture rows |
 | council-board | skills/council-board/ | Plan and execution rounds on Council rows, anonymous reviews, chair rules; stage prompts in `references/prompts.md` | 2026-10-01 | Candidate | Judgment work; "council row X"; disputed readings or proposals |
+| council-pc | skills/council-pc/ | The brief, the run of `scripts/council_pc.py` (three CLIs, Gemini 503 retried twice, letters not names, cross-ranking), the chair from the bundle, the Council row write | 2026-10-09 | Candidate | Joe says "pc council" at his PC |
 | intake-email | skills/intake-email/ | Door 1: allowlist check, routing and stop list, sourced answers, reply drafts with Joe in cc, send gate | 2026-10-01 | Candidate | Hourly intake run; [PCOS] requests |
 | weekly-evolve | skills/weekly-evolve/ | Corrections into versioned candidates, new golden-set cases, equal-or-better gate, three weekly numbers | 2026-10-01 | Candidate | Sunday L4 pass; any rule, kernel, card or skill proposal |
 
 Planned (not yet written): knowledge-extract, knowledge-review and knowledge-chair
-(P2-16); the PC council skill (P2-08).
+(P2-16).

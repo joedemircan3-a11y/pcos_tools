@@ -16,6 +16,7 @@ Changelog.
 | commitments | agents/commitments.md | Every promise in Joe's mail as a tracked row with a due date; closure only on evidence; at most two items per EXO or retro card (P2-31) | 2026-10-09 | Candidate | Building or running the Commitments lane; what Joe owes or is owed |
 | checker | agents/checker.md | Accept, Fix or Reject on every lane output; golden-set eval (P2-03, P2-04) | 2026-10-01 | Candidate | Any lane hands over an output |
 | council-board | agents/council-board.md | Draft, two reviews and a chair on a Notion Council row (P2-06) | 2026-10-01 | Candidate | Judgment work with a day's time |
+| council-pc | agents/council-pc.md | Live council on Joe's PC: Codex, Gemini and a separate Claude answer one brief, each ranks the two answers it did not write, the session chairs (P2-08) | 2026-10-09 | Candidate | Urgent judgment work with Joe at his PC; "pc council" |
 | council-github | agents/council-github.md | On-demand council through a pull request, method and code work only (P2-07) | 2026-10-01 | Candidate | Urgent council on non-business content |
 | intake-email | agents/intake-email.md | Door 1: team requests by [PCOS] mail, routed and answered as drafts (P2-09) | 2026-10-01 | Candidate | Building the intake lane, naming the allowlist |
 | weekly-evolve | agents/weekly-evolve.md | Weekly versioned rule, kernel and skill candidates behind the golden-set gate (P2-05) | 2026-10-01 | Candidate | Sunday L4 pass, any rule proposal |
