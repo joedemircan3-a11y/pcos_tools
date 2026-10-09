@@ -29,7 +29,9 @@ SEATS = ["codex", "gemini", "claude"]
 BRIEF = "Question: which of two shipping plans holds up better? Facts: plan one, plan two."
 
 SEEN_ENV = ["HOME", "USERPROFILE", "CODEX_HOME", "CLAUDE_CONFIG_DIR", "GEMINI_CLI_HOME", "XDG_CONFIG_HOME",
-            "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_CACHE_HOME", "GEMINI_API_KEY", "CLAUDECODE"]
+            "XDG_DATA_HOME", "XDG_STATE_HOME", "XDG_CACHE_HOME", "GEMINI_API_KEY", "CLAUDECODE",
+            "GEMINI_SYSTEM_MD", "GEMINI_CLI_SYSTEM_SETTINGS_PATH", "GEMINI_CLI_IDE_SERVER_PORT",
+            "CLAUDE_CODE_SSE_PORT", "CLAUDE_CODE_DISABLE_CLAUDE_MDS", "PATH"]
 
 FAKE_CLI = r'''
 import json, os, pathlib, re, sys, time
@@ -356,6 +358,30 @@ def test_the_gemini_key_comes_from_the_environment_or_the_gemini_env_file(counci
     monkeypatch.setenv("GEMINI_API_KEY", "key-from-env")
     council(out_name="from-env")
     assert seen(state, "gemini", 3)["env"]["GEMINI_API_KEY"] == "key-from-env"  # calls 3 and 4: the second run
+
+
+@pytest.mark.parametrize("line", [
+    'GEMINI_API_KEY="key-1" # personal',
+    "GEMINI_API_KEY=key-1 # personal",
+    "export GEMINI_API_KEY='key-1'",
+    "GEMINI_API_KEY = key-1\r",
+])
+def test_the_gemini_key_is_read_as_dotenv_reads_it(real_home, line):
+    (real_home / ".gemini" / ".env").write_text(f"OTHER=1\n{line}\n", encoding="utf-8")
+    assert council_pc.gemini_key() == "key-1"
+
+
+def test_no_seat_inherits_a_variable_that_loads_files_or_joins_an_ide(council, monkeypatch):
+    for variable in ("GEMINI_SYSTEM_MD", "GEMINI_CLI_SYSTEM_SETTINGS_PATH", "GEMINI_CLI_IDE_SERVER_PORT",
+                     "CLAUDE_CODE_SSE_PORT"):
+        monkeypatch.setenv(variable, "set-by-joe")
+    _, _, state = council()
+    for seat in SEATS:
+        env = seen(state, seat, 1)["env"]
+        assert env["GEMINI_SYSTEM_MD"] is None and env["GEMINI_CLI_SYSTEM_SETTINGS_PATH"] is None
+        assert env["GEMINI_CLI_IDE_SERVER_PORT"] is None and env["CLAUDE_CODE_SSE_PORT"] is None
+        assert env["CLAUDE_CODE_DISABLE_CLAUDE_MDS"] == "1"
+        assert env["PATH"] == os.environ["PATH"], "everything else is inherited"
 
 
 def test_a_sign_in_the_cli_refreshes_goes_back_where_the_cli_keeps_it(council, real_home):

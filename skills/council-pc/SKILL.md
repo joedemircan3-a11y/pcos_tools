@@ -90,7 +90,9 @@ python scripts/council_pc.py RUN-FOLDER/brief.md --out RUN-FOLDER/out
   scratch home that holds only a copy of that CLI's sign-in file (Codex
   `auth.json`, Claude `.credentials.json`; Gemini signs in with
   `GEMINI_API_KEY`, from the environment or `~/.gemini/.env`). No seat sees
-  Joe's settings, MCP servers, history or business folders. A sign-in the CLI
+  Joe's settings, MCP servers, history or business folders, inherits a
+  variable that loads a file or settings or joins an IDE (such as
+  `GEMINI_SYSTEM_MD`, `CLAUDE_CODE_SSE_PORT`), or reads a CLAUDE.md. A sign-in the CLI
   refreshes during the run is written back, so Joe's own sign-in keeps
   working. A seat whose sign-in file is missing starts signed out: `run.json`
   says so under `sign_in`. If the Claude seat fails to sign in from its

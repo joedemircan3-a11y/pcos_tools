@@ -77,7 +77,16 @@ SIGN_IN = {
     "claude": ("CLAUDE_CONFIG_DIR", ".claude", ".credentials.json"),
 }
 GEMINI_KEY = "GEMINI_API_KEY"
-GEMINI_KEY_LINE = re.compile(rf"^[ \t]*(?:export[ \t]+)?{GEMINI_KEY}[ \t]*=[ \t]*(.*?)[ \t]*$", re.M)
+# The value as dotenv reads it, as the Gemini CLI does: quoted, or bare up to a # comment.
+GEMINI_KEY_LINE = re.compile(rf"^[ \t]*(?:export[ \t]+)?{GEMINI_KEY}[ \t]*=[ \t]*"
+                             r"('(?:\\'|[^'])*'|\"(?:\\\"|[^\"])*\"|`(?:\\`|[^`])*`|[^#\r\n]*)", re.M)
+# Variables that would make a seat's CLI read a file into its prompt, load settings from
+# outside the scratch home, or join an IDE that shares the open files (checked against
+# gemini 0.63.0, Claude Code 2.1.296 and codex-cli 0.162.0). No seat inherits them.
+SEAT_ENV_DROP = re.compile(
+    r"GEMINI_SYSTEM_MD|GEMINI_WRITE_SYSTEM_MD|GEMINI_CLI_SYSTEM_SETTINGS_PATH|GEMINI_CLI_SYSTEM_DEFAULTS_PATH"
+    r"|GEMINI_CLI_TRUSTED_FOLDERS_PATH|GEMINI_CLI_IDE_\w+|CLAUDE_CODE_SSE_PORT|ENABLE_IDE_INTEGRATION"
+    r"|CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD|CODEX_SQLITE_HOME", re.I)
 LABELS = "ABC"
 TIMEOUT = 900       # seconds per call
 RETRIES = 2         # extra attempts after a transient failure (Gemini's 503)
@@ -234,8 +243,10 @@ def gemini_key():
         except (OSError, UnicodeDecodeError):
             continue
         if found:
-            value = found[-1]
-            return value[1:-1] if len(value) > 1 and value[0] == value[-1] and value[0] in "'\"" else value
+            value = found[-1].strip()
+            if len(value) > 1 and value[0] == value[-1] and value[0] in "'\"`":
+                value = value[1:-1]
+            return value or None
     return None
 
 
@@ -243,8 +254,10 @@ def seat_env(name, home):
     """Joe's environment with every home and config folder moved into the scratch home."""
     # The chair's Claude Code session sets CLAUDECODE; some Claude Code versions refuse to
     # start "claude -p" as a nested session while it is set. The seat is a separate process.
-    env = {key: value for key, value in os.environ.items() if key != "CLAUDECODE"}
+    env = {key: value for key, value in os.environ.items()
+           if key != "CLAUDECODE" and not SEAT_ENV_DROP.fullmatch(key)}
     env.update({
+        "CLAUDE_CODE_DISABLE_CLAUDE_MDS": "1",  # no CLAUDE.md, also none above the working folder
         "HOME": str(home), "USERPROFILE": str(home),  # Node and Python read USERPROFILE on Windows
         "CODEX_HOME": str(home / ".codex"), "CLAUDE_CONFIG_DIR": str(home / ".claude"),
         "GEMINI_CLI_HOME": str(home),

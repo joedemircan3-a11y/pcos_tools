@@ -56,6 +56,14 @@ web) from main 4a78c92.
   (`auth.json.council-pc`), so two council runs writing back the same
   sign-in at once could overwrite or delete each other's staged token. Each
   write-back now stages in a temporary file of its own next to the real one.
+- Codex review, round 3 (P2): (1) the seats inherited variables that make a
+  CLI read a file into its prompt or join an IDE that shares open files
+  (`GEMINI_SYSTEM_MD`, `GEMINI_CLI_SYSTEM_SETTINGS_PATH`, `GEMINI_CLI_IDE_*`,
+  `CLAUDE_CODE_SSE_PORT` and others, checked in each CLI). No seat inherits
+  them now, and `CLAUDE_CODE_DISABLE_CLAUDE_MDS=1` keeps Claude from reading a
+  CLAUDE.md in the folders above the working folder. (2) The Gemini key in
+  `~/.gemini/.env` is read as dotenv reads it, so a quoted value with an
+  inline comment works. Per the stop rule this is the last Codex round.
 
 ## Unreleased - 2026-10-09: PC council v0.1 (P2-08)
 
