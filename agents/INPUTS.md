@@ -1,6 +1,6 @@
 # Input keys
 
-Version v0.3, 2026-10-09.
+Version v0.4, 2026-10-09.
 
 Cards and skills name their sources as `[[KEY]]`. A key stands for exactly one
 object: a Drive file or folder, a Notion database, view or page, an Outlook
@@ -34,6 +34,7 @@ build session), **planned** (a later queue item or register entry creates it).
 | `KERNEL` | PCOS KERNEL page; until build day the draft `KERNEL_v1.0.md` in `[[BUILD_KIT]]` | Notion / Drive | Laws, routing, write rules, lane table, kernel version | exists (draft) |
 | `OPERATING_CARD` | [LIVE][CORE RULES] PCOS Operating Card, latest version | Drive | Live laws, START and CLOSE steps, write paths until cutover | exists |
 | `BRIEF_RULES` | PCOS_BRIEF_RULES, live version | Drive | Sweep scope, evaluation order, routes, measured owner map, draft desk | exists |
+| `EMAIL_RULES` | PCOS_EMAIL_FORMAT_RULES, live version | Drive | How Joe's mail and messages are written: the language pass by default, whole sentences, line breaks only after a comma, layout and signature | exists |
 | `CANON` | [CANON] Master v1 | Drive | Business rules authority until rules become Rules rows | exists |
 | `REGISTER` | PCOS_PHASE2_REGISTER, latest version | Drive | Phase-2 items P2-01 onward, with status | exists |
 | `REGISTRY` | [REGISTRY] PCOS Document Registry, live version | Drive | The operating document registry: each governed document with its title, ID and status; searched before asking Joe (kernel section 2, step 4). Not `REGISTER` | exists |
@@ -142,3 +143,8 @@ v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | `REGISTRY`
 item QW21 creates the database) | the cards that ask Joe search the registry first
 (kernel 1.2 section 2 step 4; QK23 open point), and the Commitments lane (P2-31)
 writes its own database | PCOS QUEUE_v6 item QC24, QUEUE_v7 amendment
+
+v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | `EMAIL_RULES`
+(exists, v4.1) | the email rules are one of the four live rules for text Joe reads,
+which every card and Routine now carries (agents/CARD_TEMPLATE.md); the kernel key map
+gets the same key in queue item QW29 | PCOS QUEUE_v10 item QC28

@@ -1,5 +1,36 @@
 # Changelog
 
+## Unreleased - 2026-10-09: rules and clock v0.1
+
+Why: PCOS queue item QC28 (QUEUE_v10), from two requests on Joe's development list:
+"new rules into the kernel and every lane" and "one clock for every lane". Four live
+Rules rows (item codes with a description, one home per record, the email rules
+v4.1, person names) bound only the EXO lane, and the lanes ran on two clocks one
+hour apart until 2026-11-01. Built by Claude (Claude Code on the web) from main
+4a78c92.
+
+- `agents/CARD_TEMPLATE.md` v0.2: section "Live rules for text Joe reads", the four
+  rules with their sources; every card inherits them and the one clock.
+- Every card in `agents/`: part 4 states the four rules as one "Live text rules"
+  line; times on America/Mexico_City.
+- Every Routine prompt in `routines/`: a TEXT RULES paragraph right after LOAD (after
+  the key load, so the council-github chair's GitHub-only filter stays key-free).
+  L1 drafts follow `[[EMAIL_RULES]]`; L2 shows codes as TASK-ID (DESCRIPTION) and
+  keeps each mirror in one file through the Drive recorder instead of new copies.
+- One clock: Joe's Outlook calendar is in "Central Standard Time (Mexico)", read
+  through the Microsoft 365 connector, so every Routine runs on
+  CRON_TZ=America/Mexico_City. exo, retro, commitments and commitments-backfill
+  keep their wall-clock times (from America/Matamoros); L4-weekly `0 15 * * 0` UTC
+  becomes `0 9 * * 0` and ledger-backtest `0 13 * * 0` UTC becomes `0 7 * * 0` (the
+  same instants); council-github-chair names the zone on its 2-hour cron.
+- Checker: common check C5 (the four rules on every output Joe reads); mail-draft
+  item 6 names `[[EMAIL_RULES]]`; question-card item 2 fails a bare code. Checklists
+  v0.2, checker skill 0.2.
+- `agents/INPUTS.md` v0.4: key `EMAIL_RULES`.
+- `tests/test_rules_and_clock.py`: fails when a card or Routine drops the rules,
+  when an output template shows an item code without a DESCRIPTION slot, or when a
+  Routine, card or skill names a time zone other than America/Mexico_City.
+
 ## Unreleased - 2026-10-09: PC council v0.1 (P2-08)
 
 Why: PCOS queue item QC22 (QUEUE_v4, carried to QUEUE_v8) builds the live

@@ -23,6 +23,8 @@ LOAD
 2. Resolve every [[KEY]] below through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 3. Read the lane card agents/L2-render.md (register P2-19) and follow it with this prompt. Where they differ, the card wins, unless it would allow something this prompt forbids. Until the card exists, run from this prompt alone and write "card missing" in the heartbeat result.
 
+TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live rules for text Joe reads"), for every text Joe reads (cards, rows, pages, drafts, Finals): (a) every item code, SAP code, order number or Task ID you show stands with its plain description, as TASK-ID (DESCRIPTION), never alone; (b) one home per record: a Drive file is changed in the same file with the same link, never rebuilt as a copy; hand each Drive write to the Drive recorder as one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place and the exact text; (c) mail and message text follows [[EMAIL_RULES]]: the language pass by default, sentences stay whole, a long sentence breaks only right after a comma; (d) name people as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve them, by address where two people share a name.
+
 READ (view mode only; SQL and rows mode hit the plan's query cap)
 4. Read the newest [[CHANGELOG]] rows first and note the time of the last hub update. Never show a row as open when a newer Changelog row closed it.
 5. Read [[NOTION_WORKLIST]] (open rows), [[DECISIONS]] (open, with default and due date), [[INBOX]] (every row whose Status is still Needs Joe, however old, plus the other rows since the last render; a Needs Joe row leaves Today only when a newer row or [[CHANGELOG]] row closes it), [[LANES]] (the last heartbeat of each lane), and today's EXO card row in [[DECISIONS]].
@@ -36,8 +38,8 @@ WRITE
      the 12 lines, show as many as fit and end with one line that links [[INBOX]]
      filtered to Status Needs Joe (no count), so every open item stays one tap away;
    - the lanes that missed their run.
-   No overdue lists and no counts of late items.
-7. After Joe's typed cutover yes only: render PCOS_NOW [MIRROR] and KERNEL.md in Drive from the rows and the kernel page, as new files. Rename the previous mirrors (created by this lane) with the suffix [SUPERSEDED] and the date, and move them to [[ARCHIVE]]. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
+   A line that names a task, item or order shows it as TASK-ID (DESCRIPTION), never the code alone. No overdue lists and no counts of late items.
+7. After Joe's typed cutover yes only: render PCOS_NOW [MIRROR] and KERNEL.md in Drive from the rows and the kernel page. Each mirror is one Drive file that keeps its link: the first render creates it; every later render hands the new text to the Drive recorder as one "DRIVE WRITE:" row in [[INBOX]] (TEXT RULES b), never a new copy. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
 
 END OF RUN
 8. One [[CHANGELOG]] row per page or file written. One heartbeat in [[LANES]]: lane L2, started, finished, kernel version, rows changed (0), result.
@@ -66,3 +68,9 @@ v0.4 | 2026-10-06 | Claude Code on the web, queue item QC18-R | when the open Ne
 do not fit in the 12 lines, Today ends with a link to all of them in the Inbox | with more
 Needs Joe rows than lines, some open items fell off Today (Codex review of PR 2) | PCOS
 QUEUE_v6 item QC18-R
+
+v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
+the live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names). Step 6 shows codes with their description; step 7 keeps
+each mirror in one file through the Drive recorder instead of new copies. | four live Rules rows bound only the EXO lane, and
+the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

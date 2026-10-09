@@ -1,10 +1,10 @@
 # Card: council-pc
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-08 (PC CLI council: "codex exec" and "gemini -p" on Joe's PC, anonymized cross-rank, chair)
 - Lane ID: pending
-- Skills: [council-pc v0.1](../skills/council-pc/SKILL.md), which runs [scripts/council_pc.py](../scripts/council_pc.py); the chair follows [council-board v0.1](../skills/council-board/SKILL.md) section 5; the Final is checked with [checker v0.1](../skills/checker/SKILL.md) (job type council-final)
+- Skills: [council-pc v0.1](../skills/council-pc/SKILL.md), which runs [scripts/council_pc.py](../scripts/council_pc.py); the chair follows [council-board v0.1](../skills/council-board/SKILL.md) section 5; the Final is checked with [checker v0.2](../skills/checker/SKILL.md) (job type council-final)
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -72,6 +72,13 @@ term; put a brief, an answer or a run file into the public repository.
   when Joe starts it on his PC, nothing is scheduled.
 - Board rules apply: one finding per bullet with evidence and a verdict; Needs
   Joe only for a factual disagreement the kernel and the sources cannot settle.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -115,3 +122,10 @@ v0.1 | 2026-10-09 | Claude Code on the web, PCOS queue item QC22 | first card |
 register P2-08; design in the dev-session record of 2026-09-27, turns 2 and 3 |
 Joe's default acceptance 2026-09-28; PCOS QUEUE_v4 item QC22, carried in
 QUEUE_v8
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

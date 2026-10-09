@@ -176,10 +176,10 @@ def test_skip_rule_is_the_exo_rule():
 
 
 def test_routines_run_on_weekdays_ahead_of_the_cards_they_feed():
-    assert cron("commitments") == ("40", "6,12,18", "1-5", "America/Matamoros")
+    assert cron("commitments") == ("40", "6,12,18", "1-5", "America/Mexico_City")
     _, exo_hours, _, exo_zone = cron("exo")
     retro_minute, retro_hour, _, retro_zone = cron("retro")
-    assert exo_zone == retro_zone == "America/Matamoros"
+    assert exo_zone == retro_zone == "America/Mexico_City"
     assert [int(h) for h in exo_hours.split(",")] == [7, 13]
     assert (18, 40) < (int(retro_hour), int(retro_minute))
 

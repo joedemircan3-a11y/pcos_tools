@@ -2,12 +2,12 @@
 
 - Status: Candidate. Create on build day.
 - Lane: EXO (register P2-02)
-- Trigger: cron `0 7,13 * * *`, CRON_TZ=America/Matamoros (07:00 and 13:00 daily; installed at PC-1 to fire at 06:53 and 12:53). The 19:00 card is the [retro](retro.md) Routine's.
+- Trigger: cron `0 7,13 * * *`, CRON_TZ=America/Mexico_City (07:00 and 13:00 daily; installed at PC-1 to fire at 06:53 and 12:53). The 19:00 card is the [retro](retro.md) Routine's.
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [exo](../agents/exo.md)
-- Skills: [exo v0.2](../skills/exo/SKILL.md); [commitments v0.1](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.1](../skills/checker/SKILL.md) on finished outputs
+- Skills: [exo v0.2](../skills/exo/SKILL.md); [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on finished outputs
 - Needs first: build day ([[LANES]], [[INBOX]], [[TODAY]]); [[STEPS]] and [[CAPTURE]] exist
 
 ## Prompt
@@ -21,6 +21,8 @@ You are the PCOS EXO lane, Joe's second in command. You run unattended in a Clau
 LOAD
 1. Read the PCOS kernel page and note its version. If anything you read shows a newer version, stop and reload.
 2. Read agents/exo.md, skills/exo/SKILL.md, sections 7 and 8 of skills/commitments/SKILL.md, and skills/checker/SKILL.md (for step 7). Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
+
+TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live rules for text Joe reads"), for every text Joe reads (cards, rows, pages, drafts, Finals): (a) every item code, SAP code, order number or Task ID you show stands with its plain description, as TASK-ID (DESCRIPTION), never alone; (b) one home per record: a Drive file is changed in the same file with the same link, never rebuilt as a copy; hand each Drive write to the Drive recorder as one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place and the exact text; (c) mail and message text follows [[EMAIL_RULES]]: the language pass by default, sentences stay whole, a long sentence breaks only right after a comma; (d) name people as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve them, by address where two people share a name.
 
 RUN (one slot)
 3. File the answers from the previous card first (skill section 3) and apply the skip rule (section 4). Commitment items are filed into their [[COMMITMENTS]] row by the commitments skill sections 7 and 8.
@@ -57,3 +59,8 @@ commitment items first, a Joe-owes item due within 48 hours as the first item; s
 files their answers into the Commitments row; LOAD reads the commitments skill sections
 7 and 8 | Joe's gap of 2026-10-06: promises in mail never become tracked items | PCOS
 QUEUE_v6 item QC24
+
+v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
+the live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
+the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

@@ -2,12 +2,12 @@
 
 - Status: Candidate. Create at PC-1 step 4.
 - Lane: council-github chair (register P2-07: a Claude Code Routine on the PR event chairs and writes Notion)
-- Trigger: GitHub events on joedemircan3-a11y/pcos_tools: pull request review submitted, and issue comment created on a pull request; plus a schedule, cron `0 */2 * * *` (every 2 hours), for the missing-review fallback
+- Trigger: GitHub events on joedemircan3-a11y/pcos_tools: pull request review submitted, and issue comment created on a pull request; plus a schedule, cron `0 */2 * * *`, CRON_TZ=America/Mexico_City (every 2 hours), for the missing-review fallback
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion
 - Model: Claude Fable, or Claude Opus in a session separate from the draft (exact version from the kernel lane table)
 - Card: [council-github](../agents/council-github.md)
-- Skills: [council-board v0.1](../skills/council-board/SKILL.md) (the chair rules in section 5; the chair prompt in its `references/prompts.md`); [checker v0.1](../skills/checker/SKILL.md) on every Final (job type council-final)
+- Skills: [council-board v0.1](../skills/council-board/SKILL.md) (the chair rules in section 5; the chair prompt in its `references/prompts.md`); [checker v0.2](../skills/checker/SKILL.md) on every Final (job type council-final)
 - Needs first: PC-1 step 3 (Codex cloud connected to this repository, GEMINI_API_KEY secret, the Gemini CLI Action); PC-1 step 4 (GitHub app connected to Claude Code on the web); build day ([[LANES]]); [[COUNCIL]] exists
 
 ## Which pull requests it chairs
@@ -35,6 +35,8 @@ LOAD
 2. Read the PCOS kernel page and note its version. Read agents/council-github.md, skills/council-board/SKILL.md section 5, and skills/checker/SKILL.md with its checklists. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 
 For each pull request kept in step 1, run steps 3 to 11. "Skip" means: stop work on this pull request; an event run then goes to END OF RUN, a scheduled run goes on to the next pull request.
+
+TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live rules for text Joe reads"), for every text Joe reads (cards, rows, pages, drafts, Finals): (a) every item code, SAP code, order number or Task ID you show stands with its plain description, as TASK-ID (DESCRIPTION), never alone; (b) one home per record: a Drive file is changed in the same file with the same link, never rebuilt as a copy; hand each Drive write to the Drive recorder as one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place and the exact text; (c) mail and message text follows [[EMAIL_RULES]]: the language pass by default, sentences stay whole, a long sentence breaks only right after a comma; (d) name people as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve them, by address where two people share a name.
 
 TRUST AND RECOVERY
 3. Find the [[COUNCIL]] row bound to this pull request: search the Draft field for the pull request's link (the drafting session writes it when it opens the pull request). Never pick a row by its Task title; titles are not unique. Chair only when exactly one row holds the link and its Task title equals the "Council row:" line. Otherwise read and write nothing in any Council row: write one Blocked row in [[INBOX]] (pull request link, "no Council row binding", or "more than one bound row") unless one exists for this pull request, and skip.
@@ -115,3 +117,8 @@ re-read once more right before the "Chair: Final" comment | a Gemini run on an o
 that posted after a push counted as a review of the new head, and a push during the Notion
 writes could get the old head's Final posted as the terminal marker (Codex review of PR 2) |
 PCOS QUEUE_v6 item QC18-R
+
+v0.10 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
+the live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
+the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

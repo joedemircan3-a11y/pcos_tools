@@ -1,10 +1,10 @@
 # Card: retro
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-30 (Retro lane: evening card of five past-closure questions, last 90 days first; answers feed the ledger, the People profiles and the golden set)
 - Lane ID: pending
-- Skills: [retro v0.2](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.1](../skills/commitments/SKILL.md) sections 7 and 8; every item checked with [checker v0.1](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
+- Skills: [retro v0.3](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8; every item checked with [checker v0.2](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -72,7 +72,7 @@ row; send or commit anything; treat silence as an answer.
 - Lane rules, from the dev-session record of 2026-10-06, part 7 (turns 20 and
   21; Joe's decisions, dated 2026-10-01 in QUEUE_v4):
   - Evening card = past questions; morning and midday cards = today. The 19:00
-    slot, America/Matamoros, moves from EXO to this lane.
+    slot, America/Mexico_City, moves from EXO to this lane.
   - Five questions per evening, last 90 days first.
   - Order: recency, then open value (money, active vendors), then pattern
     class (one answer that closes many).
@@ -81,6 +81,13 @@ row; send or commit anything; treat silence as an answer.
   - Skip rule as EXO: 2 skips reshape, 3 skips park and ask once.
   - Never overwrite the mail. When Joe's memory and the record disagree, keep
     both and open a Decision row.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -115,7 +122,7 @@ row; send or commit anything; treat silence as an answer.
 
 ## 6. Trigger and owner model
 
-- Trigger: daily, card at 19:00 America/Matamoros (the Routine fires at 18:53).
+- Trigger: daily, card at 19:00 America/Mexico_City (the Routine fires at 18:53).
   On demand when Joe says "retro".
 - Runs on: Claude Code Routine (Notion, Microsoft 365 and Drive connectors).
   The card is published as an Artifact page.
@@ -144,3 +151,10 @@ filed into their Commitments rows; a thread with a Commitments row is never a ga
 more than 14 days overdue go to the Retro lane as past questions, not to EXO; kernel 1.2
 section 2 step 4 names the Registry among the records searched before asking Joe (QK23
 open point) | PCOS QUEUE_v6 item QC24, QUEUE_v7 amendment
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

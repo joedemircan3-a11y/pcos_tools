@@ -3,7 +3,7 @@ name: checker
 description: Check a PCOS lane output before its row closes or it reaches Joe. Use when a lane hands over a mail draft, routing decision, row change, DELTA, question card, prediction, pricing preparation, research file, knowledge claim, council Final, rule candidate or repository change, or when asked to check one. Opens the sources the job type requires, applies its rules, verifies every evidence label and returns Accept, Fix or Reject with one finding per line.
 compatibility: Needs read access to the sources the generating lane used (Google Drive, the PCOS Notion hub, Outlook through the Microsoft 365 connector) and must run on a different model from the generator.
 metadata:
-  version: "0.1"
+  version: "0.2"
   status: Candidate
   register: P2-03
   kernel: "1.0"

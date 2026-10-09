@@ -1,6 +1,6 @@
 # Agent card template
 
-Version v0.1, 2026-10-01. Register P2-19: every lane needs a card before it gets a
+Version v0.2, 2026-10-09. Register P2-19: every lane needs a card before it gets a
 Lanes row.
 
 An agent is a model plus this card. The card gives it one mission, a restricted
@@ -74,6 +74,7 @@ Never: the actions outside the mission.
 - Kernel: the version the card was written against and what to do on a mismatch.
 - Laws and Rules rows that bind the lane, by number.
 - Lane rules with their source (dev-session record, dispatch, Joe's ruling).
+- Live text rules: the four rules for text Joe reads, as one line (see below).
 
 ## 5. Output contract with evidence labels
 - Where it writes: database and fields, or file title pattern and folder key.
@@ -84,9 +85,12 @@ Never: the actions outside the mission.
 - Done means: when the run is complete. Failure: retry once, then a Blocked row
   that holds the full content.
 - Eval: how the lane is measured.
+- Text rules: every text Joe reads follows the live rules for text Joe reads
+  (this template); an item code in a template is written TASK-ID (DESCRIPTION).
 
 ## 6. Trigger and owner model
-- Trigger: schedule with time zone, events, on-demand phrase.
+- Trigger: schedule in America/Mexico_City (the one clock), events, on-demand
+  phrase.
 - Runs on: the surface (Claude scheduled task, Claude Code Routine, ChatGPT
   scheduled task, Notion agent, PC session).
 - Model: generator, checker (never the generator's model), chair if any.
@@ -114,6 +118,21 @@ Every claim in an output carries exactly one label:
 Row status values (Predicted, Draft, Reviewed-1, Parked and so on) belong to
 each database. They are not evidence labels.
 
+## Live rules for text Joe reads
+
+Four live [[RULES]] rows bind every lane that writes text Joe reads: cards,
+briefs, Today, chat answers, Decisions and Inbox rows meant for him, mail
+drafts and council Finals. Kernel 1.3 carries them; until it is live, the Rules
+rows do. Every card states them in part 4 as one "Live text rules" line, and
+every Routine prompt carries them as its TEXT RULES paragraph.
+
+| Rule | What it requires | Source |
+| --- | --- | --- |
+| (a) Item code with description | Every item code, SAP code, order number or Task ID stands with a plain description, for example "the website stock sync check (TASK-ID)", never "TASK-ID" alone. A code alone is a checker FAIL. Email item lines keep Joe's format: code, description, quantity with unit. An output template writes the slot as TASK-ID (DESCRIPTION), SAP-CODE (DESCRIPTION) and so on (`tests/test_rules_and_clock.py` checks it). | Rules row "No item code without its description", Live 2026-10-08 (Joe, 2026-10-07) |
+| (b) One home per record | A Drive file is changed in the same file with the same link, never rebuilt as a new copy, and no parallel list is started. A lane hands each Drive write to the Drive recorder through the Inbox: one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place in the file and the exact text. The recorder writes it in place, reads it back and sets the row Applied. | Rules row "One home per record: Drive files are edited in place; no parallel lists", Live 2026-10-08 (Joe, 2026-10-07) |
+| (c) Email rules | Mail and message text follows [[EMAIL_RULES]]: the language pass (grammar, sentence flow, native US business English) by default, keeping Joe's meaning, points and voice; sentences stay whole, never split and never merged; a long sentence breaks onto a new line only right after a comma. | PCOS_EMAIL_FORMAT_RULES v4.1, 2026-10-09 (Joe) |
+| (d) Person names | A person is named as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve the name; where two people share a name, the address is used. The kernel holds the identity rules (which person a first name alone means). | Owner-map Rules row, 2026-10-07 (Joe); kernel identity rule |
+
 ## Rules every card inherits
 
 These apply to every lane, so cards do not repeat them in full:
@@ -130,6 +149,9 @@ These apply to every lane, so cards do not repeat them in full:
   negotiation, canon promotion or destructive file operation. No change without
   its reason. Nothing closes on silence.
 - Personal and Room 10 material never enters a business row or file.
+- The live rules for text Joe reads (above), stated in part 4 of every card.
+- One clock: every schedule runs on America/Mexico_City, the time zone of Joe's
+  Outlook calendar. A card's trigger names no other time zone.
 - A connector failure is retried once. After that the run writes a Blocked row
   that holds the full content and stops. It does not work around the failure.
 
@@ -140,3 +162,10 @@ dispatch PROMPT C1 asks for a six-part card per planned lane; dev-session record
 2026-09-28 part 2 adds one mission per card, tools limited to the mission, a
 named knowledge scope and an eval per agent | Joe, default acceptance of
 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | the live rules for
+text Joe reads (item codes with a description, one home per record, the email rules,
+person names), stated in part 4 of every card; one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane; the lanes ran on two clocks one hour apart
+until 2026-11-01 | PCOS QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into
+the kernel and every lane" and "one clock for every lane"

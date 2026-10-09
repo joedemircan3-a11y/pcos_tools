@@ -1,11 +1,11 @@
 # Card: ledger-backtest
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-01 (prediction ledger) and P2-30 (the backtest loop of the retro design)
 - Lane ID: pending
-- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1, 2 and 4 with [references/backtest.md](../skills/prediction-ledger/references/backtest.md); a sample checked with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-06
+- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1, 2 and 4 with [references/backtest.md](../skills/prediction-ledger/references/backtest.md); a sample checked with [checker v0.2](../skills/checker/SKILL.md)
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -59,6 +59,13 @@ or change a Worklist row; take more than 200 threads in one run.
 - Method rule (this card): the prediction is made blind at the cut, with the
   owner map as it stood then, so that nothing known later can leak into it.
   A thread whose map cannot be rebuilt is skipped.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -82,8 +89,8 @@ or change a Worklist row; take more than 200 threads in one run.
 
 ## 6. Trigger and owner model
 
-- Trigger: once by hand at install, over the last 90 days; then Sundays 13:00
-  UTC, two hours before L4, whose calibration reads the class rows.
+- Trigger: once by hand at install, over the last 90 days; then Sundays 07:00
+  America/Mexico_City, two hours before L4, whose calibration reads the class rows.
 - Runs on: Claude Code Routine (Notion, Microsoft 365 and Drive connectors).
 - Model: Claude Opus predicts (in subagents, blind at the cut) and scores. The
   checker re-scores a sample on a different Claude model.
@@ -98,3 +105,10 @@ v0.1 | 2026-10-06 | Claude Code on the web, PCOS queue item QC19 | first card |
 register P2-01 and P2-30; the backtest loop in the dev-session record of
 2026-10-06, part 7, turn 20 | QUEUE_v4 item QC19: one-off and weekly, scored
 without Joe, accuracy by class, at most 200 threads per run
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

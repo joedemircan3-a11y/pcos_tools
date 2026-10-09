@@ -1,11 +1,11 @@
 # Card: knowledge-review
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-16 stage 2 (council review of extracted claims)
 - Lane ID: pending
 - Skills: knowledge-review (planned with P2-16)
-- Date: 2026-10-01
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -51,6 +51,13 @@ treat the most-repeated source as the newest.
     until Gemini works.
   - The council can amplify its sources, so the stale check uses the newest
     source.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -86,3 +93,10 @@ treat the most-repeated source as the newest.
 v0.1 | 2026-10-01 | Claude Code on the web, queue item Q01 | first card | register
 P2-16 stage 2; dev-session record of 2026-09-27, turn 4 | Joe's default acceptance
 2026-09-28; PCOS_DISPATCH_2026-09-29 PROMPT C1
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"
