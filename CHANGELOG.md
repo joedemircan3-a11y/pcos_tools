@@ -31,6 +31,13 @@ Code on the web) from main 98a1943.
 - Codex review, round 1: the seats start without the chair session's
   `CLAUDECODE` marker, since some Claude Code versions refuse `claude -p` as a
   nested session and the Claude seat would always fail.
+- Codex review, round 2: self-identification is removed even when the brief
+  names the model or vendor ("As an OpenAI model, ...", "Claude here:", "This
+  is Gemini speaking", "I, Claude, ...", signature lines), while content
+  mentions stay ("such as Gemini", "As Claude suggested"); reviewers and the
+  chair ignore a name that slips through. The skill's data-flow note names
+  Anthropic too, and says each vendor receives the other seats' answers in
+  the review stage.
 - `skills/checker/references/checklists.md`: council-final covers the PC
   council (no plan round, cross-reviews, the chair worked from letters).
 - The indexes list the new card and skill; the README names the runner.

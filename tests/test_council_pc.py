@@ -292,6 +292,34 @@ def test_anonymize_keeps_names_the_brief_uses_but_still_removes_self_identificat
     assert council_pc.anonymize(kept, brief) == (kept, 0)
 
 
+@pytest.mark.parametrize("text, brief, expected", [
+    ("As an OpenAI model, I recommend A.", "Compare OpenAI and Google", "I recommend A."),
+    ("Claude here: choose A.", "Should Claude replace Gemini?", "choose A."),
+    ("This is Gemini speaking. Choose B.", "Is Gemini cheaper?", "Choose B."),
+    ("This is Claude. Choose A.", "Claude or Codex?", "Choose A."),
+    ("As Codex I would pick A.", "Codex or Gemini?", "I would pick A."),
+    ("As Claude Opus 4, I pick A.", "Claude for Review-2?", "I pick A."),
+    ("I'm an OpenAI model, so A.", "OpenAI terms?", ""),
+    ("My name is Gemini. Choose B.", "Gemini quota?", "Choose B."),
+    ("I, Claude, think A.", "Claude or Gemini?", "I think A."),
+    ("Plan A.\n— Gemini 2.5 Pro", "Gemini or Codex?", "Plan A."),
+])
+def test_anonymize_removes_self_identification_even_for_names_the_brief_uses(text, brief, expected):
+    assert council_pc.anonymize(text, brief)[0] == expected
+
+
+@pytest.mark.parametrize("text", [
+    "As Claude suggested, plan one is cheaper.",
+    "Claude here is the cheaper seat.",
+    "This is Claude's strength.",
+    "- Gemini is cheaper; Codex is faster.",
+    "As OpenAI notes, the quota resets daily.",
+])
+def test_anonymize_keeps_content_about_models_the_brief_names(text):
+    brief = "Compare Claude, Gemini and Codex (OpenAI) as reviewers."
+    assert council_pc.anonymize(text, brief) == (text, 0)
+
+
 def test_anonymize_leaves_untouched_lines_and_their_spacing_alone():
     text = "Plan:\n  - step one\n    detail  aligned\n```\ncode  block\n```\nAs Codex,  I agree."
     cleaned, removed = council_pc.anonymize(text, BRIEF)

@@ -57,11 +57,13 @@ LIMITS: never send, pay, commit a price or agree a vendor term.
    Check.
 2. The outside models cannot open Notion, Drive or mail. They answer from the
    brief and their own knowledge, so the brief carries every fact they need.
-3. What leaves the PC: the brief and the answers go to OpenAI (Codex, under
-   Joe's ChatGPT plan) and Google (Gemini, on a free API key whose terms may
-   let Google read and use prompts to improve its products: Needs Source
-   Check). Quote only what the question needs. Personal and Room 10 material
-   never enters a brief.
+3. What leaves the PC: the brief goes to three vendors: OpenAI (Codex, under
+   Joe's ChatGPT plan), Google (Gemini, on a free API key whose terms may let
+   Google read and use prompts to improve its products: Needs Source Check)
+   and Anthropic (the Claude seat, under Joe's Claude plan). In the review
+   stage each vendor also receives the other two seats' answers. Quote only
+   what the question needs. Personal and Room 10 material never enters a
+   brief.
 4. Write no model name into the brief unless the question is about the models.
 
 ## 3. Run the script
@@ -80,9 +82,10 @@ python scripts/council_pc.py RUN-FOLDER/brief.md --out RUN-FOLDER/out
 - A 503 or overload answer (Gemini's usual failure) is retried twice, after 20
   and 40 seconds. Any other failure, a timeout or a CLI that is not installed
   is not retried; that seat is left out and the run goes on.
-- Stage 2: the script removes self-identification (model, vendor and tool
-  names the brief does not use), shuffles the answers under the letters A, B
-  and C, and asks every seat that answered to review the answers it did not
+- Stage 2: the script removes self-identification ("As Claude, ...", "I'm an
+  OpenAI model", "Gemini here:", signature lines) whatever the brief says, and
+  model and vendor names the brief does not use; it shuffles the answers under
+  the letters A, B and C, and asks every seat that answered to review the answers it did not
   write: one finding per bullet with evidence and a verdict, then a ranking.
 - It writes three files into the new folder: `bundle.md` (brief, answers,
   reviews and a pairwise ranking table, letters only), `authors.json` (letter
@@ -98,7 +101,8 @@ The chair is this session. It wrote no answer. It follows council-board skill
 section 5, with these differences:
 
 1. Read `bundle.md` only. Do not open `authors.json` or `run.json` yet; the
-   answers stay letters while you judge.
+   answers stay letters while you judge. If an answer still names the model
+   that wrote it, ignore the name and judge the content.
 2. Answer each Fix or Reject finding in the reviews: accepted (with the
    change) or rejected (with the reason and the evidence from the brief).
 3. Write Final: the execution-ready answer, built from the best-supported

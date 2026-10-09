@@ -56,20 +56,41 @@ TRANSIENT = re.compile(r"\b503\b|\bUNAVAILABLE\b|high demand|overloaded", re.I)
 ANSI = re.compile(r"\x1b\[[0-9;?]*[ -/]*[@-~]")
 NOISE = re.compile(r"^(Loaded cached credentials\.?)\s*$", re.I)
 
-# Self-identification is always removed. Model and vendor names are replaced only
-# when the brief does not use them: a brief about the models makes them content.
-MODEL_NAMES = r"(?:Claude|Codex|ChatGPT|GPT|Gemini|Bard)"
+# Self-identification is always removed, whatever the brief says. Model and vendor
+# names are replaced too, but only when the brief does not use them: a brief about
+# the models makes them content ("such as Gemini", "Claude costs more" stay).
+MODEL_NAMES = r"(?:Claude|Codex|ChatGPT|GPT(?:-[\w.]+)?|Gemini|Bard)"
 VENDOR_NAMES = r"(?:Anthropic|OpenAI|Google(?: DeepMind)?|DeepMind)"
-# "As ..." counts only at the start of a line or a sentence, so "such as Gemini" stays.
+IDENTITY = rf"(?:{MODEL_NAMES}|{VENDOR_NAMES})"
+VERSION = r"(?:\s+(?:\d[\w.]*|Code|CLI|Opus|Sonnet|Haiku|Fable|Pro|Flash|Ultra))*"
+# A self-introduction counts only at the start of a line or a sentence.
 START = r"(^[ \t>*#-]*|[.!?;:][ \t]+)"
+# "As X" introduces the writer only when a comma or "I", "we" or "my" follows.
+SPEAKER = r"(?:,|(?=\s+(?:I|we|my)\b))"
 SELF_ID = [  # (pattern, replacement); each runs on one line
-    (re.compile(rf"\bI(?: am|'m|’m)\s+(?:an?\s+|the\s+)?{MODEL_NAMES}\b[^.!?\n]*[.!?]?[ \t]*", re.I), ""),
-    (re.compile(rf"{START}as\s+(?:an?\s+)?{MODEL_NAMES}\b(?:[ \t\w.-]*?\b(?:model|assistant)\b)?,?[ \t]*",
-                re.I), r"\1"),
+    # I am Claude. / I'm an OpenAI model, ...
+    (re.compile(rf"\bI(?: am|'m|’m)\s+(?:an?\s+|the\s+)?{IDENTITY}\b[^.!?\n]*[.!?]?[ \t]*", re.I), ""),
+    # My name is Gemini.
+    (re.compile(rf"\bmy name is\s+{MODEL_NAMES}\b[^.!?\n]*[.!?]?[ \t]*", re.I), ""),
+    # As Claude, ... / As Codex I ... / As a Gemini model, ...
+    (re.compile(rf"{START}as\s+(?:an?\s+|the\s+)?{MODEL_NAMES}{VERSION}"
+                rf"(?:\s+(?:model|assistant)\b)?{SPEAKER}[ \t]*", re.I), r"\1"),
+    # As an OpenAI model, ... / As the Google assistant I ...
+    (re.compile(rf"{START}as\s+(?:an?\s+|the\s+)?{VENDOR_NAMES}(?:\s+[\w.-]+)*?\s+(?:model|assistant|AI|system)\b"
+                rf"{SPEAKER}[ \t]*", re.I), r"\1"),
+    # As an AI language model, ...
     (re.compile(rf"{START}as an? (?:AI(?:\s+(?:language\s+)?(?:model|assistant))?|(?:large\s+)?language\s+model)"
                 r"\b,?[ \t]*", re.I), r"\1"),
+    # Claude here: ... / This is Gemini speaking. / This is Codex.
+    (re.compile(rf"{START}(?:this is\s+)?{MODEL_NAMES}{VERSION}\s+(?:here|speaking)[:,.!—-][ \t]*", re.I), r"\1"),
+    (re.compile(rf"{START}this is\s+{MODEL_NAMES}{VERSION}\s*(?:[,.:!]|$)[ \t]*", re.I), r"\1"),
+    # I, Claude, think ...
+    (re.compile(rf"(?<=\bI),\s+{MODEL_NAMES}{VERSION},", re.I), ""),
+    # I was trained by Google.
     (re.compile(rf"\bI(?: am|'m|’m| was)\s+(?:an?\s+[\w -]*?\s*)?(?:made|developed|trained|built|created) by "
                 rf"{VENDOR_NAMES}\b[.,]?[ \t]*", re.I), ""),
+    # A signature line: "— Claude", "-- Gemini 2.5 Pro"
+    (re.compile(rf"^[ \t]*(?:—|--)[ \t]*{IDENTITY}\b.*$", re.I), ""),
 ]
 NAMES = [(name, re.compile(pattern, re.I)) for name, pattern in [
     ("Claude", r"\bClaude(?:\s+(?:Code|Opus|Sonnet|Haiku|Fable))?(?:\s+\d+(?:\.\d+)*)?\b"),
@@ -121,6 +142,7 @@ End each answer's findings with: Overall: Accept, Fix or Reject.
 Then rank the answers on one last line, best first, each letter once, in this form:
 RANKING: {example}
 Rank on correctness first, then completeness, then use to the person who must act on it.
+If an answer still names the model that wrote it, ignore the name and judge the content.
 Do not name yourself, your model, your vendor or your tool.
 
 BRIEF
