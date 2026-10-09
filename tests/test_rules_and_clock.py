@@ -142,6 +142,11 @@ def test_today_shows_codes_with_their_description_and_keeps_one_mirror_file():
     assert "as new files" not in prompt and "[SUPERSEDED]" not in prompt
     assert "keeps its link" in prompt and '"DRIVE WRITE:" row in [[INBOX]]' in prompt
     assert "Drive recorder lane" in read(ROUTINES / "L2-render.md").split("## Prompt")[0]
+    # a later render names each existing mirror by its own key, and counts what it queued
+    assert "[[NOW_MIRROR]]" in prompt and "[[KERNEL_MIRROR]]" in prompt
+    assert {"NOW_MIRROR", "KERNEL_MIRROR"} <= set(defined_keys())
+    assert "rows changed (0)" not in prompt and 'per "DRIVE WRITE:" row filed' in prompt
+    assert "never create the mirror again" in prompt
 
 
 def test_the_drive_recorder_that_applies_drive_write_rows_is_listed():

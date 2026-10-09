@@ -39,10 +39,10 @@ WRITE
      filtered to Status Needs Joe (no count), so every open item stays one tap away;
    - the lanes that missed their run.
    A line that names a task, item or order shows it as TASK-ID (DESCRIPTION), never the code alone. No overdue lists and no counts of late items.
-7. After Joe's typed cutover yes only: render PCOS_NOW [MIRROR] and KERNEL.md in Drive from the rows and the kernel page. Each mirror is one Drive file that keeps its link: the first render creates it; every later render hands the new text to the Drive recorder as one "DRIVE WRITE:" row in [[INBOX]] (TEXT RULES b), never a new copy. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
+7. After Joe's typed cutover yes only: render [[NOW_MIRROR]] (PCOS_NOW [MIRROR]) and [[KERNEL_MIRROR]] (KERNEL.md) in Drive from the rows and the kernel page. Each mirror is one Drive file that keeps its link. When a mirror key does not resolve and no "DRIVE WRITE:" row in [[INBOX]] registering that key is still open, this is the first render: create that file, then file one "DRIVE WRITE:" row that adds the key with the file's title and ID to the private Drive map (PCOS_AGENT_INPUT_IDS), and log both in [[CHANGELOG]]. While that row is open, never create the mirror again: skip it and say so in the result. Every later render hands the new text to the Drive recorder as one "DRIVE WRITE:" row in [[INBOX]] per mirror, naming the mirror key (TEXT RULES b), never a new copy. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
 
 END OF RUN
-8. One [[CHANGELOG]] row per page or file written. One heartbeat in [[LANES]]: lane L2, started, finished, kernel version, rows changed (0), result.
+8. One [[CHANGELOG]] row per page or file written and per "DRIVE WRITE:" row filed. One heartbeat in [[LANES]]: lane L2, started, finished, kernel version, rows changed (the "DRIVE WRITE:" rows filed, 0 before cutover), result; the result names each mirror as created, queued for the recorder or unchanged.
 9. Connector failure: retry once. Then write a Blocked row in [[INBOX]] and stop.
 10. Return three lines: Today lines written, decisions shown, lanes flagged as missed.
 END
@@ -72,5 +72,7 @@ QUEUE_v6 item QC18-R
 v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). Step 6 shows codes with their description; step 7 keeps
-each mirror in one file through the Drive recorder instead of new copies. | four live Rules rows bound only the EXO lane, and
+each mirror in one file through the Drive recorder instead of new copies, under the keys
+[[NOW_MIRROR]] and [[KERNEL_MIRROR]] that the first render registers; step 8 counts and logs
+the queued rows (Codex review of PR 7). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

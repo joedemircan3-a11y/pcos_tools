@@ -31,6 +31,10 @@ hour apart until 2026-11-01. Built by Claude (Claude Code on the web) from main
   (installed 2026-10-08 outside this repository) is listed in `routines/_INDEX.md`
   and named as L2's dependency for its mirrors, so no lane hands writes to a
   consumer the repository does not show.
+- Codex review, round 2: keys `NOW_MIRROR` and `KERNEL_MIRROR` (planned, at cutover)
+  for L2's two mirrors; the first render records each file's ID under its key, later
+  renders name the key in their "DRIVE WRITE:" rows; the L2 heartbeat counts the
+  queued rows and logs each in the Changelog.
 - `tests/test_rules_and_clock.py`: fails when a card or Routine drops the rules,
   when an output template shows an item code without a DESCRIPTION slot, or when a
   Routine, card or skill names a time zone other than America/Mexico_City.

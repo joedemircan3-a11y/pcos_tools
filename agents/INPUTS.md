@@ -57,6 +57,8 @@ build session), **planned** (a later queue item or register entry creates it).
 | `GOLDEN_SET` | Golden Set | Notion database | Past corrections used as the eval set | exists |
 | `INBOX` | Inbox | Notion database | DELTA rows (source, scope, summary, why, next action, confidence, status) | build day |
 | `LANES` | Lanes | Notion database | One heartbeat row per scheduled run | build day |
+| `NOW_MIRROR` | PCOS_NOW [MIRROR] | Drive | The rendered mirror of the rows after cutover, one file kept under one link; L2's first post-cutover render creates it and records its ID under this key in the private map | planned (cutover) |
+| `KERNEL_MIRROR` | KERNEL.md, the rendered kernel mirror | Drive | The kernel page rendered after cutover, one file kept under one link; created and keyed like `NOW_MIRROR`. Not `KERNEL`, which is the source page | planned (cutover) |
 | `TODAY` | Today | Notion page | Rendered daily page, at most 12 lines | build day |
 | `INBOX_FOLDER` | _PCOS_INBOX | Drive folder | DELTA files (fallback when a Notion write fails) | exists |
 | `CHANGELOG_FOLDER` | _PCOS_CHANGELOG | Drive folder | Per-run change entries in Drive | exists |
@@ -147,4 +149,6 @@ writes its own database | PCOS QUEUE_v6 item QC24, QUEUE_v7 amendment
 v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | `EMAIL_RULES`
 (exists, v4.1) | the email rules are one of the four live rules for text Joe reads,
 which every card and Routine now carries (agents/CARD_TEMPLATE.md); the kernel key map
-gets the same key in queue item QW29 | PCOS QUEUE_v10 item QC28
+gets the same key in queue item QW29. `NOW_MIRROR` and `KERNEL_MIRROR` (planned, at
+cutover): the L2 mirrors now stay one file each, so a later render needs a key for
+each existing file (Codex review of PR 7) | PCOS QUEUE_v10 item QC28
