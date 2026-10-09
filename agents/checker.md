@@ -1,10 +1,10 @@
 # Card: checker
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-03 (L7 checker lane: generator/checker split, Claude-internal council, checklist per job type); runs the P2-04 golden-set eval
 - Lane ID: L7 (planned)
-- Skills: [checker v0.1](../skills/checker/SKILL.md)
+- Skills: [checker v0.2](../skills/checker/SKILL.md)
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -65,6 +65,13 @@ a vendor, promotes canon or deletes.
   - A question that matches an answered one is rejected.
   - Fix loops stop after 5 rounds (the iteration cap from the loop-until-verified
     pattern). Open findings then go to Joe as one card item.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -120,3 +127,10 @@ before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry
 the records searched before asking Joe, and the kernel key map holds the REGISTRY key
 since QK23 (its open point: the cards that need the registry add the key) | PCOS
 QUEUE_v7, item QC24 amendment
+
+v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

@@ -1,6 +1,6 @@
 # Checker checklists, one per job type
 
-Version v0.1, 2026-10-01. Loaded by [the checker skill](../SKILL.md) step 2.
+Version v0.2, 2026-10-09. Loaded by [the checker skill](../SKILL.md) step 2.
 Keys (`[[KEY]]`) are defined in `agents/INPUTS.md`. "Required" sources are
 opened by the checker itself in every check. Rule numbers refer to the kernel
 laws (L1 to L12) and Rules rows. Until cutover, the same laws are in
@@ -14,6 +14,19 @@ Every checklist ends with the common checks:
 - C3 Hard stops: none present (skill step 7).
 - C4 Run record: kernel version, sources opened with keys and IDs, one Changelog
   row per change.
+- C5 Live text rules (`agents/CARD_TEMPLATE.md`, "Live rules for text Joe
+  reads"), on every output Joe reads. Required: [[EMAIL_RULES]] for mail and
+  message text; [[PEOPLE]] and the owner-map rows in [[RULES]] for names.
+  (a) Every item code, SAP code, order number or Task ID stands with its plain
+  description; a code alone is a FAIL. (b) Only when the run changed a Drive
+  file: the change went through a "DRIVE WRITE:" row in [[INBOX]] for the Drive
+  recorder, the file was not rebuilt as a copy, and no parallel list was started.
+  (c) Only when the output holds mail or message text: it passes [[EMAIL_RULES]]:
+  the language pass done, no sentence split or merged, a line breaks only right
+  after a comma. (d) Every person is named as [[PEOPLE]] and the owner map
+  resolve the name; where two people share a name, by address. A clause that
+  does not apply to the output is PASS with the evidence "not applicable: no
+  Drive write" or "not applicable: no mail or message text".
 
 ## mail-draft
 
@@ -33,9 +46,10 @@ for a commitments-lane draft, its [[COMMITMENTS]] row.
    reply into an external chain.
 4. Route 3 is a reply on the original thread, never a retyped new message.
 5. Where two people share a name, the address is used, never the bare name.
-6. Language and style follow the brief rules: the thread's language for that
-   counterpart, sign-off "best regards", signature inserted, no duplicate typed
-   sign-off.
+6. Language and style follow the brief rules and [[EMAIL_RULES]]: the thread's
+   language for that counterpart, the language pass by default, sentences whole,
+   line breaks only right after a comma, sign-off "best regards", signature
+   inserted, no duplicate typed sign-off.
 7. A correction email to a team member uses observations with evidence per
    bullet, closes with "Please review below observations and let me know", and
    has no commands, no money commitments and no recalculated totals.
@@ -119,7 +133,9 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
 1. Every question passes CAL-R5: it is not already answered in Decisions, in
    Joe's replies or in a later reply.
 2. One decision per question. Self-contained, in plain words, with the key
-   facts, numbers and dates inside it; no internal ID without its meaning.
+   facts, numbers and dates inside it; no internal ID without its meaning: every
+   item code, SAP code, order number or Task ID with its plain description (a
+   bare code is a FAIL).
 3. 2 to 4 options, the recommended option first; options are concrete actions
    with owner and date where relevant; no "Other". A retro item has its six
    fixed tap options instead (item 7); a commitment item has the fixed options

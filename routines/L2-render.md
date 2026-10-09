@@ -8,7 +8,7 @@
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: agents/L2-render.md, not written yet. P2-19 requires it before the Lanes row; the build-day closeout writes it from this prompt. LOAD step 3 reads it.
 - Skills: none
-- Needs first: build day (kernel page, [[TODAY]], [[LANES]], [[INBOX]])
+- Needs first: build day (kernel page, [[TODAY]], [[LANES]], [[INBOX]]); for step 7 after cutover, the Drive recorder lane (installed 2026-10-08; routines/_INDEX.md, lanes that are not Claude Code Routines), which applies the mirror's "DRIVE WRITE:" rows
 
 ## Prompt
 
@@ -23,6 +23,8 @@ LOAD
 2. Resolve every [[KEY]] below through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 3. Read the lane card agents/L2-render.md (register P2-19) and follow it with this prompt. Where they differ, the card wins, unless it would allow something this prompt forbids. Until the card exists, run from this prompt alone and write "card missing" in the heartbeat result.
 
+TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live rules for text Joe reads"), for every text Joe reads (cards, rows, pages, drafts, Finals): (a) every item code, SAP code, order number or Task ID you show stands with its plain description, as TASK-ID (DESCRIPTION), never alone; (b) one home per record: a Drive file is changed in the same file with the same link, never rebuilt as a copy; hand each Drive write to the Drive recorder as one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place and the exact text; (c) mail and message text follows [[EMAIL_RULES]]: the language pass by default, sentences stay whole, a long sentence breaks only right after a comma; (d) name people as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve them, by address where two people share a name.
+
 READ (view mode only; SQL and rows mode hit the plan's query cap)
 4. Read the newest [[CHANGELOG]] rows first and note the time of the last hub update. Never show a row as open when a newer Changelog row closed it.
 5. Read [[NOTION_WORKLIST]] (open rows), [[DECISIONS]] (open, with default and due date), [[INBOX]] (every row whose Status is still Needs Joe, however old, plus the other rows since the last render; a Needs Joe row leaves Today only when a newer row or [[CHANGELOG]] row closes it), [[LANES]] (the last heartbeat of each lane), and today's EXO card row in [[DECISIONS]].
@@ -36,11 +38,11 @@ WRITE
      the 12 lines, show as many as fit and end with one line that links [[INBOX]]
      filtered to Status Needs Joe (no count), so every open item stays one tap away;
    - the lanes that missed their run.
-   No overdue lists and no counts of late items.
-7. After Joe's typed cutover yes only: render PCOS_NOW [MIRROR] and KERNEL.md in Drive from the rows and the kernel page, as new files. Rename the previous mirrors (created by this lane) with the suffix [SUPERSEDED] and the date, and move them to [[ARCHIVE]]. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
+   A line that names a task, item or order shows it as TASK-ID (DESCRIPTION), never the code alone. No overdue lists and no counts of late items.
+7. After Joe's typed cutover yes only: render [[NOW_MIRROR]] (PCOS_NOW [MIRROR]) and [[KERNEL_MIRROR]] (KERNEL.md) in Drive from the rows and the kernel page. Each mirror is one Drive file that keeps its link. When a mirror key does not resolve and no "DRIVE WRITE:" row in [[INBOX]] registering that key is still open, this is the first render: create that file, then file one "DRIVE WRITE:" row that adds the key with the file's title and ID to the private Drive map (PCOS_AGENT_INPUT_IDS), and log both in [[CHANGELOG]]. While that row is open, never create the mirror again: skip it and say so in the result. Every later render hands the new text to the Drive recorder as one "DRIVE WRITE:" row in [[INBOX]] per mirror, naming the mirror key (TEXT RULES b), never a new copy. When a "DRIVE WRITE:" row for that mirror is still open, read it and replace its text with this render's full text instead of filing another row, so at most one write per mirror waits and the newest snapshot wins. Before cutover, never touch the Drive PCOS_NOW: the hand-written file is canon until then.
 
 END OF RUN
-8. One [[CHANGELOG]] row per page or file written. One heartbeat in [[LANES]]: lane L2, started, finished, kernel version, rows changed (0), result.
+8. One [[CHANGELOG]] row per page or file written and per "DRIVE WRITE:" row filed or replaced. One heartbeat in [[LANES]]: lane L2, started, finished, kernel version, rows changed (the "DRIVE WRITE:" rows filed or replaced, 0 before cutover), result; the result names each mirror as created, queued for the recorder or unchanged.
 9. Connector failure: retry once. Then write a Blocked row in [[INBOX]] and stop.
 10. Return three lines: Today lines written, decisions shown, lanes flagged as missed.
 END
@@ -66,3 +68,12 @@ v0.4 | 2026-10-06 | Claude Code on the web, queue item QC18-R | when the open Ne
 do not fit in the 12 lines, Today ends with a link to all of them in the Inbox | with more
 Needs Joe rows than lines, some open items fell off Today (Codex review of PR 2) | PCOS
 QUEUE_v6 item QC18-R
+
+v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
+the live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names). Step 6 shows codes with their description; step 7 keeps
+each mirror in one file through the Drive recorder instead of new copies, under the keys
+[[NOW_MIRROR]] and [[KERNEL_MIRROR]] that the first render registers; step 8 counts and logs
+the queued rows; an open row for a mirror is replaced with the newest text, never
+duplicated (Codex review of PR 7). | four live Rules rows bound only the EXO lane, and
+the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

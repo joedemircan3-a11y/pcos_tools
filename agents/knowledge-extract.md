@@ -1,11 +1,11 @@
 # Card: knowledge-extract
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-16 stage 1 (claim extraction into the Knowledge database, backlog pass 20 files a run); needs P2-12 indexes
 - Lane ID: pending
-- Skills: knowledge-extract (planned with P2-16); claim rows checked with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Skills: knowledge-extract (planned with P2-16); claim rows checked with [checker v0.2](../skills/checker/SKILL.md)
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -52,6 +52,13 @@ or the Personal Knowledge Layer; go over the batch cap.
     file is not filed until its index line exists.
   - Internal knowledge first. Internet research goes into RAW through the
     research runs (P2-15), never through this lane.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -97,3 +104,10 @@ default Opus batches collided with Review-2 on Claude Opus, which must never be
 the extracting model and cannot find out who extracted; labeling every claim
 Candidate broke Law 4 for claims the source states (Codex reviews of PR 2 and
 PR 1) | PCOS QUEUE_v4 item QC18
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

@@ -1,10 +1,10 @@
 # Card: intake-email
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-09 (team access Door 1: Outlook intake, hourly lane, allowlist, reply with Joe in cc, Needs Joe outside the allowlist or on pricing, payment or vendors)
 - Lane ID: pending
-- Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); every reply checked with [checker v0.1](../skills/checker/SKILL.md)
+- Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); every reply checked with [checker v0.2](../skills/checker/SKILL.md)
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -64,6 +64,13 @@ source.
   both open today: the five addresses from Joe, and a Live kernel rule row that
   makes the Door 1 exception. Until both exist the lane drafts only, and Joe
   sends from Drafts.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -113,3 +120,10 @@ before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry
 the records searched before asking Joe, and the kernel key map holds the REGISTRY key
 since QK23 (its open point: the cards that need the registry add the key) | PCOS
 QUEUE_v7, item QC24 amendment
+
+v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

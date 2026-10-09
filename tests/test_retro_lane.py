@@ -124,9 +124,9 @@ def test_answers_are_filed_without_touching_the_mail():
 
 
 def test_the_evening_slot_moved_from_exo_to_retro():
-    assert cron("retro") == ("53", "18", "*", "America/Matamoros")
+    assert cron("retro") == ("53", "18", "*", "America/Mexico_City")
     minute, hour, weekday, zone = cron("exo")
-    assert (hour, weekday, zone) == ("7,13", "*", "America/Matamoros")
+    assert (hour, weekday, zone) == ("7,13", "*", "America/Mexico_City")
     for path in (EXO_CARD, EXO_SKILL):
         assert "07:00, 13:00 and 19:00" not in read(path)
 
@@ -154,7 +154,7 @@ def test_backtest_is_blind_capped_and_never_asks_joe():
 def test_backtest_runs_on_sunday_before_l4():
     minute, hour, weekday, zone = cron("ledger-backtest")
     l4_minute, l4_hour, l4_weekday, l4_zone = cron("L4-weekly")
-    assert weekday == l4_weekday == "0" and zone == l4_zone == "UTC"
+    assert weekday == l4_weekday == "0" and zone == l4_zone == "America/Mexico_City"
     assert int(hour) < int(l4_hour)
 
 

@@ -1,10 +1,10 @@
 # Card: weekly-evolve
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-05 (L4 Weekly Evolve rewrite: output = versioned kernel and rule candidates with reason and source, not reports); runs the P2-04 gate; later carries P2-17 (method loop)
 - Lane ID: L4 (planned)
-- Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md); evals run with [checker v0.1](../skills/checker/SKILL.md)
+- Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md); evals run with [checker v0.2](../skills/checker/SKILL.md)
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -65,6 +65,13 @@ candidate belongs.
   - Three numbers: corrections per run, Needs Joe rows per week, eval pass rate.
     Down, down, up means working; anything else pauses new promotions and flags
     Joe.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -87,7 +94,7 @@ candidate belongs.
 
 ## 6. Trigger and owner model
 
-- Trigger: Sunday 15:00 UTC (L4 slot). On demand: "run weekly-evolve".
+- Trigger: Sunday 09:00 America/Mexico_City (L4 slot). On demand: "run weekly-evolve".
 - Runs on: Claude scheduled task (Notion and Drive connectors); GitHub through
   Claude Code on the web for card and skill pull requests.
 - Model: Claude Fable chairs and writes the candidates. The checker lane scores
@@ -111,3 +118,10 @@ before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry
 the records searched before asking Joe, and the kernel key map holds the REGISTRY key
 since QK23 (its open point: the cards that need the registry add the key) | PCOS
 QUEUE_v7, item QC24 amendment
+
+v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

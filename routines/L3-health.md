@@ -23,6 +23,8 @@ LOAD
 2. Resolve every [[KEY]] below through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 3. Read the lane card agents/L3-health.md (register P2-19) and follow it with this prompt. Where they differ, the card wins, unless it would allow something this prompt forbids. Until the card exists, run from this prompt alone and write "card missing" in the heartbeat result.
 
+TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live rules for text Joe reads"), for every text Joe reads (cards, rows, pages, drafts, Finals): (a) every item code, SAP code, order number or Task ID you show stands with its plain description, as TASK-ID (DESCRIPTION), never alone; (b) one home per record: a Drive file is changed in the same file with the same link, never rebuilt as a copy; hand each Drive write to the Drive recorder as one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place and the exact text; (c) mail and message text follows [[EMAIL_RULES]]: the language pass by default, sentences stay whole, a long sentence breaks only right after a comma; (d) name people as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve them, by address where two people share a name.
+
 CHECK (view mode reads)
 4. Missed runs: for each lane in the kernel lane table, compare its schedule with its heartbeats in [[LANES]] over the last 24 hours. Each missing run is a finding (lane, expected time).
 5. Stale kernel: a heartbeat or Changelog row from the last 24 hours stamped with an older kernel version than the current one. Older rows were current when they were written.
@@ -55,3 +57,8 @@ QUEUE_v4 item QC18
 v0.3 | 2026-10-06 | Claude Code on the web, queue item QC18 | step 5 looks only at the last
 24 hours | the unbounded check re-flagged the whole history after every kernel change (Codex
 review of PR 2) | PCOS QUEUE_v4 item QC18
+
+v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
+the live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names). | four live Rules rows bound only the EXO lane, and
+the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

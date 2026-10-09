@@ -1,10 +1,10 @@
 # Card: commitments
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-31 (Commitments lane: every promise in email becomes a tracked item with a due date, closure only on evidence, follow-up through the EXO and retro cards)
 - Lane ID: pending
-- Skills: [commitments v0.1](../skills/commitments/SKILL.md); every draft checked with [checker v0.1](../skills/checker/SKILL.md) (job type mail-draft)
+- Skills: [commitments v0.2](../skills/commitments/SKILL.md); every draft checked with [checker v0.2](../skills/checker/SKILL.md) (job type mail-draft)
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -87,6 +87,13 @@ late items; ask Joe anything outside the EXO and retro cards.
   - At most two commitment items per card; the EXO skip rule applies; no list
     views (Joe's standing preference: one step at a time, no walls of open
     items).
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -116,7 +123,7 @@ late items; ask Joe anything outside the EXO and retro cards.
 
 ## 6. Trigger and owner model
 
-- Trigger: weekdays at 06:40, 12:40 and 18:40 America/Matamoros, each ahead of
+- Trigger: weekdays at 06:40, 12:40 and 18:40 America/Mexico_City, each ahead of
   the next card (EXO 07:00 and 13:00, retro 19:00). Once at install, the
   commitments-backfill Routine sweeps the last 30 days of sent mail.
 - Runs on: Claude Code Routine (Microsoft 365, Notion and Drive connectors).
@@ -137,3 +144,10 @@ register P2-31; Joe's gap of 2026-10-06 (promises in mail never become tracked
 items), confirmed by the auditor: no lane extracts commitments from sent mail,
 keeps a due date or follows up | PCOS QUEUE_v6 item QC24 with the QUEUE_v7
 amendment
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

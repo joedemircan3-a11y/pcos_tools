@@ -1,10 +1,10 @@
 # Card: prediction-ledger
 
-- Version: v0.5
+- Version: v0.6
 - Status: Candidate
 - Register: P2-01 (prediction ledger: Prediction database, evidence check in the daily run, "What happened?" card, calibration block in the weekly pass)
 - Lane ID: pending
-- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md); outputs checked with [checker v0.1](../skills/checker/SKILL.md); the [ledger-backtest](ledger-backtest.md) lane runs the same predictor over settled mail history
+- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md); outputs checked with [checker v0.2](../skills/checker/SKILL.md); the [ledger-backtest](ledger-backtest.md) lane runs the same predictor over settled mail history
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -75,6 +75,13 @@ an answer.
   - Every "What happened?" question offers "unrelated / wrong direction".
   - Three wrong guesses in a row on one project: assume less there and ask one
     small question earlier.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -108,7 +115,7 @@ an answer.
 
 - Trigger: daily after the brief lane, weekdays about 07:45 Mexico City. A
   30-minute calibration pass runs on Sunday before the weekly-evolve lane
-  (Sunday 15:00 UTC). Times are Candidate until the Lanes row exists. The
+  (Sunday 09:00 America/Mexico_City). Times are Candidate until the Lanes row exists. The
   [ledger-backtest](ledger-backtest.md) lane scores the same predictor against
   settled mail history on Sundays before the calibration pass.
 - Runs on: Claude scheduled task (Notion and Microsoft 365 connectors).
@@ -149,3 +156,10 @@ before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry
 the records searched before asking Joe, and the kernel key map holds the REGISTRY key
 since QK23 (its open point: the cards that need the registry add the key) | PCOS
 QUEUE_v7, item QC24 amendment
+
+v0.6 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"

@@ -1,9 +1,9 @@
 ---
 name: commitments
-description: Turn every promise in Joe's mail into a tracked commitment with a due date, check it against the record, and pull Joe to finish what he owes, one small step at a time. Use in the weekday commitments runs (06:40, 12:40 and 18:40 America/Matamoros), for the one-time backfill of the last 30 days of sent mail, when the EXO or retro lane shows a commitment item or files its answer, and when Joe asks what he owes or is owed.
+description: Turn every promise in Joe's mail into a tracked commitment with a due date, check it against the record, and pull Joe to finish what he owes, one small step at a time. Use in the weekday commitments runs (06:40, 12:40 and 18:40 America/Mexico_City), for the one-time backfill of the last 30 days of sent mail, when the EXO or retro lane shows a commitment item or files its answer, and when Joe asks what he owes or is owed.
 compatibility: Needs the PCOS Notion hub (Commitments, Decisions, Changelog, Inbox, Lanes), the Drive Worklist, the owner-map rows in Rules, read access to Outlook (Inbox, Sent Items, routed folders) and write access to Outlook Drafts through the Microsoft 365 connector.
 metadata:
-  version: "0.1"
+  version: "0.2"
   status: Candidate
   register: P2-31
   kernel: "1.2"
@@ -23,7 +23,7 @@ in the private map named there).
 
 ## 1. Where the lane sits
 
-- The lane runs on weekdays at 06:40, 12:40 and 18:40 America/Matamoros, each
+- The lane runs on weekdays at 06:40, 12:40 and 18:40 America/Mexico_City, each
   run ahead of a card: EXO at 07:00 and 13:00 (today's work), retro at 19:00
   (the past).
 - It owns the [[COMMITMENTS]] rows: it extracts them (section 2), reads their
@@ -113,7 +113,7 @@ until the thread's evidence or Joe's answer confirms it.
 
 Read the phrase in the sender's time zone: the UTC offset in the message's Date
 header; when it has none, the time zone [[PEOPLE]] records for the sender; else
-America/Matamoros, and the Due is Candidate. The send date is the sender's
+America/Mexico_City, and the Due is Candidate. The send date is the sender's
 local date when the message was sent.
 
 | Phrase in the mail | Due |
@@ -168,7 +168,7 @@ thread has a message later than the evidence or answer that closed it:
 
 ## 5. Status
 
-Dates are read in America/Matamoros on the day of the run. A row without a Due
+Dates are read in America/Mexico_City on the day of the run. A row without a Due
 uses its Next check as its date, with one difference: it is Open until that
 day, Due soon on it and Overdue after it, so it never comes to a card before
 its Next check.

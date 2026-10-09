@@ -22,6 +22,8 @@ LOAD
 1. Read the PCOS kernel page and note its version. If anything you read shows a newer version, stop and reload.
 2. Read agents/knowledge-review.md and skills/knowledge-review/SKILL.md. If the skill file does not exist, stop and write a Blocked row in [[INBOX]]. Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28).
 
+TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live rules for text Joe reads"), for every text Joe reads (cards, rows, pages, drafts, Finals): (a) every item code, SAP code, order number or Task ID you show stands with its plain description, as TASK-ID (DESCRIPTION), never alone; (b) one home per record: a Drive file is changed in the same file with the same link, never rebuilt as a copy; hand each Drive write to the Drive recorder as one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place and the exact text; (c) mail and message text follows [[EMAIL_RULES]]: the language pass by default, sentences stay whole, a long sentence breaks only right after a comma; (d) name people as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve them, by address where two people share a name.
+
 RUN
 3. Queue: [[KNOWLEDGE]] rows with Status Candidate and no Review-2 entry. Read the rows only, never the extraction run record.
 4. For each claim, open its source by Source ID and the newest source on the same subject. Write the Review-2 entry in Reviewer notes: supported, contradicted, stale, or duplicate of row X; where the evidence sits; the newest source checked, with its date.
@@ -40,3 +42,8 @@ its skill | card of queue item Q01; register P2-16 stage 2 | PCOS QUEUE_v2 item 
 v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | Model line names the extractor's
 model | the reviewer cannot find out who extracted, so the two models are fixed apart (Codex
 review of PR 2) | PCOS QUEUE_v4 item QC18
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
+the live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names). | four live Rules rows bound only the EXO lane, and
+the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

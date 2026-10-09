@@ -2,18 +2,18 @@
 
 - Status: Candidate. Create after this file is merged (queue item QW21), after the [[COMMITMENTS]] database exists; run the commitments-backfill Routine once right after the first run.
 - Lane: Commitments (register P2-31)
-- Trigger: cron `40 6,12,18 * * 1-5`, CRON_TZ=America/Matamoros (weekdays 06:40, 12:40 and 18:40, each ahead of a card: EXO 07:00 and 13:00, retro 19:00)
+- Trigger: cron `40 6,12,18 * * 1-5`, CRON_TZ=America/Mexico_City (weekdays 06:40, 12:40 and 18:40, each ahead of a card: EXO 07:00 and 13:00, retro 19:00)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Microsoft 365, Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [commitments](../agents/commitments.md)
-- Skills: [commitments v0.1](../skills/commitments/SKILL.md); [checker v0.1](../skills/checker/SKILL.md) on every draft
+- Skills: [commitments v0.2](../skills/commitments/SKILL.md); [checker v0.2](../skills/checker/SKILL.md) on every draft
 - Needs first: [[COMMITMENTS]] (QW21 creates it, fields as in skill section 2); [[LANES]], [[INBOX]] and [[CHANGELOG]] exist; the EXO and retro Routines load the commitments skill
 
 The lane reads mail itself and does not use L1's rows, so it does not depend on
-L1's order. Its order matters against the cards, which share its time zone.
-While America/Matamoros keeps daylight time (until 2026-11-01), 06:40 falls
-before L1 (06:30 America/Mexico_City); that does not change what it reads.
+L1's order. Its order matters against the cards it feeds, which run on the same
+clock (America/Mexico_City): 06:40 comes after L1 (06:30) and before the 07:00
+EXO card.
 
 ## Prompt
 
@@ -26,6 +26,8 @@ You are the PCOS Commitments lane. You turn the promises in Joe's mail into trac
 LOAD
 1. Read the PCOS kernel page and note its version. If anything you read shows a newer version, stop and reload.
 2. Read agents/commitments.md, skills/commitments/SKILL.md and skills/checker/SKILL.md (for step 6). Resolve every [[KEY]] through the kernel's "Where things are" table (until the kernel holds it: the private Drive file PCOS_AGENT_INPUT_IDS, latest version, in the folder PCOS_BUILD_KIT_2026-09-28). A key that does not resolve is Blocked; never search for a substitute.
+
+TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live rules for text Joe reads"), for every text Joe reads (cards, rows, pages, drafts, Finals): (a) every item code, SAP code, order number or Task ID you show stands with its plain description, as TASK-ID (DESCRIPTION), never alone; (b) one home per record: a Drive file is changed in the same file with the same link, never rebuilt as a copy; hand each Drive write to the Drive recorder as one [[INBOX]] row with Status Blocked and an Item that starts "DRIVE WRITE:", then the file's key, the place and the exact text; (c) mail and message text follows [[EMAIL_RULES]]: the language pass by default, sentences stay whole, a long sentence breaks only right after a comma; (d) name people as [[PEOPLE]] and the owner-map rows in [[RULES]] resolve them, by address where two people share a name.
 
 RUN
 3. Window: from the window end in the last commitments heartbeat in [[LANES]] to the start of this run (first run: the last 24 hours); at most 5 days per run, oldest first (skill section 2).
@@ -48,3 +50,8 @@ v0.1 | 2026-10-09 | Claude Code on the web, queue item QC24 | first version | re
 P2-31; Joe's gap of 2026-10-06: promises in mail never become tracked items; the run
 times come from the queue item (after L1 at 06:40, then 12:40 and 18:40 Matamoros) |
 PCOS QUEUE_v6 item QC24
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES paragraph:
+the live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
+the lanes ran on two clocks | PCOS QUEUE_v10 item QC28

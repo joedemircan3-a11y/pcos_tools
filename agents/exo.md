@@ -1,10 +1,10 @@
 # Card: exo
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-02 (EXO lane: Steps database, breakdown, cards at 07:00 and 13:00 (the 19:00 card went to the retro lane, P2-30), skip logic 2/3, interpretation cards, progress line, voice-dump parsing)
 - Lane ID: pending
-- Skills: [exo v0.2](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.1](../skills/commitments/SKILL.md) sections 7 and 8; finished outputs checked with [checker v0.1](../skills/checker/SKILL.md)
+- Skills: [exo v0.2](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8; finished outputs checked with [checker v0.2](../skills/checker/SKILL.md)
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -66,7 +66,7 @@ answered; close, drop or expire a task on silence; send or commit anything.
   5 and 7, accepted by default by Joe):
   - One step visible. Assumptions, not questions. 2 to 4 items per card, about
     30 seconds to answer.
-  - Cards at 07:00 and 13:00, America/Matamoros. The design had a 19:00 card
+  - Cards at 07:00 and 13:00, America/Mexico_City (the one clock). The design had a 19:00 card
     too; it went to the retro lane (next rule).
   - Skip rule: 2 skips, reshape the step; 3 skips, park it and ask once whether
     to drop it. Parked is the default; nothing closes on silence.
@@ -83,6 +83,13 @@ answered; close, drop or expire a task on silence; send or commit anything.
   and is due within 48 hours becomes the first item of the next card, one
   small step with a ready draft when a reply is the deliverable; at most two
   commitment items per card; no list views.
+- Live text rules ([CARD_TEMPLATE](CARD_TEMPLATE.md), "Live rules for text Joe
+  reads"; kernel 1.3 once live): (a) every item code, SAP code, order number or Task
+  ID with its plain description, written TASK-ID (DESCRIPTION) in templates; (b) one
+  home per record: a Drive file is changed in the same file, only through a "DRIVE
+  WRITE:" row in [[INBOX]] for the Drive recorder, never rebuilt as a copy; (c) mail
+  and message text by [[EMAIL_RULES]]; (d) people named as [[PEOPLE]] and the owner
+  map resolve them.
 
 ## 5. Output contract with evidence labels
 
@@ -111,7 +118,7 @@ answered; close, drop or expire a task on silence; send or commit anything.
 
 ## 6. Trigger and owner model
 
-- Trigger: 07:00 and 13:00, America/Matamoros (the 19:00 slot is the retro
+- Trigger: 07:00 and 13:00, America/Mexico_City (the 19:00 slot is the retro
   lane's). A new [[CAPTURE]] row is parsed in the next slot. On demand when Joe
   says "exo" or "next step".
 - Runs on: Claude scheduled task (Notion, Microsoft 365 and Drive connectors).
@@ -142,3 +149,10 @@ within 48 hours first, filed into the Commitments row; [[REGISTRY]] read before 
 item reaches Joe | Joe's gap of 2026-10-06 (promises in mail never become tracked
 items); kernel 1.2 section 2 step 4 names the Registry among the records searched
 before asking Joe (QK23 open point) | PCOS QUEUE_v6 item QC24, QUEUE_v7 amendment
+
+v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | part 4 states the
+live rules for text Joe reads (item codes with a description, one home per record,
+the email rules, person names); times on the one clock, America/Mexico_City | four
+live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
+QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
+lane" and "one clock for every lane"
