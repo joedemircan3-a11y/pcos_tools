@@ -86,7 +86,7 @@ answered; close, drop or expire a task on silence; send or commit anything.
 
 ## 5. Output contract with evidence labels
 
-- Card: 2 to 4 items. Each item is an assumption to confirm or fix (Form
+- Card: 2 to 4 items, or one when only one is open. Each item is an assumption to confirm or fix (Form
   assumption), a question only when no assumption is defensible (Form question),
   or an approval of a finished candidate (Form approve). At most two of them are
   commitment items, first when one is due within 48 hours, with the options of

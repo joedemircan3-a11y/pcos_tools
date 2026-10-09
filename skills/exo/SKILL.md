@@ -37,7 +37,8 @@ Input: one open row in [[WORKLIST]] and the sources named on it. Output: ordered
 
 ## 2. Build a card (each slot)
 
-Pick 2 to 4 items, in this order:
+Pick 2 to 4 items, or one when only one is open (a commitment item marked
+for the slot is never held back for want of a second), in this order:
 
 1. Commitment items: the [[COMMITMENTS]] rows the commitments lane marked for
    this slot, at most two, written and offered by the commitments skill

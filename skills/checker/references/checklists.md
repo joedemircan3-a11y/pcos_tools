@@ -126,7 +126,7 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
    of the commitments skill section 7.
 4. The "Not needed / wrong direction" option is present (the template adds it).
    A "What happened?" question also offers "unrelated / wrong direction".
-5. EXO: 2 to 4 items, assumption form unless no assumption is defensible, a
+5. EXO: 2 to 4 items (one when only one is open), assumption form unless no assumption is defensible, a
    progress line at the end, no overdue list and no count of late items; at
    most two commitment items, a Joe-owes item due within 48 hours first.
 6. One Open row in [[DECISIONS]] for the card.

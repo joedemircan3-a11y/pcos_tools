@@ -234,15 +234,38 @@ def test_every_index_row_has_the_cells_of_its_header(index):
 
 def test_an_approved_item_waits_for_its_date_without_inventing_one():
     filing = flat(section(read(SKILL), "## 7. Card items and filing the answers"))
-    approve = filing[filing.index("- approve the draft, or do the step:"):filing.index("- sent, done another way")]
+    approve = filing[filing.index("- approve the draft"):filing.index("- sent, done another way")]
     assert "the day after Due" not in approve
     assert "Due and Next check stay as they are" in approve
-    assert "not marked again while it is Due soon" in approve
+    assert "the follow-up draft included" in approve
+    assert "an Overdue row for two business days" in approve
     prepare = flat(section(read(SKILL), "## 6. Prepare the next card"))
-    assert "a Due soon row whose draft or step Joe already approved" in prepare
+    assert "a row whose draft or step Joe approved (section 7), while it waits" in prepare
+    assert "an Overdue row until two business days after the approval" in prepare
 
 
 def test_the_retro_card_keeps_room_for_marked_commitments():
     build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
     assert "The card keeps room for the commitment rows marked for this evening" in build
     assert "ledger and conflict items fill only the other places" in build
+
+
+def test_an_undated_row_never_reaches_a_card_before_its_next_check():
+    status = flat(section(read(SKILL), "## 5. Status"))
+    assert "it is Open until that day, Due soon on it and Overdue after it" in status
+
+
+def test_a_closed_row_reopens_when_later_mail_reopens_the_deliverable():
+    check = flat(section(read(SKILL), "## 4. Check the evidence (every run)"))
+    assert "every Done or Dropped row whose thread has a message later than" in check
+    assert "Reopen on mail" in check and "never reopens on silence" in check
+    status = flat(section(read(SKILL), "## 5. Status"))
+    assert "Done and Dropped are final" not in status
+
+
+def test_exo_shows_a_lone_commitment_item():
+    build = flat(section(read(EXO_SKILL), "## 2. Build a card (each slot)"))
+    assert "or one when only one is open" in build
+    assert "never held back for want of a second" in build
+    exo = flat(section(read(CHECKLISTS), "## question-card"))
+    assert "2 to 4 items (one when only one is open)" in exo

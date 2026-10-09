@@ -137,7 +137,8 @@ and Status is Moved (section 5).
 
 ## 4. Check the evidence (every run)
 
-For every row that is not Done or Dropped:
+For every row that is not Done or Dropped, and every Done or Dropped row whose
+thread has a message later than the evidence or answer that closed it:
 
 1. Read the thread through its terminal message: every message of the
    conversation in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]]. The
@@ -147,7 +148,8 @@ For every row that is not Done or Dropped:
      received) and its terminal message does not reopen it (a complaint, a
      correction, a new ask for the same deliverable): Status Done;
    - the Linked task's [[WORKLIST]] row is Done (Done-Candidate is not enough:
-     it waits for Joe's explicit close): Status Done;
+     it waits for Joe's explicit close), and no later message in the thread
+     reopens the deliverable (step 4): Status Done;
    - the thread shows the commitment called off: the ask withdrawn by the
      party who made it, or the deliverable declined or retracted by the party
      who owes it (Joe included): Status Dropped;
@@ -157,13 +159,19 @@ For every row that is not Done or Dropped:
 3. Nothing else closes a row: not silence, not a subject match, not a message
    in another thread unless it names this thread or the Linked task. Nothing
    closes on silence (Law 12).
-4. Link the task when a [[WORKLIST]] row now names the thread, and set the
+4. Reopen on mail: a later message in the thread that reopens the deliverable
+   of a Done or Dropped row (a complaint, a correction, a new ask for the same
+   deliverable) sets the row back to its status by date (section 5), with that
+   message in Evidence. A row never reopens on silence or on a subject match.
+5. Link the task when a [[WORKLIST]] row now names the thread, and set the
    status by date (section 5).
 
 ## 5. Status
 
 Dates are read in America/Matamoros on the day of the run. A row without a Due
-uses its Next check as its date.
+uses its Next check as its date, with one difference: it is Open until that
+day, Due soon on it and Overdue after it, so it never comes to a card before
+its Next check.
 
 | Status | When |
 | --- | --- |
@@ -174,8 +182,9 @@ uses its Next check as its date.
 | Done | evidence of delivery (section 4), or Joe's answer (section 7) |
 | Dropped | evidence of withdrawal (section 4), or Joe's answer (section 7) |
 
-Days overdue count from the row's date. Done and Dropped are final; a row
-leaves them only when Joe reopens it.
+Days overdue count from the row's date. A Done or Dropped row leaves that
+status only when a later message in its thread reopens the deliverable
+(section 4, step 4) or Joe reopens it.
 
 ## 6. Prepare the next card
 
@@ -202,8 +211,10 @@ EXO order: Joe owes Due soon, then Joe owes Overdue, then Owed to Joe, then
 Team member owes; the oldest date first within each. Retro order: the oldest
 date first. Not marked: a row whose item on the last card that showed it has
 an answer not filed yet (an unanswered item is marked again, and the skip rule
-counts it); a Due soon row whose draft or step Joe already approved (section
-7); a row the skip rule set aside (section 8).
+counts it); a row whose draft or step Joe approved (section 7), while it waits:
+a Due soon row until it turns Overdue, an Overdue row until two business days
+after the approval, and either until a new message arrives in its thread; a
+row the skip rule set aside (section 8).
 
 Drafts, for the marked rows only:
 
@@ -253,12 +264,14 @@ direction" to every item, and it is never added a second time):
 
 Filing, each answer Confirmed with the card ID and item as source:
 
-- approve the draft, or do the step: no Status change, and Due and Next
-  check stay as they are (a row without a Due keeps its Next check as its
-  date). Evidence notes the approval; the lane never sends. The row is not
-  marked again while it is Due soon. The evidence check closes it once the
-  thread shows delivery; if its date passes first, it turns Overdue and comes
-  back as an overdue item.
+- approve the draft (the follow-up draft included), or do the step: no Status
+  change, and Due and Next check stay as they are (a row without a Due keeps
+  its Next check as its date). Evidence notes the approval with its date; the
+  lane never sends. The row then waits off the cards (section 6): a Due soon
+  row until it turns Overdue, an Overdue row for two business days, either
+  until a new message arrives in its thread. The evidence check closes it once
+  the thread shows delivery; otherwise it comes back once the wait ends, as an
+  overdue item.
 - sent, done another way, done offline, received, delivered: Status Done.
 - moved, new date: Due = the date Joe gives (read by section 3 from the day he
   answered), the old date kept in Evidence, Status Moved. Without a date: Due
