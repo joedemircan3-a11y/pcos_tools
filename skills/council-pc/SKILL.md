@@ -74,11 +74,18 @@ From the repository folder on the PC:
 python scripts/council_pc.py RUN-FOLDER/brief.md --out RUN-FOLDER/out
 ```
 
-- Stage 1: the brief goes to the three seats at once: `codex exec` (read-only
-  sandbox), `gemini -p` and `claude -p`, a separate Claude process, never this
-  session (started without this session's `CLAUDECODE` marker, which some
-  Claude Code versions refuse as a nested session). Each runs in an empty
-  temporary folder with the prompt on stdin and 15 minutes per call.
+- Stage 1: the brief goes to the three seats at once: `codex exec`, `gemini -p`
+  and `claude -p`, a separate Claude process, never this session (started
+  without this session's `CLAUDECODE` marker, which some Claude Code versions
+  refuse as a nested session). Each runs in an empty temporary folder with the
+  prompt on stdin and 15 minutes per call.
+- The seats answer from the prompt alone, so their host tools are off: Claude
+  runs with no built-in tools and no MCP servers (`--tools ""`,
+  `--strict-mcp-config`), Gemini with a policy file that denies every tool.
+  Codex has no switch for its shell: it runs in its read-only sandbox (no
+  writes, no network for its commands) with its apps off, so it could still
+  read a file on the PC if a prompt led it there (Candidate risk, open for
+  Joe; see the card).
 - A 503 or overload answer (Gemini's usual failure) is retried twice, after 20
   and 40 seconds. Any other failure, a timeout or a CLI that is not installed
   is not retried; that seat is left out and the run goes on.
@@ -88,7 +95,9 @@ python scripts/council_pc.py RUN-FOLDER/brief.md --out RUN-FOLDER/out
   the letters A, B and C, and asks every seat that answered to review the answers it did not
   write: one finding per bullet with evidence and a verdict, then a ranking.
 - It writes three files into the new folder: `bundle.md` (brief, answers,
-  reviews and a pairwise ranking table, letters only), `authors.json` (letter
+  reviews and a pairwise ranking table, letters only; an answer is called
+  undefeated only when every comparison it is part of was ranked, and missing
+  comparisons are listed), `authors.json` (letter
   to seat) and `run.json` (attempts, exit codes, times).
 - Exit 3, Blocked: fewer than two answers. There is no bundle. Tell Joe which
   seats failed and why (from the script's last line and `run.json`), write

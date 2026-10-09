@@ -38,6 +38,15 @@ Code on the web) from main 98a1943.
   chair ignore a name that slips through. The skill's data-flow note names
   Anthropic too, and says each vendor receives the other seats' answers in
   the review stage.
+- Codex review, round 3: the seats' host tools are off (Claude `--tools ""`
+  and `--strict-mcp-config`; Gemini a policy file that denies every tool;
+  Codex its read-only sandbox and `--disable apps`; flags checked against
+  codex-cli 0.162.0, gemini 0.63.0 and Claude Code 2.1.295). Codex has no
+  switch for its shell, so a file read stays possible there: an open risk
+  for Joe and a codex-followup issue. A self-introduction loses only its
+  identity clause ("I am Claude, and Plan A is best" keeps "Plan A is
+  best"). "Undefeated" needs every comparison of the answer; missing
+  comparisons are listed in the bundle.
 - `skills/checker/references/checklists.md`: council-final covers the PC
   council (no plan round, cross-reviews, the chair worked from letters).
 - The indexes list the new card and skill; the README names the runner.

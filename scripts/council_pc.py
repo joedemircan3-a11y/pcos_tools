@@ -37,15 +37,27 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 LAST_MESSAGE = "{last_message}"  # replaced by a file path; the answer is read from that file
+NO_TOOLS = "{no_tools_policy}"  # replaced by a Gemini policy file that denies every tool
 FOLLOW = "Follow the instructions above."  # the stdin text comes first; -p appends this line
+NO_TOOLS_POLICY = """\
+[[rule]]
+toolName = "*"
+decision = "deny"
+priority = 999
+denyMessage = "A council seat answers from the prompt alone, without tools."
+"""
 
 # The prompt always goes on stdin: a Windows .cmd shim caps the command line at 8,191
-# characters, and a brief with two answers is longer than that.
+# characters, and a brief with two answers is longer than that. Each seat answers from
+# the prompt alone, so its host tools are switched off where the CLI allows it:
+# Claude gets no built-in tools and no MCP servers, Gemini a policy that denies every
+# tool, Codex its read-only sandbox (no writes, no network for commands) and no apps.
 SEATS = {
-    "codex": ["codex", "exec", "--skip-git-repo-check", "--sandbox", "read-only",
+    "codex": ["codex", "exec", "--skip-git-repo-check", "--sandbox", "read-only", "--disable", "apps",
               "--output-last-message", LAST_MESSAGE, "-"],
-    "gemini": ["gemini", "--skip-trust", "-p", FOLLOW],
-    "claude": ["claude", "-p", FOLLOW],
+    "gemini": ["gemini", "--skip-trust", "--policy", NO_TOOLS, "-p", FOLLOW],
+    # --tools takes a list, so it comes last, after the prompt argument.
+    "claude": ["claude", "-p", FOLLOW, "--strict-mcp-config", "--tools", ""],
 }
 LABELS = "ABC"
 TIMEOUT = 900       # seconds per call
@@ -65,13 +77,18 @@ IDENTITY = rf"(?:{MODEL_NAMES}|{VENDOR_NAMES})"
 VERSION = r"(?:\s+(?:\d[\w.]*|Code|CLI|Opus|Sonnet|Haiku|Fable|Pro|Flash|Ultra))*"
 # A self-introduction counts only at the start of a line or a sentence.
 START = r"(^[ \t>*#-]*|[.!?;:][ \t]+)"
+# The end of an identity clause: a short appositive ("an assistant") and the sentence end,
+# or ", and", a comma, or the next word. The rest of the sentence is kept.
+CLAUSE_END = r"(?:,\s+(?:an?|the)\s+[^.!?,\n]{0,60}?[.!?]|[.!?]|,?\s+and\b|,|(?=\s)|$)[ \t]*"
 # "As X" introduces the writer only when a comma or "I", "we" or "my" follows.
 SPEAKER = r"(?:,|(?=\s+(?:I|we|my)\b))"
 SELF_ID = [  # (pattern, replacement); each runs on one line
-    # I am Claude. / I'm an OpenAI model, ...
-    (re.compile(rf"\bI(?: am|'m|’m)\s+(?:an?\s+|the\s+)?{IDENTITY}\b[^.!?\n]*[.!?]?[ \t]*", re.I), ""),
+    # I am Claude. / I'm an OpenAI model, so ... / I am Codex, an assistant. / I am Claude, and ...
+    # Only the identity clause goes; what follows it in the sentence stays.
+    (re.compile(rf"\bI(?: am|'m|’m)\s+(?:an?\s+|the\s+)?{IDENTITY}{VERSION}(?:\s+(?:model|assistant))?\b"
+                rf"{CLAUSE_END}", re.I), ""),
     # My name is Gemini.
-    (re.compile(rf"\bmy name is\s+{MODEL_NAMES}\b[^.!?\n]*[.!?]?[ \t]*", re.I), ""),
+    (re.compile(rf"\bmy name is\s+{MODEL_NAMES}{VERSION}\b{CLAUSE_END}", re.I), ""),
     # As Claude, ... / As Codex I ... / As a Gemini model, ...
     (re.compile(rf"{START}as\s+(?:an?\s+|the\s+)?{MODEL_NAMES}{VERSION}"
                 rf"(?:\s+(?:model|assistant)\b)?{SPEAKER}[ \t]*", re.I), r"\1"),
@@ -235,7 +252,10 @@ def call(argv, prompt, timeout, retries, retry_wait):
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as workdir, \
                 tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as outdir:
             last = Path(outdir) / "last_message.txt"
-            args = [program, *(str(last) if a == LAST_MESSAGE else a for a in argv[1:])]
+            policy = Path(outdir) / "no_tools.toml"
+            policy.write_text(NO_TOOLS_POLICY, encoding="utf-8")
+            files = {LAST_MESSAGE: str(last), NO_TOOLS: str(policy)}
+            args = [program, *(files.get(a, a) for a in argv[1:])]
             started = time.monotonic()
             try:
                 returncode, stdout, stderr = run_one(args, prompt, timeout, workdir)
@@ -288,9 +308,24 @@ def tally(rankings, labels):
     return table
 
 
-def undefeated(table):
-    """Labels that won at least one comparison and lost none."""
-    return [label for label, row in table.items() if row["wins"] and not row["losses"]]
+def beaten(rankings):
+    """The set of (winner, loser) pairs the rankings show."""
+    return {(ranked[i], ranked[j]) for ranked in rankings
+            for i in range(len(ranked)) for j in range(i + 1, len(ranked))}
+
+
+def missing_pairs(rankings, labels):
+    """Pairs of answers that no parsed ranking compares."""
+    seen = {frozenset(pair) for pair in beaten(rankings)}
+    return [(a, b) for i, a in enumerate(labels) for b in labels[i + 1:] if frozenset((a, b)) not in seen]
+
+
+def undefeated(rankings, labels):
+    """Labels compared with every other answer and never ranked below one."""
+    pairs = beaten(rankings)
+    return [label for label in labels if len(labels) > 1
+            and all((label, other) in pairs and (other, label) not in pairs
+                    for other in labels if other != label)]
 
 
 def review_prompt(brief, answers, letters):
@@ -309,7 +344,7 @@ def run_parallel(jobs, timeout, retries, retry_wait):
         return {name: future.result() for name, future in futures.items()}
 
 
-def write_bundle(path, brief, answers, removed, reviews, table, missing_seats, started, finished):
+def write_bundle(path, brief, answers, removed, reviews, rankings, missing_seats, started, finished):
     lines = [
         "# PC council bundle",
         "",
@@ -349,10 +384,16 @@ def write_bundle(path, brief, answers, removed, reviews, table, missing_seats, s
         "| Answer | First places | Pairwise wins | Pairwise losses | Ranked by |",
         "| --- | --- | --- | --- | --- |",
     ]
-    for label, row in table.items():
+    labels = list(answers)
+    for label, row in tally(rankings, labels).items():
         lines.append(f"| {label} | {row['first']} | {row['wins']} | {row['losses']} | {row['ranked_by']} |")
-    best = undefeated(table)
-    lines += ["", f"Undefeated: {', '.join(best) if best else 'none (no answer won every comparison)'}", ""]
+    best = undefeated(rankings, labels)
+    gaps = missing_pairs(rankings, labels)
+    lines += ["", f"Undefeated: {', '.join(best) if best else 'none (no answer was compared with every other and won)'}"]
+    if gaps:
+        lines.append("Comparisons missing (a review or its ranking is missing): "
+                     + ", ".join(f"{a} and {b}" for a, b in gaps))
+    lines.append("")
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
@@ -463,10 +504,10 @@ def main(argv=None):
         cleaned = anonymize(text, brief)[0] if text is not None else None
         ranking = parse_ranking(cleaned, letters_of[name]) if cleaned else None
         reviews[label] = {"letters": letters_of[name], "text": cleaned, "ranking": ranking}
-    table = tally([r["ranking"] for r in reviews.values() if r["ranking"]], list(answers))
+    rankings = [r["ranking"] for r in reviews.values() if r["ranking"]]
 
     finished = utc_now()
-    write_bundle(args.out / "bundle.md", brief, answers, removed, reviews, table, missing, started, finished)
+    write_bundle(args.out / "bundle.md", brief, answers, removed, reviews, rankings, missing, started, finished)
     (args.out / "authors.json").write_text(json.dumps(authors, indent=2), encoding="utf-8")
     record["finished"] = finished
     record["outcome"] = "bundle written"

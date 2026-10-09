@@ -35,8 +35,11 @@ term; put a brief, an answer or a run file into the public repository.
 ## 3. Tools allowed
 
 - Terminal on Joe's PC: `python scripts/council_pc.py`, which starts the
-  Codex CLI (read-only sandbox), the Gemini CLI and the Claude Code CLI in an
-  empty temporary folder and writes only into the new run folder.
+  Codex CLI (read-only sandbox, apps off), the Gemini CLI (every tool denied)
+  and the Claude Code CLI (no tools, no MCP servers) in an empty temporary
+  folder and writes only into the new run folder. Open risk (Candidate, for
+  Joe): Codex has no switch for its shell, so a prompt could lead it to read
+  a file on the PC.
 - A checker subagent on a different Claude model.
 - Notion: write Task, Draft, Review-1, Review-2, Final, Dissent, Status,
   Deadline and, last, Author on the one [[COUNCIL]] row; [[CHANGELOG]] rows;

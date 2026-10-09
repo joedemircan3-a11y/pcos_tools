@@ -39,6 +39,8 @@ if mode == "nested" and "CLAUDECODE" in __import__("os").environ:
 if mode.startswith("503x") and n <= int(mode[4:]):
     sys.stderr.write("[API Error: got status: 503 UNAVAILABLE. The model is currently experiencing high demand.]\n")
     sys.exit(1)
+if mode == "policy" and 'toolName = "*"' not in pathlib.Path(sys.argv[4]).read_text():
+    sys.exit(1)
 if mode == "fail" or (mode == "noreview" and reviewing):
     sys.stderr.write("error: not signed in\n")
     sys.exit(1)
@@ -81,6 +83,8 @@ def council(tmp_path):
             command = [sys.executable, str(fake), seat, str(state), mode]
             if mode == "lastmsg":
                 command.append(council_pc.LAST_MESSAGE)
+            if mode == "policy":
+                command.append(council_pc.NO_TOOLS)
             if mode == "missing":
                 command = ["no-such-council-cli-for-tests"]
             argv += ["--seat", f"{seat}={json.dumps(command)}"]
@@ -216,6 +220,12 @@ def test_the_claude_seat_starts_without_the_chair_sessions_nested_session_marker
     assert read_json(out / "run.json")["seats"]["claude"]["answer"]["status"] == "ok"
 
 
+def test_the_no_tools_policy_file_is_written_and_passed_to_the_seat(council):
+    _, out, state = council({"gemini": "policy"})
+    assert read_json(out / "run.json")["seats"]["gemini"]["answer"]["status"] == "ok"
+    assert calls(state, "gemini") == 2
+
+
 def test_the_last_message_file_is_the_answer_when_the_cli_writes_one(council):
     code, out, _ = council({"codex": "lastmsg"})
     assert code == 0
@@ -233,6 +243,8 @@ def test_a_missing_review_is_named_by_letter_never_by_seat(council, capsys):
                     + " and ".join(sorted(set("ABC") - {label})))
     assert "Review missing" in block
     assert "Reviews: 2 of 3 written, 2 rankings parsed" in bundle
+    others = sorted(set("ABC") - {label})
+    assert f"Comparisons missing (a review or its ranking is missing): {others[0]} and {others[1]}" in bundle
     assert "gemini" not in bundle.lower() and "gemini" not in capsys.readouterr().out.lower()
 
 
@@ -263,6 +275,14 @@ def test_default_commands_read_the_prompt_from_stdin():
     assert codex[codex.index("--output-last-message") + 1] == council_pc.LAST_MESSAGE
     assert gemini[0] == "gemini" and gemini[gemini.index("-p") + 1] == council_pc.FOLLOW
     assert claude[0] == "claude" and claude[claude.index("-p") + 1] == council_pc.FOLLOW
+
+
+def test_default_commands_switch_the_seats_host_tools_off():
+    codex, gemini, claude = (council_pc.SEATS[s] for s in SEATS)
+    assert codex[codex.index("--disable") + 1] == "apps"
+    assert gemini[gemini.index("--policy") + 1] == council_pc.NO_TOOLS
+    assert 'toolName = "*"' in council_pc.NO_TOOLS_POLICY and 'decision = "deny"' in council_pc.NO_TOOLS_POLICY
+    assert "--strict-mcp-config" in claude and claude[-2:] == ["--tools", ""], "--tools takes a list: keep it last"
     assert council_pc.RETRIES == 2
 
 
@@ -299,7 +319,10 @@ def test_anonymize_keeps_names_the_brief_uses_but_still_removes_self_identificat
     ("This is Claude. Choose A.", "Claude or Codex?", "Choose A."),
     ("As Codex I would pick A.", "Codex or Gemini?", "I would pick A."),
     ("As Claude Opus 4, I pick A.", "Claude for Review-2?", "I pick A."),
-    ("I'm an OpenAI model, so A.", "OpenAI terms?", ""),
+    ("I'm an OpenAI model, so A.", "OpenAI terms?", "so A."),
+    ("I am Claude, and Plan A is best because it costs less.", "Claude or Codex?",
+     "Plan A is best because it costs less."),
+    ("I am Gemini 2.5 Pro and I pick B.", "Gemini quota?", "I pick B."),
     ("My name is Gemini. Choose B.", "Gemini quota?", "Choose B."),
     ("I, Claude, think A.", "Claude or Gemini?", "I think A."),
     ("Plan A.\n— Gemini 2.5 Pro", "Gemini or Codex?", "Plan A."),
@@ -342,12 +365,21 @@ def test_parse_ranking(text, letters, expected):
 
 
 def test_tally_counts_pairwise_wins_and_finds_the_undefeated_answer():
-    table = council_pc.tally([["B", "C"], ["A", "C"], ["A", "B"]], ["A", "B", "C"])
+    rankings = [["B", "C"], ["A", "C"], ["A", "B"]]
+    table = council_pc.tally(rankings, ["A", "B", "C"])
     assert table["A"] == {"first": 2, "wins": 2, "losses": 0, "ranked_by": 2}
     assert table["C"] == {"first": 0, "wins": 0, "losses": 2, "ranked_by": 2}
-    assert council_pc.undefeated(table) == ["A"]
-    cycle = council_pc.tally([["B", "C"], ["C", "A"], ["A", "B"]], ["A", "B", "C"])
-    assert council_pc.undefeated(cycle) == []
+    assert council_pc.undefeated(rankings, ["A", "B", "C"]) == ["A"]
+    assert council_pc.missing_pairs(rankings, ["A", "B", "C"]) == []
+    assert council_pc.undefeated([["B", "C"], ["C", "A"], ["A", "B"]], ["A", "B", "C"]) == []
+
+
+def test_undefeated_needs_every_comparison_of_the_answer():
+    rankings = [["B", "C"], ["A", "B"]]  # the review that compares A and C is missing
+    assert council_pc.undefeated(rankings, ["A", "B", "C"]) == []
+    assert council_pc.missing_pairs(rankings, ["A", "B", "C"]) == [("A", "C")]
+    assert council_pc.undefeated([["A", "B"], ["A", "C"]], ["A", "B", "C"]) == ["A"]
+    assert council_pc.undefeated([["B"], ["A"]], ["A", "B"]) == []
 
 
 def test_clean_drops_colour_codes_and_the_credentials_banner():
