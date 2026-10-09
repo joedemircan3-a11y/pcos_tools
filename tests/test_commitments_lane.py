@@ -203,3 +203,30 @@ def test_every_card_that_asks_joe_reads_the_registry_first(card):
     escalation = re.search(r"^- Escalation: (.*)$", text, re.M).group(1)
     if not escalation.startswith("none."):
         assert "[[REGISTRY]]" in section(text, "## 2. Inputs by ID"), "asks Joe without the registry"
+
+
+def test_every_promise_joe_makes_is_tracked_even_without_a_date():
+    extract = flat(section(read(SKILL), "## 2. Extract"))
+    assert "every promise Joe makes in his sent mail" in extract
+    assert "with or without a time phrase" in extract
+    due = section(read(SKILL), "## 3. Due dates")
+    vague = next(line for line in due.splitlines() if line.rstrip(" |").endswith("| vague"))
+    assert "no time phrase in a promise of Joe's" in vague
+
+
+def test_a_refusal_by_the_party_who_owes_drops_the_row():
+    check = flat(section(read(SKILL), "## 4. Check the evidence (every run)"))
+    assert "declined or retracted by the party who owes it (Joe included): Status Dropped" in check
+
+
+@pytest.mark.parametrize("index", ["agents/_INDEX.md", "skills/_INDEX.md", "routines/_INDEX.md"])
+def test_every_index_row_has_the_cells_of_its_header(index):
+    width = None
+    for line in read(ROOT / index).splitlines():
+        if not line.startswith("|"):
+            width = None
+            continue
+        cells = line.count("|")
+        if width is None:
+            width = cells
+        assert cells == width, f"{index}: {line[:60]}"

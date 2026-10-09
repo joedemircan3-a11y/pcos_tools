@@ -10,8 +10,10 @@ prediction ledger scores incoming items, but no lane extracts commitments from
 sent mail, keeps a due date or follows up. Built by Claude (Claude Code on the
 web) from main 98a1943.
 
-- `skills/commitments/` and `agents/commitments.md`: one Commitments row per
-  promise or dated ask in Joe's sent mail and in incoming mail with Joe in To
+- `skills/commitments/` and `agents/commitments.md`: one Commitments row for
+  every promise Joe makes in sent mail (with or without a date), every dated
+  ask he makes, and every dated ask or promise to him in incoming mail with Joe
+  in To
   (Commitment, Direction, Counterparty, Due, Thread, Source message, Status,
   Evidence, Linked task, Draft link, Next check; Card and Skips for the card
   hand-off). Due dates are read from the words of the mail in the sender's time
