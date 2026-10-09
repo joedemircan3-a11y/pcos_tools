@@ -35,6 +35,11 @@ hour apart until 2026-11-01. Built by Claude (Claude Code on the web) from main
   for L2's two mirrors; the first render records each file's ID under its key, later
   renders name the key in their "DRIVE WRITE:" rows; the L2 heartbeat counts the
   queued rows and logs each in the Changelog.
+- Codex review, round 3: check C5's Drive clause applies only to a run that changed
+  a Drive file and its email clause only to mail or message text (a clause that does
+  not apply is PASS, not applicable), so outputs without either can still be
+  accepted; L2 replaces an open "DRIVE WRITE:" row for a mirror with the newest text
+  instead of queuing a second one.
 - `tests/test_rules_and_clock.py`: fails when a card or Routine drops the rules,
   when an output template shows an item code without a DESCRIPTION slot, or when a
   Routine, card or skill names a time zone other than America/Mexico_City.

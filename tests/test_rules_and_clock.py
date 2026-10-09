@@ -131,6 +131,9 @@ def test_checker_checks_the_live_text_rules_on_every_output_joe_reads():
     for marker in RULE_MARKERS:
         assert marker in common, f"check C5 does not name {marker}"
     assert "a code alone is a FAIL" in common
+    # an output that writes no Drive file or holds no mail text can still be accepted
+    assert "Only when the run changed a Drive file" in common
+    assert "Only when the output holds mail or message text" in common and "not applicable" in common
     card = flat(section(read(CHECKLISTS), "## question-card"))
     assert "a bare code is a FAIL" in card
     assert "[[EMAIL_RULES]]" in flat(section(read(CHECKLISTS), "## mail-draft"))
@@ -147,6 +150,7 @@ def test_today_shows_codes_with_their_description_and_keeps_one_mirror_file():
     assert {"NOW_MIRROR", "KERNEL_MIRROR"} <= set(defined_keys())
     assert "rows changed (0)" not in prompt and 'per "DRIVE WRITE:" row filed' in prompt
     assert "never create the mirror again" in prompt
+    assert "replace its text with this render's full text instead of filing another row" in prompt
 
 
 def test_the_drive_recorder_that_applies_drive_write_rows_is_listed():

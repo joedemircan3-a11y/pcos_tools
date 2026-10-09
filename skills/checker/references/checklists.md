@@ -18,12 +18,15 @@ Every checklist ends with the common checks:
   reads"), on every output Joe reads. Required: [[EMAIL_RULES]] for mail and
   message text; [[PEOPLE]] and the owner-map rows in [[RULES]] for names.
   (a) Every item code, SAP code, order number or Task ID stands with its plain
-  description; a code alone is a FAIL. (b) A Drive file was changed in the same
-  file through a "DRIVE WRITE:" row in [[INBOX]] for the Drive recorder, never
-  rebuilt as a copy, and no parallel list was started. (c) Mail and message text
-  passes [[EMAIL_RULES]]: the language pass done, no sentence split or merged, a
-  line breaks only right after a comma. (d) Every person is named as [[PEOPLE]]
-  and the owner map resolve the name; where two people share a name, by address.
+  description; a code alone is a FAIL. (b) Only when the run changed a Drive
+  file: the change went through a "DRIVE WRITE:" row in [[INBOX]] for the Drive
+  recorder, the file was not rebuilt as a copy, and no parallel list was started.
+  (c) Only when the output holds mail or message text: it passes [[EMAIL_RULES]]:
+  the language pass done, no sentence split or merged, a line breaks only right
+  after a comma. (d) Every person is named as [[PEOPLE]] and the owner map
+  resolve the name; where two people share a name, by address. A clause that
+  does not apply to the output is PASS with the evidence "not applicable: no
+  Drive write" or "not applicable: no mail or message text".
 
 ## mail-draft
 
