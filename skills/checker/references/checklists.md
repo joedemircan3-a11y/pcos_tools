@@ -18,11 +18,12 @@ Every checklist ends with the common checks:
 ## mail-draft
 
 A Route 2 instruction or a Route 3 reply drafted into Outlook (brief lane, EXO
-clarifying line, intake reply).
+clarifying line, intake reply), or a commitments-lane draft (item 10).
 
 Required: the whole thread, every branch, including its terminal message
 ([[MAIL_INBOX]], [[MAIL_ROUTED]], [[MAIL_SENT]]); the owner-map rows in
-[[RULES]]; [[DECISIONS]]; for a recurring report, Joe's last sent version.
+[[RULES]]; [[DECISIONS]]; for a recurring report, Joe's last sent version;
+for a commitments-lane draft, its [[COMMITMENTS]] row.
 
 1. The route follows the evaluation order: Route 1 tests first, then Route 3
    criteria (name the one that fired), then Route 2 as the default.
@@ -40,6 +41,13 @@ Required: the whole thread, every branch, including its terminal message
    has no commands, no money commitments and no recalculated totals.
 8. No price, payment, quantity or date promise to an external party.
 9. It is in Drafts and not sent. At most 5 drafts per run.
+10. A commitments-lane draft (commitments skill section 6) follows its own form
+    instead of items 1 to 4: what Joe owes is a reply on the original thread,
+    even when Joe's message is terminal, that delivers what the cited
+    commitment promised and promises nothing new; what others owe is a new
+    internal email, never a reply into an external chain, to the team member
+    who owes it or to the front-line owner the owner map names. The commitment
+    row it cites exists and is marked for the next card.
 
 ## routing
 
@@ -114,14 +122,16 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
    facts, numbers and dates inside it; no internal ID without its meaning.
 3. 2 to 4 options, the recommended option first; options are concrete actions
    with owner and date where relevant; no "Other". A retro item has its six
-   fixed tap options instead (item 7).
+   fixed tap options instead (item 7); a commitment item has the fixed options
+   of the commitments skill section 7.
 4. The "Not needed / wrong direction" option is present (the template adds it).
    A "What happened?" question also offers "unrelated / wrong direction".
 5. EXO: 2 to 4 items, assumption form unless no assumption is defensible, a
-   progress line at the end, no overdue list and no count of late items.
+   progress line at the end, no overdue list and no count of late items; at
+   most two commitment items, a Joe-owes item due within 48 hours first.
 6. One Open row in [[DECISIONS]] for the card.
 7. Retro: at most five items; the ledger's "What happened?" items first, then
-   the open conflict items. A retro item is one line that sums up the thread
+   the open conflict items, then at most two commitment items. A retro item is one line that sums up the thread
    (for a gap with no thread, the Worklist row: the task, what it waited on,
    since when),
    with the tap options closed as quoted, closed differently, dropped, moved
@@ -137,8 +147,10 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
    closure evidence exists in the mail, [[WORKLIST]], [[CHANGELOG]] or
    [[DECISIONS]]; no [[PREDICTION]] row has any identity the gap carries (the
    conversation ID, and the Task ID of a linked Worklist row) in Source, unless
-   the item is the ledger's own queued question. Matching is by identity, never
-   by subject.
+   the item is the ledger's own queued question; no [[COMMITMENTS]] row has the
+   thread as Thread or the Worklist row as Linked task, unless the item is the
+   commitments lane's own marked item. Matching is by identity, never by
+   subject.
 
 ## prediction
 

@@ -399,6 +399,11 @@ Drive or Notion link in `agents/` or `skills/`. `tests/test_retro_lane.py` pins
 what the Retro lane and the ledger backtest fixed: the evening slot, five
 questions with six tap options, the 90-day window, the read-everything gate, and
 a backtest that is blind at the cut, capped at 200 threads and never asks Joe.
+`tests/test_commitments_lane.py` pins the Commitments lane: the row fields, due
+dates read from the words of the mail, threads by conversation ID, closure only on
+evidence, at most two commitment items per card with what Joe owes and is due soon
+first, more than 14 days overdue to the retro card, drafts never sent, and the
+registry read by every card that asks Joe.
 
 ## Build the zip
 

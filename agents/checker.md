@@ -1,11 +1,11 @@
 # Card: checker
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-03 (L7 checker lane: generator/checker split, Claude-internal council, checklist per job type); runs the P2-04 golden-set eval
 - Lane ID: L7 (planned)
 - Skills: [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -32,6 +32,10 @@ a vendor, promotes canon or deletes.
   rows with the same pattern; [[CANON]] until rules are rows.
 - L2, weekly eval: [[GOLDEN_SET]]; for the checker run's clean half, outputs
   Joe used unedited ([[PREDICTION]], [[CORRECTIONS]]).
+- L2, re-ask check on any question to Joe (kernel section 2, step 4):
+  [[REGISTRY]], the operating document registry, with the other records that
+  step names, so that no question passes that a registered document already
+  answers.
 - Knowledge scope: exactly the generator card's scope. The checker never widens
   a lane's scope.
 
@@ -110,3 +114,9 @@ run scores the checker separately, on Wrong outputs and on known-good outputs | 
 old criterion passed a version that kept the defect and failed one that fixed it,
 and a checker that failed everything would have scored perfectly (Codex review of
 PR 1) | PCOS QUEUE_v4 item QC18
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | [[REGISTRY]] read
+before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry among
+the records searched before asking Joe, and the kernel key map holds the REGISTRY key
+since QK23 (its open point: the cards that need the registry add the key) | PCOS
+QUEUE_v7, item QC24 amendment
