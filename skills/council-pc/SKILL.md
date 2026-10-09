@@ -3,7 +3,7 @@ name: council-pc
 description: Run a live PCOS council on Joe's PC in minutes. One brief goes to the Codex CLI, the Gemini CLI and a separate Claude process; each model then reviews and ranks the two answers it did not write, under letters, never names; the Claude Code session that started the run chairs by the council-board rules and writes Final and Dissent to a Council row. Use when Joe, at his PC, says "pc council" with a topic or a Council row. Not for scheduled or cloud runs (board council, council-github) or routine lane outputs (the checker).
 compatibility: Runs only in Claude Code on Joe's PC, with Python 3.11 or newer, the Codex CLI signed in with the ChatGPT plan, the Gemini CLI with the GEMINI_API_KEY variable (free tier), the Claude Code CLI, and the Notion connector for the Council row.
 metadata:
-  version: "0.1"
+  version: "0.2"
   status: Candidate
   register: P2-08
   kernel: "1.2"
@@ -77,15 +77,34 @@ python scripts/council_pc.py RUN-FOLDER/brief.md --out RUN-FOLDER/out
 - Stage 1: the brief goes to the three seats at once: `codex exec`, `gemini -p`
   and `claude -p`, a separate Claude process, never this session (started
   without this session's `CLAUDECODE` marker, which some Claude Code versions
-  refuse as a nested session). Each runs in an empty temporary folder with the
-  prompt on stdin and 15 minutes per call.
+  refuse as a nested session). Each gets the prompt on stdin and 15 minutes
+  per call.
 - The seats answer from the prompt alone, so their host tools are off: Claude
   runs with no built-in tools and no MCP servers (`--tools ""`,
-  `--strict-mcp-config`), Gemini with a policy file that denies every tool.
-  Codex has no switch for its shell: it runs in its read-only sandbox (no
-  writes, no network for its commands) with its apps off, so it could still
-  read a file on the PC if a prompt led it there (Candidate risk, open for
-  Joe; see the card).
+  `--strict-mcp-config`), Gemini with a policy file that denies every tool,
+  and Codex without its shell and its image reader (`--disable shell_tool`,
+  `--disable view_image`), in its read-only sandbox with its apps off and
+  without Joe's Codex settings (`--ignore-user-config`, `--ephemeral`). So no
+  seat has a tool that reads a file on the PC.
+- Each call runs in a new temporary folder that holds only the brief, with a
+  scratch home that holds only a copy of that CLI's sign-in file (Codex
+  `auth.json`, Claude `.credentials.json`; Gemini signs in with
+  `GEMINI_API_KEY`, from the environment or `~/.gemini/.env`). No seat sees
+  Joe's settings, MCP servers, history or business folders. A sign-in the CLI
+  refreshes during the run is written back, so Joe's own sign-in keeps
+  working. A seat whose sign-in file is missing starts signed out: `run.json`
+  says so under `sign_in`. If the Claude seat fails to sign in from its
+  scratch home, `claude setup-token` gives Joe a long-lived token for the
+  `CLAUDE_CODE_OAUTH_TOKEN` variable, which every seat inherits.
+- Pre-run check, before the first live run and after every Codex update: run
+  `codex --disable shell_tool --disable view_image features list` and confirm
+  that `shell_tool` and `view_image` read `false`. If codex answers "Unknown
+  feature flag", stop: the Codex seat fails the same way, and its command
+  needs new flags before the council runs (tell Joe).
+- Residual risk (Candidate, recorded in issue #6): Codex keeps `apply_patch`,
+  which has no switch. The sandbox and the approval policy stop it from
+  writing, and it returns no file content, but its error shows whether a line
+  the model guessed is in a file it names.
 - A 503 or overload answer (Gemini's usual failure) is retried twice, after 20
   and 40 seconds. Any other failure, a timeout or a CLI that is not installed
   is not retried; that seat is left out and the run goes on.
@@ -162,6 +181,8 @@ section 5, with these differences:
 - Chair from a session that wrote one of the answers, or let the Claude seat
   run inside this session.
 - Let a seat review or rank its own answer, or show a seat name to a reviewer.
+- Override a seat (`--seat`) with a command that gives it back a tool that
+  reads files, such as Codex without `--disable shell_tool`.
 - Open `authors.json` or `run.json` before Final and Dissent are written.
 - Send, pay, commit a price or agree a vendor term from a council run.
 - Put a brief, an answer or a run file into this public repository.

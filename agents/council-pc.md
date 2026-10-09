@@ -1,10 +1,10 @@
 # Card: council-pc
 
-- Version: v0.1
+- Version: v0.2
 - Status: Candidate
 - Register: P2-08 (PC CLI council: "codex exec" and "gemini -p" on Joe's PC, anonymized cross-rank, chair)
 - Lane ID: pending
-- Skills: [council-pc v0.1](../skills/council-pc/SKILL.md), which runs [scripts/council_pc.py](../scripts/council_pc.py); the chair follows [council-board v0.1](../skills/council-board/SKILL.md) section 5; the Final is checked with [checker v0.1](../skills/checker/SKILL.md) (job type council-final)
+- Skills: [council-pc v0.2](../skills/council-pc/SKILL.md), which runs [scripts/council_pc.py](../scripts/council_pc.py); the chair follows [council-board v0.1](../skills/council-board/SKILL.md) section 5; the Final is checked with [checker v0.1](../skills/checker/SKILL.md) (job type council-final)
 - Date: 2026-10-09
 
 ## 1. Mission
@@ -38,11 +38,16 @@ term; put a brief, an answer or a run file into the public repository.
 ## 3. Tools allowed
 
 - Terminal on Joe's PC: `python scripts/council_pc.py`, which starts the
-  Codex CLI (read-only sandbox, apps off), the Gemini CLI (every tool denied)
-  and the Claude Code CLI (no tools, no MCP servers) in an empty temporary
-  folder and writes only into the new run folder. Open risk (Candidate, for
-  Joe): Codex has no switch for its shell, so a prompt could lead it to read
-  a file on the PC.
+  Codex CLI (no shell, no image reader, read-only sandbox, apps off), the
+  Gemini CLI (every tool denied) and the Claude Code CLI (no tools, no MCP
+  servers), each in a new temporary folder that holds only the brief, with a
+  scratch home that holds only its own sign-in file. It writes into the new
+  run folder, and writes a sign-in a CLI refreshed during the run back to
+  that CLI's own file. Before the first live run and after every Codex
+  update, the skill's pre-run check confirms the Codex flags still apply.
+- Residual risk (Candidate, for Joe; issue #6): Codex keeps `apply_patch`,
+  which cannot write here and returns no file content, but whose error shows
+  whether a guessed line is in a named file.
 - A checker subagent on a different Claude model.
 - Notion: write Task, Draft, Review-1, Review-2, Final, Dissent, Status,
   Deadline and, last, Author on the one [[COUNCIL]] row; [[CHANGELOG]] rows;
@@ -50,9 +55,10 @@ term; put a brief, an answer or a run file into the public repository.
 - Drive: one Blocked DELTA file in [[INBOX_FOLDER]] when the Notion write fails
   twice.
 - Not allowed: send mail or messages; commit a price, payment or vendor term;
-  edit or delete files outside the run folder; commit the run folder to
-  [[REPO]]; change another Council row; sign the Gemini CLI in with a consumer
-  Google login; add Grok.
+  edit or delete files outside the run folder (the script's write-back of a
+  refreshed sign-in aside); give a seat a tool that reads files; commit the
+  run folder to [[REPO]]; change another Council row; sign the Gemini CLI in
+  with a consumer Google login; add Grok.
 
 ## 4. Rules and kernel version
 
@@ -115,3 +121,10 @@ v0.1 | 2026-10-09 | Claude Code on the web, PCOS queue item QC22 | first card |
 register P2-08; design in the dev-session record of 2026-09-27, turns 2 and 3 |
 Joe's default acceptance 2026-09-28; PCOS QUEUE_v4 item QC22, carried in
 QUEUE_v8
+
+v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC27 | the
+seats run without a tool that reads a file (Codex shell and image reader
+off), each in a folder that holds only the brief and a scratch home that
+holds only its sign-in; pre-run check; residual risk apply_patch | issue #6
+(follow-up of QC22); flags checked against codex-cli 0.162.0 | PCOS
+QUEUE_v9 item QC27

@@ -11,8 +11,11 @@ written Final and Dissent.
 Standard library only. This script is not part of the draft-only toolkit: the
 CLIs it starts call their vendors over the network. It writes nothing to Notion,
 Drive or mail; it reads the brief and writes bundle.md, authors.json and run.json
-into a new output folder. Each CLI runs in an empty temporary folder, so it never
-sees the files around it.
+into a new output folder. Each CLI runs in a fresh temporary folder that holds
+only the brief, with a scratch home that holds only a copy of its own sign-in
+file, so it never sees the files around it or Joe's settings, MCP servers and
+history. When a CLI refreshes its sign-in during the run, the refreshed file goes
+back to where the CLI keeps it, so the real sign-in keeps working.
 
 Usage: python scripts/council_pc.py BRIEF.md --out FOLDER
 Exit codes: 0 bundle written; 2 usage error; 3 Blocked (fewer than two answers,
@@ -49,16 +52,32 @@ denyMessage = "A council seat answers from the prompt alone, without tools."
 
 # The prompt always goes on stdin: a Windows .cmd shim caps the command line at 8,191
 # characters, and a brief with two answers is longer than that. Each seat answers from
-# the prompt alone, so its host tools are switched off where the CLI allows it:
-# Claude gets no built-in tools and no MCP servers, Gemini a policy that denies every
-# tool, Codex its read-only sandbox (no writes, no network for commands) and no apps.
+# the prompt alone, so its host tools are switched off: Claude gets no built-in tools
+# and no MCP servers, Gemini a policy that denies every tool. Codex's read-only sandbox
+# blocks writes but not reads, so Codex gets no tool that reads a file: shell_tool off
+# removes its shell (exec_command and write_stdin, also inside its JavaScript tool and
+# in the agents it spawns), view_image off its image reader. What stays is
+# apply_patch, which the sandbox and the approval policy stop from writing. An
+# unknown feature name stops codex with an error, so a renamed flag fails the seat
+# instead of giving it a shell back. Checked against codex-cli 0.162.0.
 SEATS = {
-    "codex": ["codex", "exec", "--skip-git-repo-check", "--sandbox", "read-only", "--disable", "apps",
-              "--output-last-message", LAST_MESSAGE, "-"],
+    "codex": ["codex", "exec", "--skip-git-repo-check", "--ephemeral", "--ignore-user-config",
+              "--sandbox", "read-only", "--disable", "apps", "--disable", "shell_tool",
+              "--disable", "view_image", "--output-last-message", LAST_MESSAGE, "-"],
     "gemini": ["gemini", "--skip-trust", "--policy", NO_TOOLS, "-p", FOLLOW],
     # --tools takes a list, so it comes last, after the prompt argument.
     "claude": ["claude", "-p", FOLLOW, "--strict-mcp-config", "--tools", ""],
 }
+BRIEF_FILE = "brief.md"  # the one file in a seat's working folder
+# The one file a seat's scratch home carries: its CLI's sign-in, copied from where the
+# CLI keeps it, as (variable that moves the folder, folder under the home, file).
+# Gemini signs in with GEMINI_API_KEY and needs no file.
+SIGN_IN = {
+    "codex": ("CODEX_HOME", ".codex", "auth.json"),
+    "claude": ("CLAUDE_CONFIG_DIR", ".claude", ".credentials.json"),
+}
+GEMINI_KEY = "GEMINI_API_KEY"
+GEMINI_KEY_LINE = re.compile(rf"^[ \t]*(?:export[ \t]+)?{GEMINI_KEY}[ \t]*=[ \t]*(.*?)[ \t]*$", re.M)
 LABELS = "ABC"
 TIMEOUT = 900       # seconds per call
 RETRIES = 2         # extra attempts after a transient failure (Gemini's 503)
@@ -205,7 +224,93 @@ def anonymize(text, brief):
     return "\n".join(lines).strip(), count
 
 
-def run_one(args, prompt, timeout, workdir):
+def gemini_key():
+    """GEMINI_API_KEY from the environment, else from the Gemini CLI's own .env files."""
+    if os.environ.get(GEMINI_KEY):
+        return os.environ[GEMINI_KEY]
+    for path in (Path.home() / ".gemini" / ".env", Path.home() / ".env"):
+        try:
+            found = GEMINI_KEY_LINE.findall(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError):
+            continue
+        if found:
+            value = found[-1]
+            return value[1:-1] if len(value) > 1 and value[0] == value[-1] and value[0] in "'\"" else value
+    return None
+
+
+def seat_env(name, home):
+    """Joe's environment with every home and config folder moved into the scratch home."""
+    # The chair's Claude Code session sets CLAUDECODE; some Claude Code versions refuse to
+    # start "claude -p" as a nested session while it is set. The seat is a separate process.
+    env = {key: value for key, value in os.environ.items() if key != "CLAUDECODE"}
+    env.update({
+        "HOME": str(home), "USERPROFILE": str(home),  # Node and Python read USERPROFILE on Windows
+        "CODEX_HOME": str(home / ".codex"), "CLAUDE_CONFIG_DIR": str(home / ".claude"),
+        "GEMINI_CLI_HOME": str(home),
+        "XDG_CONFIG_HOME": str(home / ".config"), "XDG_DATA_HOME": str(home / ".local" / "share"),
+        "XDG_STATE_HOME": str(home / ".local" / "state"), "XDG_CACHE_HOME": str(home / ".cache"),
+    })
+    # The scratch home hides ~/.gemini/.env, where the Gemini CLI may keep its key.
+    key = gemini_key() if name == "gemini" else None
+    if key:
+        env[GEMINI_KEY] = key
+    return env
+
+
+def copy_sign_in(name, home):
+    """Copy the seat's sign-in file into the scratch home.
+
+    Returns (copied, notes): copied is [(real path, copy, bytes)], notes go to run.json.
+    """
+    if name not in SIGN_IN:
+        return [], {}
+    variable, folder, filename = SIGN_IN[name]
+    real = (Path(os.environ[variable]) if os.environ.get(variable) else Path.home() / folder) / filename
+    try:
+        data = real.read_bytes()
+    except OSError:
+        return [], {filename: "not found where the CLI keeps it; the seat starts signed out"}
+    copy = home / folder / filename
+    copy.parent.mkdir(parents=True, exist_ok=True)
+    copy.write_bytes(data)
+    return [(real, copy, data)], {}
+
+
+def return_sign_in(copied):
+    """Put a sign-in the CLI refreshed during the run back where the CLI keeps it.
+
+    A refresh token can be good for one use only, so a refreshed copy thrown away with
+    the scratch home would leave the real sign-in dead. Only a complete JSON file goes
+    back, and only when nothing else changed the real file during the run.
+    """
+    notes = {}
+    for real, copy, before in copied:
+        try:
+            after = copy.read_bytes()
+        except OSError:
+            continue
+        if after == before:
+            continue
+        temp = real.with_name(real.name + ".council-pc")
+        try:
+            json.loads(after)
+            if real.read_bytes() != before:
+                notes[real.name] = "refreshed in the run; the real file changed too, so it was kept"
+                continue
+            temp.write_bytes(after)
+            shutil.copymode(real, temp)
+            os.replace(temp, real)
+            notes[real.name] = "refreshed in the run and written back"
+        except ValueError:
+            notes[real.name] = "changed in the run but not complete JSON; not written back"
+        except OSError as exc:
+            notes[real.name] = f"refreshed in the run; writing it back failed: {exc}"[:300]
+            temp.unlink(missing_ok=True)
+    return notes
+
+
+def run_one(args, prompt, timeout, workdir, env):
     """One CLI run with the prompt on stdin. Returns (exit code, stdout, stderr).
 
     On timeout the whole process tree is killed before TimeoutExpired is raised: on
@@ -213,9 +318,6 @@ def run_one(args, prompt, timeout, workdir):
     open and hang the run.
     """
     windows = os.name == "nt"
-    # The chair's Claude Code session sets CLAUDECODE; some Claude Code versions refuse to
-    # start "claude -p" as a nested session while it is set. The seat is a separate process.
-    env = {key: value for key, value in os.environ.items() if key != "CLAUDECODE"}
     proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                             text=True, encoding="utf-8", errors="replace", cwd=workdir, env=env,
                             start_new_session=not windows)
@@ -238,8 +340,12 @@ def run_one(args, prompt, timeout, workdir):
     return proc.returncode, stdout, stderr
 
 
-def call(argv, prompt, timeout, retries, retry_wait):
-    """Run one CLI with the prompt on stdin. Returns (text, record); text is None on failure."""
+def call(name, argv, prompt, brief, timeout, retries, retry_wait):
+    """Run one seat's CLI with the prompt on stdin. Returns (text, record); text is None on failure.
+
+    Every attempt gets a new working folder that holds only the brief and a new scratch
+    home that holds only the seat's sign-in file.
+    """
     record = {"attempts": [], "status": None}
     program = shutil.which(argv[0])
     if program is None:
@@ -250,7 +356,13 @@ def call(argv, prompt, timeout, retries, retry_wait):
         if attempt:
             time.sleep(retry_wait * attempt)
         with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as workdir, \
+                tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as homedir, \
                 tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as outdir:
+            (Path(workdir) / BRIEF_FILE).write_text(brief, encoding="utf-8")
+            home = Path(homedir)
+            for _, folder, _ in SIGN_IN.values():  # codex stops if CODEX_HOME does not exist
+                (home / folder).mkdir()
+            copied, notes = copy_sign_in(name, home)
             last = Path(outdir) / "last_message.txt"
             policy = Path(outdir) / "no_tools.toml"
             policy.write_text(NO_TOOLS_POLICY, encoding="utf-8")
@@ -258,7 +370,7 @@ def call(argv, prompt, timeout, retries, retry_wait):
             args = [program, *(files.get(a, a) for a in argv[1:])]
             started = time.monotonic()
             try:
-                returncode, stdout, stderr = run_one(args, prompt, timeout, workdir)
+                returncode, stdout, stderr = run_one(args, prompt, timeout, workdir, seat_env(name, home))
             except subprocess.TimeoutExpired:
                 record["attempts"].append({"exit": None, "seconds": round(time.monotonic() - started, 1)})
                 record["status"] = "timeout"
@@ -269,6 +381,10 @@ def call(argv, prompt, timeout, retries, retry_wait):
                 record["status"] = "failed"
                 record["error"] = str(exc)[:300]
                 return None, record
+            finally:  # also after a timeout: the CLI may have refreshed its sign-in first
+                notes.update(return_sign_in(copied))
+                if notes:
+                    record.setdefault("sign_in", {}).update(notes)
             text = last.read_text(encoding="utf-8", errors="replace") if last.is_file() else ""
             text = clean(text) or clean(stdout)
         record["attempts"].append({"exit": returncode, "seconds": round(time.monotonic() - started, 1)})
@@ -336,10 +452,10 @@ def review_prompt(brief, answers, letters):
                                 brief=brief, answers=blocks)
 
 
-def run_parallel(jobs, timeout, retries, retry_wait):
+def run_parallel(jobs, brief, timeout, retries, retry_wait):
     """jobs: {name: (argv, prompt)}. Returns {name: (text, record)}."""
     with ThreadPoolExecutor(max_workers=max(1, len(jobs))) as pool:
-        futures = {name: pool.submit(call, argv, prompt, timeout, retries, retry_wait)
+        futures = {name: pool.submit(call, name, argv, prompt, brief, timeout, retries, retry_wait)
                    for name, (argv, prompt) in jobs.items()}
         return {name: future.result() for name, future in futures.items()}
 
@@ -427,7 +543,8 @@ def build_parser():
     parser = argparse.ArgumentParser(
         prog="python scripts/council_pc.py",
         description="PC council: one brief to codex, gemini and claude; anonymous cross-ranking; "
-                    "a bundle for the chair. Writes nothing outside the output folder.")
+                    "a bundle for the chair. Writes nothing outside the output folder, except a "
+                    "sign-in a CLI refreshed during the run, written back to that CLI's own file.")
     parser.add_argument("brief", type=Path, help="the brief, a UTF-8 text or markdown file")
     parser.add_argument("--out", type=Path, required=True,
                         help="new output folder for bundle.md, authors.json and run.json")
@@ -466,7 +583,7 @@ def main(argv=None):
 
     # Stage 1: every seat answers the brief.
     prompt = ANSWER_PROMPT.format(brief=brief)
-    results = run_parallel({name: (argv, prompt) for name, argv in seats.items()}, *policy)
+    results = run_parallel({name: (argv, prompt) for name, argv in seats.items()}, brief, *policy)
     answered = [name for name in seats if results[name][0] is not None]
     for name in seats:
         record["seats"][name]["answer"] = results[name][1]
@@ -495,7 +612,7 @@ def main(argv=None):
         letters = [label for label in answers if label != label_of[name]]
         letters_of[name] = letters
         jobs[name] = (seats[name], review_prompt(brief, answers, letters))
-    reviewed = run_parallel(jobs, *policy)
+    reviewed = run_parallel(jobs, brief, *policy)
     reviews = {}
     for label in answers:
         name = authors[label]
