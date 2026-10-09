@@ -1,11 +1,11 @@
 # Card: prediction-ledger
 
-- Version: v0.4
+- Version: v0.5
 - Status: Candidate
 - Register: P2-01 (prediction ledger: Prediction database, evidence check in the daily run, "What happened?" card, calibration block in the weekly pass)
 - Lane ID: pending
 - Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md); outputs checked with [checker v0.1](../skills/checker/SKILL.md); the [ledger-backtest](ledger-backtest.md) lane runs the same predictor over settled mail history
-- Date: 2026-10-06
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -36,6 +36,9 @@ an answer.
   subject alone counts only when it is unique (skill section 2).
 - L2, for Owner and Route: the routing section of [[KERNEL]] and the owner-map
   rows in [[RULES]]; until cutover, [[BRIEF_RULES]] sections B and I.
+- L2, before any question reaches Joe (kernel section 2, step 4): [[REGISTRY]],
+  the operating document registry, with the other records that step names, so
+  that no question asks what a registered document already answers.
 - Knowledge scope: no domain folders. Mail is read only for items already in
   [[PREDICTION]] or in the day's new items.
 
@@ -140,3 +143,9 @@ v0.4 | 2026-10-06 | Claude Code on the web, queue item QC19 | "What happened?"
 questions go on the evening retro card; the backtest lane named | Joe's decision:
 evening = past questions (dev-session record of 2026-10-06, part 7, turn 21); the
 backtest loop of turn 20 | PCOS QUEUE_v4 item QC19
+
+v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | [[REGISTRY]] read
+before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry among
+the records searched before asking Joe, and the kernel key map holds the REGISTRY key
+since QK23 (its open point: the cards that need the registry add the key) | PCOS
+QUEUE_v7, item QC24 amendment

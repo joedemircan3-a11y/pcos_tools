@@ -1,11 +1,11 @@
 # Card: knowledge-chair
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-16 stages 3 and 4 (consolidation and golden-set gate); later P2-17 (method loop)
 - Lane ID: pending
 - Skills: knowledge-chair (planned with P2-16); gate evals with [checker v0.1](../skills/checker/SKILL.md)
-- Date: 2026-10-01
+- Date: 2026-10-09
 
 ## 1. Mission
 
@@ -27,6 +27,9 @@ settle.
 - L2: the claim sources (to settle a disputed verdict); the current REFINED file
   of the domain; [[GOLDEN_SET]] for the gate; [[DECISIONS]] (contradictions
   already decided are not asked again).
+- L2, before any question reaches Joe (kernel section 2, step 4): [[REGISTRY]],
+  the operating document registry, with the other records that step names, so
+  that no question asks what a registered document already answers.
 - Knowledge scope: the domain folders in [[KL_DOMAINS]] and [[PCOS_KB]], RAW and
   REFINED.
 
@@ -103,3 +106,9 @@ v0.2 | 2026-10-06 | Claude Code on the web, queue item QC18 | Status Duplicate f
 claims that a review finds to repeat an earlier row | the review lane can return
 "duplicate of row X", but the chair had no status for it, so such a claim could
 never be decided (Codex review of PR 1) | PCOS QUEUE_v4 item QC18
+
+v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC24 | [[REGISTRY]] read
+before any question reaches Joe | kernel 1.2 section 2 step 4 names the Registry among
+the records searched before asking Joe, and the kernel key map holds the REGISTRY key
+since QK23 (its open point: the cards that need the registry add the key) | PCOS
+QUEUE_v7, item QC24 amendment
