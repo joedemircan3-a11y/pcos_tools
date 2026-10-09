@@ -94,7 +94,7 @@ One row per commitment:
 | Evidence | First line: the time phrase quoted from the source message, with its ID. Then one line per piece of evidence or answer (section 4 and 7): key, ID, date, label |
 | Linked task | The Task ID of the [[WORKLIST]] row whose sources name the thread, or that the thread names; empty otherwise; never matched by subject |
 | Draft link | The checked draft of section 6 |
-| Next check | For a row without a Due, the date the lane looks for one (section 3); for a row with a Due, empty, or the day before which an answer keeps it off the cards (section 7) |
+| Next check | For a row without a Due, the date the lane looks for one (sections 3 and 7); empty for a row with a Due |
 | Card | The slot the row is marked for (section 6), replaced by the card ID once shown |
 | Skips | Cards that showed it without an answer (section 8) |
 
@@ -202,8 +202,8 @@ EXO order: Joe owes Due soon, then Joe owes Overdue, then Owed to Joe, then
 Team member owes; the oldest date first within each. Retro order: the oldest
 date first. Not marked: a row whose item on the last card that showed it has
 an answer not filed yet (an unanswered item is marked again, and the skip rule
-counts it); a row whose Next check, set by an answer (section 7), is later than
-today; a row the skip rule set aside (section 8).
+counts it); a Due soon row whose draft or step Joe already approved (section
+7); a row the skip rule set aside (section 8).
 
 Drafts, for the marked rows only:
 
@@ -253,11 +253,12 @@ direction" to every item, and it is never added a second time):
 
 Filing, each answer Confirmed with the card ID and item as source:
 
-- approve the draft, or do the step: no Status change. Evidence notes the
-  approval; the lane never sends. Next check: the day after Due, so the item is
-  not asked again before then. The evidence check closes the row once the
-  thread shows delivery; if the date passes first, the row turns Overdue and
-  comes back as an overdue item.
+- approve the draft, or do the step: no Status change, and Due and Next
+  check stay as they are (a row without a Due keeps its Next check as its
+  date). Evidence notes the approval; the lane never sends. The row is not
+  marked again while it is Due soon. The evidence check closes it once the
+  thread shows delivery; if its date passes first, it turns Overdue and comes
+  back as an overdue item.
 - sent, done another way, done offline, received, delivered: Status Done.
 - moved, new date: Due = the date Joe gives (read by section 3 from the day he
   answered), the old date kept in Evidence, Status Moved. Without a date: Due

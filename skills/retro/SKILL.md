@@ -133,7 +133,10 @@ becomes a question:
 
 ## 5. Build the card
 
-Five items, never more, in this order:
+Five items, never more, in this order. The card keeps room for the
+commitment rows marked for this evening (at most two): ledger and conflict
+items fill only the other places, so a backlog of them never keeps a
+commitment off the card.
 
 1. Ledger items: [[PREDICTION]] rows with Status Asked Joe whose question has
    not been answered, oldest first, each in the ledger's own format

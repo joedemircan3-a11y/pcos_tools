@@ -131,7 +131,8 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
    most two commitment items, a Joe-owes item due within 48 hours first.
 6. One Open row in [[DECISIONS]] for the card.
 7. Retro: at most five items; the ledger's "What happened?" items first, then
-   the open conflict items, then at most two commitment items. A retro item is one line that sums up the thread
+   the open conflict items, then at most two commitment items, for which the
+   card keeps room. A retro item is one line that sums up the thread
    (for a gap with no thread, the Worklist row: the task, what it waited on,
    since when),
    with the tap options closed as quoted, closed differently, dropped, moved

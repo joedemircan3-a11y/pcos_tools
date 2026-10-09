@@ -230,3 +230,19 @@ def test_every_index_row_has_the_cells_of_its_header(index):
         if width is None:
             width = cells
         assert cells == width, f"{index}: {line[:60]}"
+
+
+def test_an_approved_item_waits_for_its_date_without_inventing_one():
+    filing = flat(section(read(SKILL), "## 7. Card items and filing the answers"))
+    approve = filing[filing.index("- approve the draft, or do the step:"):filing.index("- sent, done another way")]
+    assert "the day after Due" not in approve
+    assert "Due and Next check stay as they are" in approve
+    assert "not marked again while it is Due soon" in approve
+    prepare = flat(section(read(SKILL), "## 6. Prepare the next card"))
+    assert "a Due soon row whose draft or step Joe already approved" in prepare
+
+
+def test_the_retro_card_keeps_room_for_marked_commitments():
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    assert "The card keeps room for the commitment rows marked for this evening" in build
+    assert "ledger and conflict items fill only the other places" in build
