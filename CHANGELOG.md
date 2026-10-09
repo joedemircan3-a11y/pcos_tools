@@ -28,6 +28,9 @@ Code on the web) from main 98a1943.
   Author filled only after Final and Dissent; one Needs Joe question asked in
   the session), the Council row write behind the checker's Accept, and the
   Never list. On demand only: no Routine file.
+- Codex review, round 1: the seats start without the chair session's
+  `CLAUDECODE` marker, since some Claude Code versions refuse `claude -p` as a
+  nested session and the Claude seat would always fail.
 - `skills/checker/references/checklists.md`: council-final covers the PC
   council (no plan round, cross-reviews, the chair worked from letters).
 - The indexes list the new card and skill; the README names the runner.

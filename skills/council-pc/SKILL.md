@@ -74,8 +74,9 @@ python scripts/council_pc.py RUN-FOLDER/brief.md --out RUN-FOLDER/out
 
 - Stage 1: the brief goes to the three seats at once: `codex exec` (read-only
   sandbox), `gemini -p` and `claude -p`, a separate Claude process, never this
-  session. Each runs in an empty temporary folder with the prompt on stdin and
-  15 minutes per call.
+  session (started without this session's `CLAUDECODE` marker, which some
+  Claude Code versions refuse as a nested session). Each runs in an empty
+  temporary folder with the prompt on stdin and 15 minutes per call.
 - A 503 or overload answer (Gemini's usual failure) is retried twice, after 20
   and 40 seconds. Any other failure, a timeout or a CLI that is not installed
   is not retried; that seat is left out and the run goes on.

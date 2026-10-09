@@ -174,8 +174,11 @@ def run_one(args, prompt, timeout, workdir):
     open and hang the run.
     """
     windows = os.name == "nt"
+    # The chair's Claude Code session sets CLAUDECODE; some Claude Code versions refuse to
+    # start "claude -p" as a nested session while it is set. The seat is a separate process.
+    env = {key: value for key, value in os.environ.items() if key != "CLAUDECODE"}
     proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            text=True, encoding="utf-8", errors="replace", cwd=workdir,
+                            text=True, encoding="utf-8", errors="replace", cwd=workdir, env=env,
                             start_new_session=not windows)
     try:
         stdout, stderr = proc.communicate(prompt, timeout=timeout)

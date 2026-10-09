@@ -33,6 +33,9 @@ n = int(calls.read_text()) + 1 if calls.exists() else 1
 calls.write_text(str(n))
 (state / f"{name}.prompt{n}").write_text(prompt, encoding="utf-8")
 reviewing = "RANKING:" in prompt
+if mode == "nested" and "CLAUDECODE" in __import__("os").environ:
+    sys.stderr.write("Error: Claude Code cannot be launched inside another Claude Code session.\n")
+    sys.exit(1)
 if mode.startswith("503x") and n <= int(mode[4:]):
     sys.stderr.write("[API Error: got status: 503 UNAVAILABLE. The model is currently experiencing high demand.]\n")
     sys.exit(1)
@@ -204,6 +207,13 @@ def test_a_timeout_kills_the_children_that_hold_the_pipes(council):
     _, out, _ = council({"claude": "sleeptree"}, extra=["--timeout", "1"])
     assert time.monotonic() - started < 8  # 1 s timeout; without the tree kill the run waits 10 s more
     assert read_json(out / "run.json")["seats"]["claude"]["answer"]["status"] == "timeout"
+
+
+def test_the_claude_seat_starts_without_the_chair_sessions_nested_session_marker(council, monkeypatch):
+    monkeypatch.setenv("CLAUDECODE", "1")
+    code, out, state = council({"claude": "nested"})
+    assert code == 0 and calls(state, "claude") == 2
+    assert read_json(out / "run.json")["seats"]["claude"]["answer"]["status"] == "ok"
 
 
 def test_the_last_message_file_is_the_answer_when_the_cli_writes_one(council):
