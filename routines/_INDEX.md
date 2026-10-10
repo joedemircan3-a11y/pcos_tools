@@ -32,7 +32,7 @@ One line per file, using the PCOS index convention (P2-12): title | ID | what | 
 | L1 Brief | routines/L1-brief.md | Weekdays 06:30: sweep, route, Inbox rows, at most 5 checked drafts, never send | 2026-10-10 | Kept (usage diet) | Changing the brief |
 | L2 Render | routines/L2-render.md | Daily 07:15: Today page from rows; mirrors only after cutover | 2026-10-09 | Candidate | Build day; changing Today |
 | L3 Health | routines/L3-health.md | Paused; Restore: daily 07:30 for missed runs, stale kernel, old Inbox rows, REASON-MISSING, naming and governance count | 2026-10-10 | Paused 2026-10-10 (usage diet) | Joe restores the lane |
-| L4 Weekly | routines/L4-weekly.md | Sunday 09:00: calibration, golden-set eval, weekly-evolve, knowledge chair later | 2026-10-09 | Candidate | Build day; rule and skill evolution |
+| L4 Weekly | routines/L4-weekly.md | Sunday 09:00: golden-set eval and weekly-evolve, knowledge chair later; prediction calibration is skipped under the usage diet and has a restore instruction | 2026-10-10 | Candidate | Build day; rule and skill evolution |
 | council-github chair | routines/council-github-chair.md | Paused; Restore: PR review/comment events plus every 2 hours for the missing-review fallback | 2026-10-10 | Paused 2026-10-10 (usage diet) | Joe restores the lane |
 | prediction-ledger | routines/prediction-ledger.md | Paused; Restore: weekdays 07:45 to predict, check, ask when blind and score | 2026-10-10 | Paused 2026-10-10 (usage diet) | Joe restores the lane |
 | exo | routines/exo.md | Daily 07:00 only: distribute front-line steps as checked internal Outlook drafts, watch answers, and show one today's-work card with commitment items first; 13:00 is off | 2026-10-10 | Kept (usage diet) | Changing the EXO lane |

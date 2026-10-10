@@ -18,6 +18,8 @@ the prior state.
 - `routines/_INDEX.md` records the no-file scheduled lanes: CAL and PCOS hub
   sync paused, and the Drive recorder reduced from 08:10, 14:10 and 20:10 to
   20:10 only.
+- L4 remains active at Sunday 09:00 but skips loading Prediction rows and skips
+  its calibration step until the prediction lane is restored.
 - Agent cards and the EXO, Commitments and Retro skills match the active diet.
   `tests/test_lane_diet.py` pins every active, paused, restore and no-file state.
 

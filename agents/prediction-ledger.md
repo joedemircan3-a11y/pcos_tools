@@ -1,6 +1,6 @@
 # Card: prediction-ledger
 
-- Version: v0.7
+- Version: v0.8
 - Status: Candidate
 - Register: P2-01 (prediction ledger: Prediction database, evidence check in the daily run, "What happened?" card, calibration block in the weekly pass)
 - Lane ID: pending
@@ -113,9 +113,10 @@ an answer.
 
 ## 6. Trigger and owner model
 
-- Trigger: paused 2026-10-10 (usage diet). Restore weekdays about 07:45 Mexico
-  City after the brief lane; the 30-minute calibration pass restores on Sunday
-  before the weekly-evolve lane (Sunday 09:00 America/Mexico_City). The
+- Trigger: paused 2026-10-10 (usage diet). While paused, L4 explicitly skips
+  calibration and does not read Prediction rows. Restore weekdays about 07:45
+  Mexico City after the brief lane; the 30-minute calibration pass restores in
+  the weekly-evolve lane (Sunday 09:00 America/Mexico_City). The
   [ledger-backtest](ledger-backtest.md) lane scores the same predictor against
   settled mail history on Sundays before the calibration pass.
 - Runs on: Claude scheduled task (Notion and Microsoft 365 connectors).
@@ -167,3 +168,8 @@ lane" and "one clock for every lane"
 v0.7 | 2026-10-10 | Codex, queue item QX35 | daily prediction and Sunday
 calibration paused; restore times retained | Joe's temporary usage diet | PCOS
 QUEUE_v12 item QX35
+
+v0.8 | 2026-10-10 | Codex, queue item QX35 review fix | the active L4 lane is
+explicitly barred from reading Prediction rows or running calibration while the
+prediction lane is paused | Codex correctness review of PR 10 | PCOS QUEUE_v12
+item QX35

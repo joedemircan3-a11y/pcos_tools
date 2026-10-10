@@ -92,3 +92,13 @@ def test_cards_state_the_reduced_or_paused_lane_schedule():
     for name in ("council-board", "council-github", "prediction-ledger",
                  "ledger-backtest"):
         assert "paused 2026-10-10" in read(AGENTS / f"{name}.md").lower()
+
+
+def test_active_l4_skips_prediction_calibration_while_prediction_is_paused():
+    l4 = read(ROUTINES / "L4-weekly.md")
+    assert "Calibration: paused 2026-10-10 (usage diet)" in l4
+    assert "Do not read [[PREDICTION]]" in l4
+    assert "follow that section" in l4 and "Restore:" in l4
+    prediction = read(AGENTS / "prediction-ledger.md")
+    assert "L4 explicitly skips" in prediction
+    assert "does not read Prediction rows" in prediction
