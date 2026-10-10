@@ -7,7 +7,7 @@
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [exo](../agents/exo.md)
-- Skills: [exo v0.3](../skills/exo/SKILL.md); [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on front-line instructions and finished outputs
+- Skills: [exo v0.4](../skills/exo/SKILL.md); [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on front-line instructions and finished outputs
 - Needs first: build day ([[LANES]], [[INBOX]], [[TODAY]]); [[STEPS]] and [[CAPTURE]] exist
 
 ## Prompt
@@ -26,9 +26,9 @@ TEXT RULES (live Rules rows; kernel 1.3 once live; agents/CARD_TEMPLATE.md "Live
 
 RUN (one slot)
 3. File the answers from the previous card first (skill section 3) and apply the skip rule (section 4). Commitment items are filed into their [[COMMITMENTS]] row by the commitments skill sections 7 and 8. For a front-line instruction: Approve leaves the draft in Drafts; Edit checks a separate candidate and updates that same draft only after Accept (Fix or Reject keeps the last accepted draft unchanged); Skip leaves it unsent and open. No action sends.
-4. Watch each Distribution Approved, Awaiting owner or Overdue step by skill section 9. Approval alone is not a send: wait for the exact message in [[MAIL_SENT]], then watch the same conversation for a later reply from the intended owner's address. Only when that reply answers the outcome, set Distribution Answered, set the step Status Answered and queue its next dependent step. After the explicit deadline with no such reply, mark Overdue. Never match by subject, accept a partial answer or close a Worklist task here.
+4. Watch each Distribution Approved, Awaiting owner or Overdue step by skill section 9. Approval alone is not a send: request Microsoft Graph `Prefer: IdType="ImmutableId"`, find the exact message in [[MAIL_SENT]] by its stored immutable draft ID, then watch the same conversation for a later reply from the intended owner's address. Only when that reply answers the outcome, set Distribution Answered, set the step Status Answered and queue its next dependent step. After the explicit deadline with no such reply, mark Overdue. Never match by subject or mutable message ID, accept a partial answer or close a Worklist task here.
 5. Parse the new [[CAPTURE]] rows (section 6).
-6. Break down the open tasks that have no steps yet (section 1). For every step assigned to a front-line owner, run skill section 8: read the whole source conversation, prove the reply has internal recipients only, strip every representative, customer and vendor address from To, Cc and Bcc, draft the one-to-three-line outcome/deadline/"loop me only if" instruction in Joe's [[EMAIL_RULES]] form (greeting by person, we/us voice, item codes with descriptions, Outlook signature JOE BM and no typed sign-off), and run the mail-draft checker. Only an Accept becomes a reply draft on that source conversation. If the internal-only recipient set cannot be proved, write no draft and mark it Blocked. Never send.
+6. Break down the open tasks that have no steps yet (section 1). For every step assigned to a front-line owner, run skill section 8. If a qualifying owner reply already answers a mail-backed step, store the evidence, set Distribution and Status Answered, queue the next dependent step and write no draft. Otherwise prove the recipients are internal only, strip every representative, customer and vendor address from To, Cc and Bcc, draft the one-to-three-line outcome/deadline/"loop me only if" instruction in Joe's [[EMAIL_RULES]] form (greeting by person, we/us voice, item codes with descriptions, Outlook signature JOE BM and no typed sign-off), and run the mail-draft checker. Only an Accept becomes a reply on the exact source conversation for a mail-backed step or a new internal message for a step with no Outlook source. Create and retain it with Microsoft Graph `Prefer: IdType="ImmutableId"`. If the internal-only recipient set or immutable ID cannot be proved, write no draft and mark it Blocked. Never send.
 7. Write interpretation readings for new emails from ownership-level senders (skill section 5).
 8. Build one card with 2 to 4 items (one when only one is open) and a progress line (section 2). A front-line instruction item names its owner, outcome and deadline and offers the three one-tap actions Approve / Edit / Skip; Approve means only that the draft stays in Drafts for Joe to send. First the [[COMMITMENTS]] rows marked for this slot, at most two, a Joe-owes item due within 48 hours as the first item. Ask only about today's work: the prediction-ledger lane's "What happened?" questions are past questions and go on the evening retro card, never on this one. Publish the card page from [[CAL_TEMPLATE]]. If no page can be published in this run, use the letter-card fallback of [[CAL_STANDARD]] in the card's [[DECISIONS]] row. If nothing is open, build no card.
 9. Send other finished candidate outputs to the checker. Offer each Accept as an approve item on the next card.
@@ -72,3 +72,8 @@ front-line distribution: checked internal-only reply drafts with Joe's form,
 Approve/Edit/Skip without send, exact sent-message evidence, then owner-reply
 tracking to Answered or Overdue | Joe's development-list request "task
 distribution by EXO" | PCOS QUEUE_v12 item QX30
+
+v0.7 | 2026-10-10 | Codex, PCOS queue item QX30 final review | pre-answered
+steps advance; immutable Outlook IDs correlate Drafts to Sent; steps without an
+Outlook source use a new internal message | Codex correctness review of PR 9 |
+PCOS QUEUE_v12 item QX30

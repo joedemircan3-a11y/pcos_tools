@@ -1,9 +1,9 @@
 ---
 name: exo
 description: Break PCOS work into single small steps, draft safe internal instructions for front-line owners, and pull Joe into his own work with short assumption cards. Use for the 07:00 and 13:00 EXO cards (the 19:00 evening card belongs to the retro skill), when Joe says "exo" or "next step", when a voice or text dump lands in Capture, when an email from an ownership-level sender needs an interpretation card, when the commitments lane has marked a commitment for the next card, and when a task's facts are complete enough to finish a candidate output.
-compatibility: Needs the PCOS Notion hub (Steps, Capture, Decisions, Prediction, Commitments, Worklist), the CAL card template in Drive, and read access to Outlook through the Microsoft 365 connector for interpretation cards.
+compatibility: Needs the PCOS Notion hub (Steps, Capture, Decisions, Prediction, Commitments, Worklist), the CAL card template in Drive, and Outlook read/draft access through the Microsoft 365 connector. Outlook draft operations must support Microsoft Graph immutable IDs.
 metadata:
-  version: "0.3"
+  version: "0.4"
   status: Candidate
   register: P2-02
   kernel: "1.0"
@@ -163,21 +163,30 @@ as a new version that passes the golden-set gate.
 ## 8. Draft a front-line instruction
 
 Every [[STEPS]] row assigned to a front-line owner gets one Outlook draft from
-Joe. The draft is a reply on the source conversation, not a new subject and not
-a message on a look-alike thread.
+Joe. A mail-backed step is a reply on the source conversation, not a new subject
+and not a message on a look-alike thread. A step with no Outlook source gets a
+new internal message to the intended owner; never invent a conversation to make
+it look like a reply.
 
-1. Read the whole source conversation in [[MAIL_INBOX]], [[MAIL_ROUTED]] and
-   [[MAIL_SENT]]. Match it by conversation ID and the source message ID, never
-   by subject. If the intended owner has already answered the requested outcome
-   after Joe's latest message, mark Distribution Answered and write no draft.
+1. Record Source type as `Mail-backed` or `No Outlook thread`. For a mail-backed
+   step, read the whole source conversation in [[MAIL_INBOX]], [[MAIL_ROUTED]]
+   and [[MAIL_SENT]]. Match it by conversation ID and the source message ID,
+   never by subject. If the intended owner has already answered the requested
+   outcome after Joe's latest message, store that message as evidence, mark
+   Distribution Answered, set the step Status Answered, queue its next dependent
+   step and write no draft. For `No Outlook thread`, skip the reply lookup and
+   use the new-internal-message path in step 4.
 2. Resolve the intended owner by address through [[PEOPLE]] and the owner-map
    rows in [[RULES]]. The reply recipients are internal people only. Remove
    every representative, customer, vendor and other external address from To,
    Cc and Bcc, even when the external person started or appears anywhere in the
-   source conversation. If the connector cannot preserve the source
-   conversation while proving that recipient set, write no draft, mark the
-   step Blocked and file one [[INBOX]] row for the closeout owner. Fail closed;
-   never place an internal instruction in front of an external party.
+   source conversation. For a mail-backed step, if the connector cannot
+   preserve that conversation while proving the recipient set, write no draft,
+   mark the step Blocked and file one [[INBOX]] row for the closeout owner. For
+   `No Outlook thread`, address a new message only to the intended internal
+   owner. In both paths, an unprovably internal owner or recipient set is
+   Blocked. Fail closed; never place an internal instruction in front of an
+   external party.
 3. Write an instruction body of one to three lines, apart from the greeting and
    signature. It contains exactly: the outcome, the explicit deadline and
    "loop me only if ..." followed by the exception that needs Joe. Address the
@@ -186,10 +195,15 @@ a message on a look-alike thread.
    description. Select the Outlook signature `JOE BM`; type no sign-off and do
    not type the signature into the body.
 4. Run the checker with job type mail-draft before writing Outlook. Only an
-   Accept becomes a reply draft in [[MAIL_DRAFTS]]. Never send. Record the
-   conversation ID, source message ID, owner address, deadline and draft ID on
-   the step; set Distribution Drafted. A retry sees that identity and updates
-   the same draft rather than creating a duplicate.
+   Accept becomes a draft in [[MAIL_DRAFTS]]: reply on the exact source
+   conversation for `Mail-backed`, or new internal message for `No Outlook
+   thread`. Never send. On every Outlook create, read and update request, use
+   Microsoft Graph `Prefer: IdType="ImmutableId"`; if the connector cannot
+   request and return immutable IDs, write no draft, mark the step Blocked and
+   file one [[INBOX]] row. Record Source type, conversation ID, source message
+   ID when one exists, owner address, deadline and immutable draft ID on the
+   step; set Distribution Drafted. A retry sees that immutable identity and
+   updates the same draft rather than creating a duplicate.
 
 ## 9. Watch the owner's reply
 
@@ -197,8 +211,10 @@ At every slot, inspect the source conversation of each Distribution Approved,
 Awaiting owner or Overdue step. Approval alone is not a send.
 
 - Until the exact draft appears in [[MAIL_SENT]], keep Distribution Approved.
-  When it appears, store its sent message ID and time and set Distribution
-  Awaiting owner.
+  Find the sent copy by the stored immutable draft ID, using Microsoft Graph
+  `Prefer: IdType="ImmutableId"`; never correlate by a mutable message ID or
+  subject. When it appears, store its immutable sent message ID and time and set
+  Distribution Awaiting owner.
 - Mark Distribution Answered only when a later message in the same conversation
   comes from the intended owner's address and answers the requested outcome.
   Store that reply's message ID and text in Facts, set the step Status Answered

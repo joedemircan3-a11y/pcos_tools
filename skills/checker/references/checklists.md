@@ -64,11 +64,16 @@ for a commitments-lane draft, its [[COMMITMENTS]] row.
     who owes it or to the front-line owner the owner map names. The commitment
     row it cites exists and is marked for the next card.
 11. An EXO front-line instruction (exo skill section 8) follows its own form
-    instead of items 1 to 4. It is the Route 2 exception: a reply on the exact
-    source conversation, including an externally started conversation, matched
-    by conversation ID and source message ID; To, Cc and Bcc contain only the
-    intended internal owner addresses from [[PEOPLE]] and [[RULES]], with every
-    representative, customer, vendor and other external address removed. If an
+    instead of items 1 to 4. For a mail-backed step: It is the Route 2 exception,
+    a reply on the exact source conversation, including an externally started
+    conversation, matched by conversation ID and source message ID. For a step
+    with Source type `No Outlook thread`, it is a new internal message to the
+    intended owner, never a fabricated reply. In either path, To, Cc and Bcc
+    contain only the intended internal owner addresses from [[PEOPLE]] and
+    [[RULES]], with every representative, customer, vendor and other external
+    address removed. The run record shows Microsoft Graph
+    `Prefer: IdType="ImmutableId"` was used and retains the immutable draft ID
+    for Sent correlation. If an
     internal-only recipient set cannot be proved, the only passing result is no
     draft and a Blocked step.
 12. Its instruction body is one to three lines apart from the greeting and

@@ -193,3 +193,45 @@ def test_edit_is_transactional_and_owner_reply_advances_the_step():
     for text in (watch, prompt):
         assert "Status Answered" in text
         assert "next dependent step" in text
+
+
+def test_preanswered_step_advances_without_a_draft():
+    draft = flat(section(read(SKILL), "## 8. Draft a front-line instruction"))
+    prompt = flat(read(ROUTINE))
+    for text in (draft, prompt):
+        assert "Distribution Answered" in text
+        assert "Status Answered" in text
+        assert "next dependent step" in text
+        assert "write no draft" in text
+
+
+def test_immutable_id_correlates_drafts_after_sending():
+    draft = flat(section(read(SKILL), "## 8. Draft a front-line instruction"))
+    watch = flat(section(read(SKILL), "## 9. Watch the owner's reply"))
+    card = flat(read(CARD))
+    routine = flat(read(ROUTINE))
+    for text in (draft, watch, card, routine):
+        assert 'Prefer: IdType="ImmutableId"' in text
+    assert "stored immutable draft ID" in watch
+    assert "never correlate by a mutable message ID or subject" in watch
+
+
+def test_card_allows_distribution_state_writes():
+    tools = flat(section(read(CARD), "## 3. Tools allowed"))
+    for field in (
+        "Distribution", "Source type", "Source conversation ID",
+        "Source message ID", "Owner address", "Deadline", "Immutable draft ID",
+        "Immutable sent message ID", "Sent time", "Owner-reply message ID",
+    ):
+        assert field in tools
+
+
+def test_non_mail_front_line_step_uses_new_internal_message():
+    draft = flat(section(read(SKILL), "## 8. Draft a front-line instruction"))
+    card = flat(read(CARD))
+    routine = flat(read(ROUTINE))
+    checker = flat(section(read(CHECKLISTS), "## mail-draft"))
+    for text in (draft, card, routine, checker):
+        assert "No Outlook thread" in text or "no Outlook source" in text
+        assert "new internal message" in text
+    assert "never invent a conversation to make it look like a reply" in draft

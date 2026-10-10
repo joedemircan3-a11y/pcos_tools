@@ -37,6 +37,11 @@ put it in Joe's Drafts or watch for the answer. Built by Codex from main 106d794
   Answered and queues its dependent step; Edit is transactional, so only a new
   checker Accept replaces the existing Outlook draft and Fix/Reject leaves the
   last accepted draft unchanged.
+- Codex final allowed review: an owner answer found before drafting now also
+  sets Status Answered and queues dependent work; the Steps write allowlist
+  includes the distribution fields; every Graph draft operation uses an
+  immutable ID that survives the move to Sent; a front-line step without an
+  Outlook source uses a checked new internal message instead of blocking.
 
 ## Unreleased - 2026-10-09: rules and clock v0.1
 

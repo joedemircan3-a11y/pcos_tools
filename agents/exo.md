@@ -1,10 +1,10 @@
 # Card: exo
 
-- Version: v0.5
+- Version: v0.6
 - Status: Candidate
 - Register: P2-02 (EXO lane: Steps database, breakdown, cards at 07:00 and 13:00 (the 19:00 card went to the retro lane, P2-30), skip logic 2/3, interpretation cards, progress line, voice-dump parsing)
 - Lane ID: pending
-- Skills: [exo v0.3](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8; front-line instructions and finished outputs checked with [checker v0.2](../skills/checker/SKILL.md)
+- Skills: [exo v0.4](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8; front-line instructions and finished outputs checked with [checker v0.2](../skills/checker/SKILL.md)
 - Date: 2026-10-10
 
 ## 1. Mission
@@ -16,10 +16,11 @@ facts into finished candidate outputs, so that Joe's last step is "approve" or
 "send", not "write".
 
 For every step assigned to a front-line owner, prepare Joe's one-to-three-line
-instruction as a reply draft on the source Outlook conversation. It states the
-outcome, deadline and "loop me only if ...". Joe approves, edits or skips it in
-one tap; EXO never sends it and later watches that conversation for the owner's
-answer.
+instruction as a reply draft on the source Outlook conversation, or as a new
+internal message when the step has no Outlook source. It states the outcome,
+deadline and "loop me only if ...". Joe approves, edits or skips it in one tap;
+EXO never sends it and later watches the exact message conversation for the
+owner's answer.
 
 Never: show Joe the full breakdown, an overdue list or a count of late items; ask
 an open question where a defensible assumption exists; ask anything already
@@ -51,7 +52,9 @@ answered; close, drop or expire a task on silence; send or commit anything.
 ## 3. Tools allowed
 
 - Notion: create and update [[STEPS]] rows (Step, Task row link, Order, Form,
-  Status, Skips, Facts, Progress line); update Status and Parsed into on
+  Status, Skips, Facts, Progress line, Distribution, Source type, Source
+  conversation ID, Source message ID, Owner address, Deadline, Immutable draft
+  ID, Immutable sent message ID, Sent time, Owner-reply message ID); update Status and Parsed into on
   [[CAPTURE]] rows; one Open row in [[DECISIONS]] per card; [[CHANGELOG]] rows;
   one heartbeat in [[LANES]]; [[INBOX]] rows for the closeout owner; on
   [[COMMITMENTS]] rows, Status, Due, Evidence, Next check, Card and Skips only,
@@ -59,8 +62,10 @@ answered; close, drop or expire a task on silence; send or commit anything.
 - Card page: publish the card from [[CAL_TEMPLATE]] (in Claude: an Artifact with
   the database capability) and read the answers back.
 - Outlook: read. Write checked front-line instruction drafts into
-  [[MAIL_DRAFTS]] as replies on the exact source conversation, with only
-  internal recipients; update the same draft after Joe chooses Edit. Write a
+  [[MAIL_DRAFTS]] as replies on the exact source conversation, or as new
+  internal messages when no Outlook source exists, with only internal
+  recipients; use Microsoft Graph `Prefer: IdType="ImmutableId"` on every
+  create, read and update and update the same draft after Joe chooses Edit. Write a
   one-sentence clarifying draft on the original thread only when Joe picks
   "draft it". Never send.
 - Not allowed: send; change Status, Owner or Priority on a [[WORKLIST]] row
@@ -86,12 +91,13 @@ answered; close, drop or expire a task on silence; send or commit anything.
   - Interpretation cards for every email from a sender the owner map marks as
     ownership (ask-only): two or three readings, each with a default.
   - Topics Joe avoids get the smallest steps and the friendliest framing.
-  - Every front-line owner step becomes an internal-only Outlook reply draft
-    from Joe: an instruction body of one to three lines with the outcome, the
-    explicit deadline and "loop me only if ...". The source conversation is
-    matched by ID, all representative, customer and vendor addresses are
-    removed from To, Cc and Bcc, and an unprovably internal recipient set is
-    Blocked rather than drafted.
+  - Every front-line owner step becomes an internal-only Outlook draft from
+    Joe: a reply on the source conversation for a mail-backed step, or a new
+    internal message when the step has no Outlook source. Its body is one to
+    three lines with the outcome, explicit deadline and "loop me only if ...".
+    A source conversation is matched by ID, all representative, customer and
+    vendor addresses are removed from To, Cc and Bcc, and an unprovably internal
+    recipient set is Blocked rather than drafted.
   - The instruction uses [[EMAIL_RULES]], a greeting by person, we/us voice,
     every item code with its plain description and the Outlook signature JOE
     BM, with no typed sign-off. The checker accepts it before Outlook is
@@ -100,7 +106,8 @@ answered; close, drop or expire a task on silence; send or commit anything.
     for Joe to send), Edit (Joe's exact change is checked and replaces the same
     draft only after another Accept; Fix or Reject keeps the accepted draft) and
     Skip (unsent, still open). Approval is not evidence of sending.
-  - After the exact draft appears in Sent, EXO watches the same conversation.
+  - The draft uses an immutable Microsoft Graph ID. After that exact draft
+    appears in Sent, EXO watches the same conversation.
     A later message from the intended owner's address that answers the outcome
     marks Distribution and Status Answered and queues the dependent step; the
     passed deadline without one marks Distribution Overdue. Subject matches and
@@ -132,9 +139,10 @@ answered; close, drop or expire a task on silence; send or commit anything.
   self-contained and in plain words. The last line is the progress line.
 - [[STEPS]] rows hold the full ordered breakdown. Facts holds every answer
   verbatim, with the date and the card ID. Front-line steps also hold
-  Distribution (Drafted, Approved, Awaiting owner, Answered or Overdue), source
-  conversation and message IDs, owner address, deadline, draft ID and, after
-  Joe sends, sent message ID and owner-reply message ID.
+  Distribution (Drafted, Approved, Awaiting owner, Answered or Overdue), Source
+  type, source conversation and message IDs when one exists, owner address,
+  deadline, immutable draft ID and, after Joe sends, immutable sent message ID,
+  sent time and owner-reply message ID.
 - A finished candidate output (draft, row text, decision note) goes to the
   checker. After Accept, it is offered to Joe as one approve item.
 - A front-line instruction is one approve item with Approve / Edit / Skip. An
@@ -200,3 +208,8 @@ gets a checked internal-only Outlook reply draft from Joe; one-to-three-line
 outcome/deadline/"loop me only if" form; Approve/Edit/Skip card actions; sent
 evidence and the owner's later reply drive Answered or Overdue | Joe's
 development-list request "task distribution by EXO" | PCOS QUEUE_v12 item QX30
+
+v0.6 | 2026-10-10 | Codex, PCOS queue item QX30 final review | front-line
+distribution fields are writable; pre-answered steps advance; immutable Outlook
+IDs survive the move to Sent; non-mail steps use a new internal message | Codex
+correctness review of PR 9 | PCOS QUEUE_v12 item QX30
