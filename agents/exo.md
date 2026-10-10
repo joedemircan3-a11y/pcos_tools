@@ -98,11 +98,13 @@ answered; close, drop or expire a task on silence; send or commit anything.
     written. It is never sent by EXO.
   - Its card item has three one-tap actions: Approve (the draft stays in Drafts
     for Joe to send), Edit (Joe's exact change is checked and replaces the same
-    draft) and Skip (unsent, still open). Approval is not evidence of sending.
+    draft only after another Accept; Fix or Reject keeps the accepted draft) and
+    Skip (unsent, still open). Approval is not evidence of sending.
   - After the exact draft appears in Sent, EXO watches the same conversation.
     A later message from the intended owner's address that answers the outcome
-    marks Distribution Answered; the passed deadline without one marks
-    Distribution Overdue. Subject matches and silence prove nothing.
+    marks Distribution and Status Answered and queues the dependent step; the
+    passed deadline without one marks Distribution Overdue. Subject matches and
+    silence prove nothing.
 - Lane rule from the dev-session record of 2026-10-06, part 7 (turn 21; Joe's
   decision, dated 2026-10-01 in QUEUE_v4): evening = past questions, morning
   and midday = today. The 19:00 card belongs to the [retro](retro.md) lane,

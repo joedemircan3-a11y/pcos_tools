@@ -113,7 +113,9 @@ def test_card_has_one_tap_approve_edit_skip_and_none_sends():
         assert "Approve" in text and "Edit" in text and "Skip" in text
     assert "Approve means the checked reply draft stays in Drafts for Joe to send; it does not send" in card_build
     assert "Edit applies only Joe's stated edit" in filing
-    assert "Skip leaves it unsent" in filing and "keeps the step open" in filing
+    assert "only an Accept updates the same Outlook draft" in filing
+    assert "Fix or Reject leaves the previously accepted draft unchanged" in filing
+    assert "Skip leaves the draft unsent" in filing and "keeps the step open" in filing
     assert "Do not set the step's Status to Answered" in filing
     assert "do not queue the task's next step" in filing
     assert filing.index("front-line instruction items") < filing.index("For every remaining item")
@@ -155,6 +157,9 @@ def test_mock_approval_waits_for_sent_evidence_then_the_named_owner():
         "explicit deadline", "Distribution Overdue", "Subject match", "silence",
     ):
         assert required in watch
+    assert "set the step Status Answered" in watch
+    assert "queue its next dependent step" in watch
+    assert "only generic answer transition" in watch
 
 
 def test_card_routine_and_checker_all_carry_the_distribution_gate():
@@ -176,3 +181,15 @@ def test_exo_threaded_reply_explicitly_overrides_generic_route_two_mail():
     assert route_two in mail_check and exception in mail_check
     assert "It is the Route 2 exception" in mail_check
     assert "including an externally started conversation" in mail_check
+
+
+def test_edit_is_transactional_and_owner_reply_advances_the_step():
+    filing = flat(section(read(SKILL), "## 3. File the answers"))
+    watch = flat(section(read(SKILL), "## 9. Watch the owner's reply"))
+    prompt = flat(read(ROUTINE))
+    for text in (filing, prompt):
+        assert "only" in text and "Accept" in text
+        assert "Fix or Reject" in text and "unchanged" in text
+    for text in (watch, prompt):
+        assert "Status Answered" in text
+        assert "next dependent step" in text

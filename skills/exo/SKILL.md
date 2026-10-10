@@ -89,9 +89,12 @@ front-line instruction items, use this separate branch before any generic
 answer transition:
 
 - Approve sets Distribution Approved and leaves the checked draft in
-  [[MAIL_DRAFTS]] for Joe; Edit applies only Joe's stated edit, checks it again
-  and updates that draft; Skip leaves it unsent, increments Skips and keeps the
-  step open. None of the three actions sends or proves that the owner has acted.
+  [[MAIL_DRAFTS]] for Joe. Edit applies only Joe's stated edit to a separate
+  candidate and runs the checker again; only an Accept updates the same Outlook
+  draft. Fix or Reject leaves the previously accepted draft unchanged and shows
+  the checker finding on the next card. Skip leaves the draft unsent, increments
+  Skips and keeps the step open. None of the three actions sends or proves that
+  the owner has acted.
 - Do not set the step's Status to Answered and do not queue the task's next step
   for Approve, Edit or Skip. Distribution Answered is set only by the later
   owner-reply evidence in section 9.
@@ -198,8 +201,10 @@ Awaiting owner or Overdue step. Approval alone is not a send.
   Awaiting owner.
 - Mark Distribution Answered only when a later message in the same conversation
   comes from the intended owner's address and answers the requested outcome.
-  Store that reply's message ID and text in Facts. A subject match, a reply from
-  somebody else or an earlier message is not evidence.
+  Store that reply's message ID and text in Facts, set the step Status Answered
+  and queue its next dependent step. This owner-reply branch is the only generic
+  answer transition for a front-line instruction. A subject match, a partial
+  answer, a reply from somebody else or an earlier message is not evidence.
 - Once the explicit deadline has passed with no qualifying owner reply, mark
   Distribution Overdue. Keep watching that same conversation; a later
   qualifying reply changes it to Answered. Never close the Worklist task from

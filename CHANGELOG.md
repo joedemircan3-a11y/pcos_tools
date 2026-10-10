@@ -33,6 +33,10 @@ put it in Joe's Drafts or watch for the answer. Built by Codex from main 106d794
   generic Route 2 new-message rule after its recipients pass the internal-only
   gate; Approve/Edit/Skip branch before the generic answer transition, so Skip
   cannot mark a step Answered or queue dependent work.
+- Codex review, round 2: a qualifying owner reply now sets the step Status
+  Answered and queues its dependent step; Edit is transactional, so only a new
+  checker Accept replaces the existing Outlook draft and Fix/Reject leaves the
+  last accepted draft unchanged.
 
 ## Unreleased - 2026-10-09: rules and clock v0.1
 

@@ -162,7 +162,9 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
    most two commitment items, a Joe-owes item due within 48 hours first. A
    front-line instruction item names the owner, outcome and deadline and offers
    the three one-tap actions Approve / Edit / Skip; Approve explicitly leaves
-   the draft in Drafts for Joe to send and never sends it.
+   the draft in Drafts for Joe to send and never sends it. Edit says the
+   accepted draft changes only after another checker Accept; Fix or Reject keeps
+   the last accepted draft unchanged.
 6. One Open row in [[DECISIONS]] for the card.
 7. Retro: at most five items; the ledger's "What happened?" items first, then
    the open conflict items, then at most two commitment items, for which the
