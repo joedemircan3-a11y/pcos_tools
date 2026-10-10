@@ -31,7 +31,8 @@ Every checklist ends with the common checks:
 ## mail-draft
 
 A Route 2 instruction or a Route 3 reply drafted into Outlook (brief lane, EXO
-clarifying line, intake reply), or a commitments-lane draft (item 10).
+front-line instruction or clarifying line, intake reply), or a commitments-lane
+draft (item 10).
 
 Required: the whole thread, every branch, including its terminal message
 ([[MAIL_INBOX]], [[MAIL_ROUTED]], [[MAIL_SENT]]); the owner-map rows in
@@ -62,6 +63,18 @@ for a commitments-lane draft, its [[COMMITMENTS]] row.
     internal email, never a reply into an external chain, to the team member
     who owes it or to the front-line owner the owner map names. The commitment
     row it cites exists and is marked for the next card.
+11. An EXO front-line instruction follows exo skill section 8: it is a reply on
+    the exact source conversation, matched by conversation ID and source message
+    ID; To, Cc and Bcc contain only the intended internal owner addresses from
+    [[PEOPLE]] and [[RULES]], with every representative, customer, vendor and
+    other external address removed. If an internal-only recipient set cannot be
+    proved, the only passing result is no draft and a Blocked step.
+12. Its instruction body is one to three lines apart from the greeting and
+    signature, and contains the outcome, the explicit deadline and the phrase
+    "loop me only if" with a real exception. It greets the owner by person, uses
+    we/us voice and [[EMAIL_RULES]], writes each item code with its plain
+    description, selects the Outlook signature JOE BM and types no sign-off or
+    signature. It is a draft, never sent. Never send it.
 
 ## routing
 
@@ -144,7 +157,10 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
    A "What happened?" question also offers "unrelated / wrong direction".
 5. EXO: 2 to 4 items (one when only one is open), assumption form unless no assumption is defensible, a
    progress line at the end, no overdue list and no count of late items; at
-   most two commitment items, a Joe-owes item due within 48 hours first.
+   most two commitment items, a Joe-owes item due within 48 hours first. A
+   front-line instruction item names the owner, outcome and deadline and offers
+   the three one-tap actions Approve / Edit / Skip; Approve explicitly leaves
+   the draft in Drafts for Joe to send and never sends it.
 6. One Open row in [[DECISIONS]] for the card.
 7. Retro: at most five items; the ledger's "What happened?" items first, then
    the open conflict items, then at most two commitment items, for which the
