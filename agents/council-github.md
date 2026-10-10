@@ -1,11 +1,11 @@
 # Card: council-github
 
-- Version: v0.5
+- Version: v0.6
 - Status: Candidate
 - Register: P2-07 (on-demand council through a GitHub pull request: "@codex review", Gemini CLI Action on a free API key, a Claude Code Routine on the PR event chairs and writes Notion)
 - Lane ID: pending
 - Skills: none of its own yet; the chair uses [council-board v0.1](../skills/council-board/SKILL.md). The PC council skill is P2-08.
-- Date: 2026-10-09
+- Date: 2026-10-10
 
 ## 1. Mission
 
@@ -98,8 +98,9 @@ reviews its own draft.
 
 ## 6. Trigger and owner model
 
-- Trigger: "council: TOPIC" in a Claude chat; then the PR opened, review
-  submitted and comment events.
+- Trigger: "council: TOPIC" can prepare the PR on demand, but the Claude chair
+  event and two-hour fallback are paused 2026-10-10 (usage diet). Restore the
+  chair on review-submitted and PR-comment events plus its two-hour fallback.
 - Runs on: Claude Code on the web (draft and PR); Codex cloud; the Gemini CLI
   GitHub Action; a Claude Code Routine (chair).
 - Model: draft Claude Opus; Review-1 Codex (ChatGPT plan); Review-2 Gemini (free
@@ -141,3 +142,7 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+v0.6 | 2026-10-10 | Codex, queue item QX35 | chair events and the two-hour
+fallback paused; on-demand PR preparation remains explicit | Joe's temporary
+usage diet | PCOS QUEUE_v12 item QX35

@@ -1,8 +1,9 @@
 # Routine: knowledge-review-2
 
-- Status: Blocked. It needs the knowledge-review skill (P2-16, not yet written). Create it only when the skill and the knowledge-extract Routine exist. When Gemini works through the Drive mirror lane, it replaces this Routine.
+- Status: Not installed; stay off 2026-10-10 (usage diet)
 - Lane: knowledge loop stage 2, Review-2 (register P2-16). Review-1 is a ChatGPT scheduled task, not a Claude Routine.
-- Trigger: cron `0 13 * * *`, CRON_TZ=America/Mexico_City (daily 13:00, after extraction and Review-1)
+- Trigger: none; not installed and still blocked on the knowledge-review skill (P2-16)
+- Restore: cron `0 13 * * *`, CRON_TZ=America/Mexico_City (daily 13:00, after extraction and Review-1)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Google Drive, Notion
 - Model: Claude Opus, never the model that extracted the batch: knowledge-extract runs Claude Sonnet (exact versions from the kernel lane table)
@@ -47,3 +48,7 @@ v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the uninstalled lane off and
+preserved daily 13:00 in Restore | Joe's temporary usage diet; P2-16 is still
+not built | PCOS QUEUE_v12 item QX35

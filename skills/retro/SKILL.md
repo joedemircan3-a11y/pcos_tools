@@ -3,7 +3,7 @@ name: retro
 description: Close gaps in the PCOS historical record by asking Joe about the past, which he answers easily ("past is just remembering"). Use for the evening card at 19:00 America/Mexico_City, when Joe says "retro", and when filing retro answers. Finds threads and Worklist items of the last 90 days with no closure evidence, reads every thread in full before asking, asks five one-line questions with fixed tap options, and files the answers into Prediction rows, People candidates, golden-set candidates and Decision rows. Also carries the commitments lane's past questions (commitments more than 14 days overdue).
 compatibility: Needs the PCOS Notion hub (Prediction, Decisions, Corrections, Changelog, Inbox, Lanes, Steps, Commitments), the Drive Worklist, mail-mining outputs and people profiles, the CAL card template, and read access to Outlook through the Microsoft 365 connector.
 metadata:
-  version: "0.3"
+  version: "0.4"
   status: Candidate
   register: P2-30
   kernel: "1.1"
@@ -22,8 +22,9 @@ in the private map named there).
 
 ## 1. Where the lane sits
 
-- Morning and midday cards (EXO, 07:00 and 13:00) are about today. The evening
-  card (19:00 America/Mexico_City) is about the past, and it is this lane's.
+- The morning card (EXO, 07:00) is about today; its 13:00 run is off under the
+  usage diet. The evening card (19:00 America/Mexico_City) is about the past,
+  and it is this lane's.
 - The evening card is the only place for past questions. It carries the
   prediction-ledger lane's queued "What happened?" questions first, then this
   lane's conflict items and the commitments lane's past questions
@@ -301,7 +302,7 @@ candidates; the lane never writes a rule.
   commitments lane's own marked item.
 - Overwrite, move, delete, forward or reply to mail; send or draft anything.
 - Close, drop or change a Worklist row; mint a Task ID.
-- Ask about today's work: that is the morning and midday cards' job.
+- Ask about today's work: that is the morning card's job.
 - Show the size of the backlog or a count of open gaps.
 - Put a people line where the team can see it, or personal or Room 10 material
   on a card.

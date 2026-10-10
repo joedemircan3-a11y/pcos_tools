@@ -1,8 +1,9 @@
 # Routine: intake-email
 
-- Status: Candidate. Create after PC-2 (the Outlook folder and rule for [PCOS] intake) and build day.
+- Status: Not installed; stay off 2026-10-10 (usage diet)
 - Lane: team access Door 1 (register P2-09)
-- Trigger: cron `5 8-18 * * 1-5`, CRON_TZ=America/Mexico_City (hourly at :05 on weekdays, 08:05 to 18:05)
+- Trigger: none; not installed
+- Restore: cron `5 8-18 * * 1-5`, CRON_TZ=America/Mexico_City (hourly at :05 on weekdays, 08:05 to 18:05)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Microsoft 365, Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -52,3 +53,7 @@ v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the uninstalled lane off and
+preserved its hourly schedule in Restore | Joe's temporary usage diet | PCOS
+QUEUE_v12 item QX35

@@ -1,13 +1,13 @@
 # Routine: exo
 
-- Status: Candidate. Create on build day.
+- Status: Candidate. Kept 2026-10-10 (usage diet).
 - Lane: EXO (register P2-02)
-- Trigger: cron `0 7,13 * * *`, CRON_TZ=America/Mexico_City (07:00 and 13:00 daily; installed at PC-1 to fire at 06:53 and 12:53). The 19:00 card is the [retro](retro.md) Routine's.
+- Trigger: cron `0 7 * * *`, CRON_TZ=America/Mexico_City (07:00 daily; the 13:00 run is off under the usage diet). The 19:00 card is the [retro](retro.md) Routine's.
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [exo](../agents/exo.md)
-- Skills: [exo v0.4](../skills/exo/SKILL.md); [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on front-line instructions and finished outputs
+- Skills: [exo v0.5](../skills/exo/SKILL.md); [commitments v0.3](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on front-line instructions and finished outputs
 - Needs first: build day ([[LANES]], [[INBOX]], [[TODAY]]); [[STEPS]] and [[CAPTURE]] exist
 
 ## Prompt
@@ -77,3 +77,7 @@ v0.7 | 2026-10-10 | Codex, PCOS queue item QX30 final review | pre-answered
 steps advance; immutable Outlook IDs correlate Drafts to Sent; steps without an
 Outlook source use a new internal message | Codex correctness review of PR 9 |
 PCOS QUEUE_v12 item QX30
+
+v0.8 | 2026-10-10 | Codex, queue item QX35 | kept 07:00 and turned off 13:00;
+loads exo v0.5 and commitments v0.3 | Joe's temporary usage diet | PCOS
+QUEUE_v12 item QX35

@@ -1,13 +1,13 @@
 # Routine: retro
 
-- Status: Candidate. Create after this file is merged (queue item QW21), in the same session that removes the EXO Routine's 18:53 run.
+- Status: Candidate. Kept 2026-10-10 (usage diet).
 - Lane: Retro (register P2-30)
 - Trigger: cron `53 18 * * *`, CRON_TZ=America/Mexico_City (daily 18:53, so the card is ready for the 19:00 evening slot that EXO hands over)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [retro](../agents/retro.md)
-- Skills: [retro v0.3](../skills/retro/SKILL.md); [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3 for the ledger's questions; [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on every item
+- Skills: [retro v0.4](../skills/retro/SKILL.md); [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3 for the ledger's questions; [commitments v0.3](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on every item
 - Needs first: [[PREDICTION]], [[DECISIONS]], [[CORRECTIONS]], [[INBOX]] and [[LANES]] exist; the EXO Routine no longer fires at 18:53
 
 ## Prompt
@@ -56,3 +56,7 @@ v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the daily 18:53 trigger and
+updated loader versions for the one-card diet | Joe's temporary usage diet |
+PCOS QUEUE_v12 item QX35

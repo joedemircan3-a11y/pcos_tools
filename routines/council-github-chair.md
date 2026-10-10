@@ -1,8 +1,9 @@
 # Routine: council-github-chair
 
-- Status: Candidate. Create at PC-1 step 4.
+- Status: Paused 2026-10-10 (usage diet)
 - Lane: council-github chair (register P2-07: a Claude Code Routine on the PR event chairs and writes Notion)
-- Trigger: GitHub events on joedemircan3-a11y/pcos_tools: pull request review submitted, and issue comment created on a pull request; plus a schedule, cron `0 */2 * * *`, CRON_TZ=America/Mexico_City (every 2 hours), for the missing-review fallback
+- Trigger: none while paused
+- Restore: GitHub events on joedemircan3-a11y/pcos_tools: pull request review submitted, and issue comment created on a pull request; plus a schedule, cron `0 */2 * * *`, CRON_TZ=America/Mexico_City (every 2 hours), for the missing-review fallback
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion
 - Model: Claude Fable, or Claude Opus in a session separate from the draft (exact version from the kernel lane table)
@@ -122,3 +123,8 @@ v0.10 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES p
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.11 | 2026-10-10 | Codex, queue item QX35 | paused PR events and the two-hour
+fallback; preserved both in Restore | Codex review rounds create many PR
+comments, so Joe's temporary usage diet pauses this Claude chair | PCOS
+QUEUE_v12 item QX35

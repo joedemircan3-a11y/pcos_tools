@@ -1,13 +1,13 @@
 # Routine: commitments-backfill
 
-- Status: Candidate. Create after this file is merged (queue item QW21) and run it once by hand, right after the commitments Routine's first run.
+- Status: Candidate. One-time manual run only under the 2026-10-10 usage diet; disable after a heartbeat says complete.
 - Lane: Commitments, one-time backfill (register P2-31)
-- Trigger: once by hand at install; cron `20 7 * * 1-5`, CRON_TZ=America/Mexico_City, only as the catch-up schedule until a heartbeat says complete (a run cut short by a time-out continues from its last batch); the installing session disables it after that
+- Trigger: once by hand; no recurring schedule (a run cut short by a time-out resumes by hand from its last batch); disable after a heartbeat says complete
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Microsoft 365, Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [commitments](../agents/commitments.md)
-- Skills: [commitments v0.2](../skills/commitments/SKILL.md) sections 2 to 5 and 9
+- Skills: [commitments v0.3](../skills/commitments/SKILL.md) sections 2 to 5 and 9
 - Needs first: [[COMMITMENTS]] exists; the commitments Routine is installed and has run once
 
 ## Prompt
@@ -48,3 +48,7 @@ v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.3 | 2026-10-10 | Codex, queue item QX35 | removed the recurring catch-up
+cron; resume the one-time backfill only by hand until complete | Joe's temporary
+usage diet | PCOS QUEUE_v12 item QX35

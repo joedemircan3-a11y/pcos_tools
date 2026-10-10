@@ -1,6 +1,6 @@
 # Routine: L1-brief
 
-- Status: Candidate. Create on build day.
+- Status: Candidate. Kept 2026-10-10 (usage diet).
 - Lane: L1 PCOS Brief (build plan section 2; kernel lane table)
 - Trigger: cron `30 6 * * 1-5`, CRON_TZ=America/Mexico_City (weekdays 06:30)
 - Repository: joedemircan3-a11y/pcos_tools
@@ -77,3 +77,7 @@ v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.6 | 2026-10-10 | Codex, queue item QX35 | kept the weekday 06:30 trigger under
+the temporary usage diet | Joe's usage-routing rule reduces Claude runs without
+changing the brief slot | PCOS QUEUE_v12 item QX35

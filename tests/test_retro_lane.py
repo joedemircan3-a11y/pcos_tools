@@ -46,8 +46,11 @@ def flat(text):
 
 
 def cron(name):
-    """(minute, hour, day of week, time zone) of a Routine's Trigger line."""
-    trigger = re.search(r"^- Trigger: (.*)$", read(ROUTINES / f"{name}.md"), re.M).group(1)
+    """(minute, hour, day of week, time zone) of a Routine's trigger or restore line."""
+    text = read(ROUTINES / f"{name}.md")
+    trigger = re.search(r"^- Trigger: (.*)$", text, re.M).group(1)
+    if "cron `" not in trigger:
+        trigger = re.search(r"^- Restore: (.*)$", text, re.M).group(1)
     minute, hour, _, _, weekday = re.search(r"cron `([^`]+)`", trigger).group(1).split()
     zone = re.search(r"CRON_TZ=([\w/]+)", trigger)
     return minute, hour, weekday, zone.group(1) if zone else "UTC"
@@ -126,7 +129,7 @@ def test_answers_are_filed_without_touching_the_mail():
 def test_the_evening_slot_moved_from_exo_to_retro():
     assert cron("retro") == ("53", "18", "*", "America/Mexico_City")
     minute, hour, weekday, zone = cron("exo")
-    assert (hour, weekday, zone) == ("7,13", "*", "America/Mexico_City")
+    assert (hour, weekday, zone) == ("7", "*", "America/Mexico_City")
     for path in (EXO_CARD, EXO_SKILL):
         assert "07:00, 13:00 and 19:00" not in read(path)
 

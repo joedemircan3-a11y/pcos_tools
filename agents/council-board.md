@@ -1,11 +1,11 @@
 # Card: council-board
 
-- Version: v0.4
+- Version: v0.5
 - Status: Candidate
 - Register: P2-06 (board council on Notion: Draft, Review-1, Review-2, Final, Dissent; plan round before execution; chair)
 - Lane ID: pending
 - Skills: [council-board v0.1](../skills/council-board/SKILL.md); the chair's Final is checked with [checker v0.2](../skills/checker/SKILL.md)
-- Date: 2026-10-09
+- Date: 2026-10-10
 
 ## 1. Mission
 
@@ -87,9 +87,10 @@ sources settle.
 
 ## 6. Trigger and owner model
 
-- Trigger: a daily cycle in Mexico City time: 08:00 Draft, 09:00 Review-1, 09:30
-  Review-2, 10:00 Chair. On demand, "council row X" joins the next cycle. Urgent
-  work goes to council-github instead.
+- Trigger: the Claude Draft, Review-2 and Chair stages are paused 2026-10-10
+  (usage diet). Restore in Mexico City time: 08:00 Draft, 09:30 Review-2 and
+  10:00 Chair. Review-1 is the separate ChatGPT task at 09:00. On demand,
+  "council row X" waits for a restored cycle.
 - Runs on: Claude scheduled tasks (Draft, Review-2, Chair) and a ChatGPT
   scheduled task (Review-1).
 - Model: Draft Claude Opus; Review-1 GPT (ChatGPT Pro); Review-2 Claude Opus in a
@@ -122,3 +123,7 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+v0.5 | 2026-10-10 | Codex, queue item QX35 | Claude Draft, Review-2 and Chair
+stages paused; restore times retained | Joe's temporary usage diet | PCOS
+QUEUE_v12 item QX35
