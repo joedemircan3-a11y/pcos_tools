@@ -1,9 +1,9 @@
 ---
 name: exo
-description: Break PCOS work into single small steps and pull Joe into it with short assumption cards. Use for the 07:00 EXO card (the 13:00 run is off under the usage diet, and the 19:00 evening card belongs to the retro skill), when Joe says "exo" or "next step", when a voice or text dump lands in Capture, when an email from an ownership-level sender needs an interpretation card, when the commitments lane has marked a commitment for the next card, and when a task's facts are complete enough to finish a candidate output.
-compatibility: Needs the PCOS Notion hub (Steps, Capture, Decisions, Prediction, Commitments, Worklist), the CAL card template in Drive, and read access to Outlook through the Microsoft 365 connector for interpretation cards.
+description: Break PCOS work into single small steps, draft safe internal instructions for front-line owners, and pull Joe into his own work with short assumption cards. Use for the 07:00 EXO card (the 13:00 run is off under the usage diet, and the 19:00 evening card belongs to the retro skill), when Joe says "exo" or "next step", when a voice or text dump lands in Capture, when an email from an ownership-level sender needs an interpretation card, when the commitments lane has marked a commitment for the next card, and when a task's facts are complete enough to finish a candidate output.
+compatibility: Needs the PCOS Notion hub (Steps, Capture, Decisions, Prediction, Commitments, Worklist), the CAL card template in Drive, and Outlook read/draft access through the Microsoft 365 connector. Outlook draft operations must support Microsoft Graph immutable IDs.
 metadata:
-  version: "0.3"
+  version: "0.5"
   status: Candidate
   register: P2-02
   kernel: "1.0"
@@ -32,6 +32,10 @@ Input: one open row in [[WORKLIST]] and the sources named on it. Output: ordered
   Joe's yes).
 - Before the first card, copy the facts the sources already hold into Facts,
   with their key and ID, so that no card asks for them.
+- When the action belongs to a front-line owner, keep Joe out of the action:
+  set the owner on the step and prepare the instruction by section 8. A step
+  without an explicit deadline is not ready for that draft; put the deadline
+  assumption on Joe's card first and never invent one.
 - The full breakdown stays in Notion. A card shows one next step and what is
   already done, never the whole list.
 
@@ -58,6 +62,12 @@ Write each item:
   delivery addresses applies?"
 - Approve form: "The draft to the order owner is ready. Approve to put it in
   your Drafts."
+- Front-line instruction form: show the owner, outcome and deadline in plain
+  words, followed by three one-tap actions: **Approve** / **Edit** / **Skip**.
+  Approve means the checked reply draft stays in Drafts for Joe to send; it does
+  not send. Edit applies Joe's exact change, re-runs the checker and updates the
+  same draft. Skip leaves the draft unsent and the work open; it counts once
+  under section 4 and never means done or dropped.
 - Self-contained: plain words, with the key facts and dates inside the item; no
   internal ID without its meaning (CAL standard P-19).
 - Tone: small and calm. Present the step as simple. Never show the total size,
@@ -75,7 +85,21 @@ step to Status Shown.
 
 Commitment items are filed into their [[COMMITMENTS]] row by the commitments
 skill sections 7 and 8 (its own skip rule included), never into [[STEPS]]. For
-every other item:
+front-line instruction items, use this separate branch before any generic
+answer transition:
+
+- Approve sets Distribution Approved and leaves the checked draft in
+  [[MAIL_DRAFTS]] for Joe. Edit applies only Joe's stated edit to a separate
+  candidate and runs the checker again; only an Accept updates the same Outlook
+  draft. Fix or Reject leaves the previously accepted draft unchanged and shows
+  the checker finding on the next card. Skip leaves the draft unsent, increments
+  Skips and keeps the step open. None of the three actions sends or proves that
+  the owner has acted.
+- Do not set the step's Status to Answered and do not queue the task's next step
+  for Approve, Edit or Skip. Distribution Answered is set only by the later
+  owner-reply evidence in section 9.
+
+For every remaining item (neither a commitment nor a front-line instruction):
 
 - Write each answer verbatim into the step's Facts, with the date and the card
   ID. It is Confirmed, with the card ID as its source.
@@ -136,6 +160,73 @@ steps and the friendliest framing. Forms he answers get used more. Report the
 counts to the weekly-evolve lane. This skill changes only through weekly-evolve,
 as a new version that passes the golden-set gate.
 
+## 8. Draft a front-line instruction
+
+Every [[STEPS]] row assigned to a front-line owner gets one Outlook draft from
+Joe. A mail-backed step is a reply on the source conversation, not a new subject
+and not a message on a look-alike thread. A step with no Outlook source gets a
+new internal message to the intended owner; never invent a conversation to make
+it look like a reply.
+
+1. Record Source type as `Mail-backed` or `No Outlook thread`. For a mail-backed
+   step, read the whole source conversation in [[MAIL_INBOX]], [[MAIL_ROUTED]]
+   and [[MAIL_SENT]]. Match it by conversation ID and the source message ID,
+   never by subject. If the intended owner has already answered the requested
+   outcome after Joe's latest message, store that message as evidence, mark
+   Distribution Answered, set the step Status Answered, queue its next dependent
+   step and write no draft. For `No Outlook thread`, skip the reply lookup and
+   use the new-internal-message path in step 4.
+2. Resolve the intended owner by address through [[PEOPLE]] and the owner-map
+   rows in [[RULES]]. The reply recipients are internal people only. Remove
+   every representative, customer, vendor and other external address from To,
+   Cc and Bcc, even when the external person started or appears anywhere in the
+   source conversation. For a mail-backed step, if the connector cannot
+   preserve that conversation while proving the recipient set, write no draft,
+   mark the step Blocked and file one [[INBOX]] row for the closeout owner. For
+   `No Outlook thread`, address a new message only to the intended internal
+   owner. In both paths, an unprovably internal owner or recipient set is
+   Blocked. Fail closed; never place an internal instruction in front of an
+   external party.
+3. Write an instruction body of one to three lines, apart from the greeting and
+   signature. It contains exactly: the outcome, the explicit deadline and
+   "loop me only if ..." followed by the exception that needs Joe. Address the
+   owner by person in the greeting, use we/us voice and [[EMAIL_RULES]], and
+   write every item code, SAP code, order number or Task ID with its plain
+   description. Select the Outlook signature `JOE BM`; type no sign-off and do
+   not type the signature into the body.
+4. Run the checker with job type mail-draft before writing Outlook. Only an
+   Accept becomes a draft in [[MAIL_DRAFTS]]: reply on the exact source
+   conversation for `Mail-backed`, or new internal message for `No Outlook
+   thread`. Never send. On every Outlook create, read and update request, use
+   Microsoft Graph `Prefer: IdType="ImmutableId"`; if the connector cannot
+   request and return immutable IDs, write no draft, mark the step Blocked and
+   file one [[INBOX]] row. Record Source type, conversation ID, source message
+   ID when one exists, owner address, deadline and immutable draft ID on the
+   step; set Distribution Drafted. A retry sees that immutable identity and
+   updates the same draft rather than creating a duplicate.
+
+## 9. Watch the owner's reply
+
+At every slot, inspect the source conversation of each Distribution Approved,
+Awaiting owner or Overdue step. Approval alone is not a send.
+
+- Until the exact draft appears in [[MAIL_SENT]], keep Distribution Approved.
+  Find the sent copy by the stored immutable draft ID, using Microsoft Graph
+  `Prefer: IdType="ImmutableId"`; never correlate by a mutable message ID or
+  subject. When it appears, store its immutable sent message ID and time and set
+  Distribution Awaiting owner.
+- Mark Distribution Answered only when a later message in the same conversation
+  comes from the intended owner's address and answers the requested outcome.
+  Store that reply's message ID and text in Facts, set the step Status Answered
+  and queue its next dependent step. This owner-reply branch is the only generic
+  answer transition for a front-line instruction. A subject match, a partial
+  answer, a reply from somebody else or an earlier message is not evidence.
+- Once the explicit deadline has passed with no qualifying owner reply, mark
+  Distribution Overdue. Keep watching that same conversation; a later
+  qualifying reply changes it to Answered. Never close the Worklist task from
+  this state change, never infer an answer from silence and never show an
+  overdue list to Joe. Subject matches never count.
+
 ## Never
 
 - Show the full breakdown, an overdue list or a count of late items.
@@ -144,3 +235,6 @@ as a new version that passes the golden-set gate.
 - Close, drop or expire anything on silence.
 - Send, or commit a price, payment or vendor term.
 - Change Status, Owner or Priority on a Worklist row (the closeout owner does).
+- Put a representative, customer, vendor or any external address on a
+  front-line instruction draft; send a draft; treat approval as evidence that
+  Joe sent it; mark an owner answer by subject alone.
