@@ -1,13 +1,13 @@
 # Routine: exo
 
-- Status: Candidate. Create on build day.
+- Status: Candidate. Kept 2026-10-10 (usage diet).
 - Lane: EXO (register P2-02)
-- Trigger: cron `0 7,13 * * *`, CRON_TZ=America/Mexico_City (07:00 and 13:00 daily; installed at PC-1 to fire at 06:53 and 12:53). The 19:00 card is the [retro](retro.md) Routine's.
+- Trigger: cron `0 7 * * *`, CRON_TZ=America/Mexico_City (07:00 daily; the 13:00 run is off under the usage diet). The 19:00 card is the [retro](retro.md) Routine's.
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [exo](../agents/exo.md)
-- Skills: [exo v0.2](../skills/exo/SKILL.md); [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on finished outputs
+- Skills: [exo v0.3](../skills/exo/SKILL.md); [commitments v0.3](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on finished outputs
 - Needs first: build day ([[LANES]], [[INBOX]], [[TODAY]]); [[STEPS]] and [[CAPTURE]] exist
 
 ## Prompt
@@ -64,3 +64,7 @@ v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.6 | 2026-10-10 | Codex, queue item QX35 | kept 07:00 and turned off 13:00;
+loads exo v0.3 and commitments v0.3 | Joe's temporary usage diet | PCOS
+QUEUE_v12 item QX35

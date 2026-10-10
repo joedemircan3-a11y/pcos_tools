@@ -1,8 +1,9 @@
 # Routine: council-board-chair
 
-- Status: Candidate. Create on build day.
+- Status: Paused 2026-10-10 (usage diet)
 - Lane: board council, chair (register P2-06)
-- Trigger: cron `0 10 * * *`, CRON_TZ=America/Mexico_City (daily 10:00)
+- Trigger: none while paused
+- Restore: cron `0 10 * * *`, CRON_TZ=America/Mexico_City (daily 10:00)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Google Drive
 - Model: Claude Fable (exact version from the kernel lane table)
@@ -66,3 +67,6 @@ v0.5 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.6 | 2026-10-10 | Codex, queue item QX35 | paused; preserved daily 10:00 in
+Restore | Joe's temporary usage diet | PCOS QUEUE_v12 item QX35

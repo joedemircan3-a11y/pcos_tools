@@ -1,11 +1,11 @@
 # Card: ledger-backtest
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-01 (prediction ledger) and P2-30 (the backtest loop of the retro design)
 - Lane ID: pending
 - Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1, 2 and 4 with [references/backtest.md](../skills/prediction-ledger/references/backtest.md); a sample checked with [checker v0.2](../skills/checker/SKILL.md)
-- Date: 2026-10-09
+- Date: 2026-10-10
 
 ## 1. Mission
 
@@ -89,8 +89,9 @@ or change a Worklist row; take more than 200 threads in one run.
 
 ## 6. Trigger and owner model
 
-- Trigger: once by hand at install, over the last 90 days; then Sundays 07:00
-  America/Mexico_City, two hours before L4, whose calibration reads the class rows.
+- Trigger: paused 2026-10-10 (usage diet). Restore with one manual run over the
+  last 90 days, then Sundays 07:00 America/Mexico_City, two hours before L4,
+  whose calibration reads the class rows.
 - Runs on: Claude Code Routine (Notion, Microsoft 365 and Drive connectors).
 - Model: Claude Opus predicts (in subagents, blind at the cut) and scores. The
   checker re-scores a sample on a different Claude model.
@@ -112,3 +113,7 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+v0.3 | 2026-10-10 | Codex, queue item QX35 | weekly backtest paused; manual
+first run and Sunday restore time retained | Joe's temporary usage diet | PCOS
+QUEUE_v12 item QX35

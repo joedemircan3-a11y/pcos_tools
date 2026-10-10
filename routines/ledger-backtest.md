@@ -1,8 +1,9 @@
 # Routine: ledger-backtest
 
-- Status: Candidate. Create after this file is merged (queue item QW21); run it once by hand, then let the schedule take over.
+- Status: Paused 2026-10-10 (usage diet)
 - Lane: ledger backtest (register P2-01; the backtest loop of P2-30)
-- Trigger: once by hand at install, then cron `0 7 * * 0`, CRON_TZ=America/Mexico_City (Sunday 07:00, two hours before L4)
+- Trigger: none while paused
+- Restore: once by hand at install, then cron `0 7 * * 0`, CRON_TZ=America/Mexico_City (Sunday 07:00, two hours before L4)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -49,3 +50,7 @@ v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). Trigger on the one clock, America/Mexico_City. | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.3 | 2026-10-10 | Codex, queue item QX35 | paused; preserved the manual first
+run and Sunday 07:00 in Restore | Joe's temporary usage diet | PCOS QUEUE_v12
+item QX35

@@ -1,9 +1,9 @@
 ---
 name: commitments
-description: Turn every promise in Joe's mail into a tracked commitment with a due date, check it against the record, and pull Joe to finish what he owes, one small step at a time. Use in the weekday commitments runs (06:40, 12:40 and 18:40 America/Mexico_City), for the one-time backfill of the last 30 days of sent mail, when the EXO or retro lane shows a commitment item or files its answer, and when Joe asks what he owes or is owed.
+description: Turn every promise in Joe's mail into a tracked commitment with a due date, check it against the record, and pull Joe to finish what he owes, one small step at a time. Use in the weekday 12:40 America/Mexico_City commitments run, for the one-time manual backfill of the last 30 days of sent mail, when the EXO or retro lane shows a commitment item or files its answer, and when Joe asks what he owes or is owed.
 compatibility: Needs the PCOS Notion hub (Commitments, Decisions, Changelog, Inbox, Lanes), the Drive Worklist, the owner-map rows in Rules, read access to Outlook (Inbox, Sent Items, routed folders) and write access to Outlook Drafts through the Microsoft 365 connector.
 metadata:
-  version: "0.2"
+  version: "0.3"
   status: Candidate
   register: P2-31
   kernel: "1.2"
@@ -23,9 +23,9 @@ in the private map named there).
 
 ## 1. Where the lane sits
 
-- The lane runs on weekdays at 06:40, 12:40 and 18:40 America/Mexico_City, each
-  run ahead of a card: EXO at 07:00 and 13:00 (today's work), retro at 19:00
-  (the past).
+- The lane runs once on weekdays at 12:40 America/Mexico_City. It marks rows for
+  the next EXO card at 07:00 (today's work) and that evening's retro card at
+  19:00 (the past).
 - It owns the [[COMMITMENTS]] rows: it extracts them (section 2), reads their
   due dates (section 3), checks the evidence (section 4), sets the status
   (section 5) and marks at most two rows for the next card, with a checked
@@ -203,10 +203,10 @@ Where a row may go:
 An Open or Moved row goes on no card. A team member's item stays with the front
 line, by the owner map, and surfaces only once it is overdue.
 
-Mark the rows: write the slot into Card ("EXO DATE 07:00", "EXO DATE 13:00",
-"retro DATE"). Each run first clears the marks it set that no card has shown,
-then marks at most two rows for the next EXO slot (the 18:40 run marks the next
-morning's) and, in the 18:40 run, at most two for that evening's retro card.
+Mark the rows: write the slot into Card ("EXO DATE 07:00" or "retro DATE").
+The 12:40 run first clears the marks it set that no card has shown, then marks
+at most two rows for the next 07:00 EXO card and at most two for that evening's
+retro card.
 EXO order: Joe owes Due soon, then Joe owes Overdue, then Owed to Joe, then
 Team member owes; the oldest date first within each. Retro order: the oldest
 date first. Not marked: a row whose item on the last card that showed it has

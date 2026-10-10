@@ -1,5 +1,26 @@
 # Changelog
 
+## Unreleased - 2026-10-10: lane diet v0.1
+
+Why: PCOS queue item QX35 (QUEUE_v12) temporarily reduces Claude usage. Active
+lanes keep their work on fewer runs; paused and not-installed lanes retain an
+explicit `Restore:` schedule so the diet is reversible without reconstructing
+the prior state.
+
+- Kept: L1 weekdays 06:30 and Retro daily 18:53.
+- Reduced: EXO from 07:00 and 13:00 to 07:00 only; Commitments from weekdays
+  06:40, 12:40 and 18:40 to 12:40 only; its backfill is manual only.
+- Paused: L3 Health, prediction-ledger, ledger-backtest, the three Claude
+  council-board stages, and the council-github chair. Their old triggers are on
+  `Restore:` lines.
+- Kept off because they are not installed: intake-email, knowledge-extract and
+  knowledge-review-2; their proposed schedules are also on `Restore:` lines.
+- `routines/_INDEX.md` records the no-file scheduled lanes: CAL and PCOS hub
+  sync paused, and the Drive recorder reduced from 08:10, 14:10 and 20:10 to
+  20:10 only.
+- Agent cards and the EXO, Commitments and Retro skills match the active diet.
+  `tests/test_lane_diet.py` pins every active, paused, restore and no-file state.
+
 ## Unreleased - 2026-10-09: rules and clock v0.1
 
 Why: PCOS queue item QC28 (QUEUE_v10), from two requests on Joe's development list:

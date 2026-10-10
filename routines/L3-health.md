@@ -1,8 +1,9 @@
 # Routine: L3-health
 
-- Status: Candidate. Create on build day.
+- Status: Paused 2026-10-10 (usage diet)
 - Lane: L3 PCOS Health (build plan section 2; replaces the daily Registry Audit)
-- Trigger: cron `30 7 * * *`, CRON_TZ=America/Mexico_City (daily 07:30)
+- Trigger: none while paused
+- Restore: cron `30 7 * * *`, CRON_TZ=America/Mexico_City (daily 07:30)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -62,3 +63,6 @@ v0.4 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.5 | 2026-10-10 | Codex, queue item QX35 | paused; preserved daily 07:30 in
+Restore | Joe's temporary usage diet | PCOS QUEUE_v12 item QX35

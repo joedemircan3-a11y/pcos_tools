@@ -190,10 +190,15 @@ def test_bare_item_code_detector_passes_codes_with_a_slot_and_plain_words(text):
 # --- one clock ------------------------------------------------------------------------
 
 @pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
-def test_every_routine_runs_on_the_one_clock(routine):
-    trigger = trigger_line(routine)
-    assert "cron `" in trigger
-    assert not zone_problems(trigger), f"{routine.stem}: {zone_problems(trigger)}"
+def test_every_routine_schedule_or_restore_uses_the_one_clock(routine):
+    text = read(routine)
+    status = re.search(r"^- Status: (.*)$", text, re.M).group(1)
+    schedule = trigger_line(routine)
+    if status.startswith(("Paused 2026-10-10", "Not installed; stay off")):
+        schedule = re.search(r"^- Restore: (.*)$", text, re.M).group(1)
+    if "cron `" not in schedule:
+        assert routine.stem == "commitments-backfill" and "once by hand" in schedule
+    assert not zone_problems(schedule), f"{routine.stem}: {zone_problems(schedule)}"
 
 
 @pytest.mark.parametrize("card", cards(), ids=lambda p: p.stem)

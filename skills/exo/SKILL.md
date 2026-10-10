@@ -1,9 +1,9 @@
 ---
 name: exo
-description: Break PCOS work into single small steps and pull Joe into it with short assumption cards. Use for the 07:00 and 13:00 EXO cards (the 19:00 evening card belongs to the retro skill), when Joe says "exo" or "next step", when a voice or text dump lands in Capture, when an email from an ownership-level sender needs an interpretation card, when the commitments lane has marked a commitment for the next card, and when a task's facts are complete enough to finish a candidate output.
+description: Break PCOS work into single small steps and pull Joe into it with short assumption cards. Use for the 07:00 EXO card (the 13:00 run is off under the usage diet, and the 19:00 evening card belongs to the retro skill), when Joe says "exo" or "next step", when a voice or text dump lands in Capture, when an email from an ownership-level sender needs an interpretation card, when the commitments lane has marked a commitment for the next card, and when a task's facts are complete enough to finish a candidate output.
 compatibility: Needs the PCOS Notion hub (Steps, Capture, Decisions, Prediction, Commitments, Worklist), the CAL card template in Drive, and read access to Outlook through the Microsoft 365 connector for interpretation cards.
 metadata:
-  version: "0.2"
+  version: "0.3"
   status: Candidate
   register: P2-02
   kernel: "1.0"

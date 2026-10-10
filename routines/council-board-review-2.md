@@ -1,8 +1,9 @@
 # Routine: council-board-review-2
 
-- Status: Candidate. Create on build day. When Gemini joins through a Drive mirror row, it replaces this Routine.
+- Status: Paused 2026-10-10 (usage diet)
 - Lane: board council, Review-2 stage (register P2-06). Review-1 is a ChatGPT scheduled task at 09:00 that uses the same reviewer prompt; it is not a Claude Routine.
-- Trigger: cron `30 9 * * *`, CRON_TZ=America/Mexico_City (daily 09:30)
+- Trigger: none while paused
+- Restore: cron `30 9 * * *`, CRON_TZ=America/Mexico_City (daily 09:30)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Google Drive
 - Model: Claude Opus in this Routine's own session, never the Draft session (exact version from the kernel lane table)
@@ -44,3 +45,6 @@ v0.2 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.3 | 2026-10-10 | Codex, queue item QX35 | paused; preserved daily 09:30 in
+Restore | Joe's temporary usage diet | PCOS QUEUE_v12 item QX35

@@ -1,11 +1,11 @@
 # Card: commitments
 
-- Version: v0.2
+- Version: v0.3
 - Status: Candidate
 - Register: P2-31 (Commitments lane: every promise in email becomes a tracked item with a due date, closure only on evidence, follow-up through the EXO and retro cards)
 - Lane ID: pending
-- Skills: [commitments v0.2](../skills/commitments/SKILL.md); every draft checked with [checker v0.2](../skills/checker/SKILL.md) (job type mail-draft)
-- Date: 2026-10-09
+- Skills: [commitments v0.3](../skills/commitments/SKILL.md); every draft checked with [checker v0.2](../skills/checker/SKILL.md) (job type mail-draft)
+- Date: 2026-10-10
 
 ## 1. Mission
 
@@ -123,9 +123,10 @@ late items; ask Joe anything outside the EXO and retro cards.
 
 ## 6. Trigger and owner model
 
-- Trigger: weekdays at 06:40, 12:40 and 18:40 America/Mexico_City, each ahead of
-  the next card (EXO 07:00 and 13:00, retro 19:00). Once at install, the
-  commitments-backfill Routine sweeps the last 30 days of sent mail.
+- Trigger: weekdays at 12:40 America/Mexico_City. It marks rows for the next
+  EXO 07:00 card and that evening's retro 19:00 card. The 06:40 and 18:40 runs
+  are off under the usage diet. The commitments-backfill Routine runs once by
+  hand over the last 30 days of sent mail.
 - Runs on: Claude Code Routine (Microsoft 365, Notion and Drive connectors).
 - Model: Claude Opus extracts, checks evidence and drafts. The checker verifies
   every draft on a different Claude model.
@@ -151,3 +152,7 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+v0.3 | 2026-10-10 | Codex, queue item QX35 | one weekday run at 12:40 marks the
+next 07:00 EXO and evening retro rows; backfill is manual | Joe's temporary
+usage diet | PCOS QUEUE_v12 item QX35

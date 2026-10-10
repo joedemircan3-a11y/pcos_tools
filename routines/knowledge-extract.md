@@ -1,8 +1,9 @@
 # Routine: knowledge-extract
 
-- Status: Blocked. It needs the knowledge-extract skill (P2-16, not yet written) and the `_INDEX.md` files of queue item Q02. Create it only when both exist.
+- Status: Not installed; stay off 2026-10-10 (usage diet)
 - Lane: knowledge loop stage 1 (register P2-16)
-- Trigger: cron `0 11 * * *`, CRON_TZ=America/Mexico_City (daily 11:00, after the daily lanes) during the backlog pass. Then change it to weekly: cron `0 11 * * 1` (Monday 11:00).
+- Trigger: none; not installed and still blocked on the knowledge-extract skill (P2-16)
+- Restore: cron `0 11 * * *`, CRON_TZ=America/Mexico_City (daily 11:00, after the daily lanes) during the backlog pass; then cron `0 11 * * 1`, CRON_TZ=America/Mexico_City (Monday 11:00)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Google Drive, Notion
 - Model: Claude Sonnet, fixed (card v0.2): never the Claude Opus of knowledge-review Review-2
@@ -49,3 +50,7 @@ v0.3 | 2026-10-09 | Claude Code on the web, PCOS queue item QC28 | TEXT RULES pa
 the live rules for text Joe reads (item codes with a description, one home per record,
 the email rules, person names). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the uninstalled lane off and
+preserved its backlog and weekly schedules in Restore | Joe's temporary usage
+diet; P2-16 is still not built | PCOS QUEUE_v12 item QX35

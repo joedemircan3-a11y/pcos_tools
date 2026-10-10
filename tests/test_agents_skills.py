@@ -366,7 +366,16 @@ def test_routine_prompt_loads_the_cards_in_its_header(routine):
 
 @pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)
 def test_routine_has_a_schedule_so_a_waiting_run_is_picked_up(routine):
-    assert "cron `" in header_line(routine.read_text(encoding="utf-8"), "Trigger")
+    text = routine.read_text(encoding="utf-8")
+    status = header_line(text, "Status")
+    trigger = header_line(text, "Trigger")
+    if status.startswith(("Paused 2026-10-10", "Not installed; stay off")):
+        assert "none" in trigger
+        assert "cron `" in header_line(text, "Restore")
+    elif routine.stem == "commitments-backfill":
+        assert "once by hand" in trigger and "cron `" not in trigger
+    else:
+        assert "cron `" in trigger
 
 
 @pytest.mark.parametrize("routine", routines(), ids=lambda p: p.stem)

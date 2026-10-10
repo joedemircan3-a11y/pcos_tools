@@ -1,11 +1,11 @@
 # Card: retro
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-30 (Retro lane: evening card of five past-closure questions, last 90 days first; answers feed the ledger, the People profiles and the golden set)
 - Lane ID: pending
-- Skills: [retro v0.3](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.2](../skills/commitments/SKILL.md) sections 7 and 8; every item checked with [checker v0.2](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
-- Date: 2026-10-09
+- Skills: [retro v0.4](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.3](../skills/commitments/SKILL.md) sections 7 and 8; every item checked with [checker v0.2](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
+- Date: 2026-10-10
 
 ## 1. Mission
 
@@ -16,8 +16,8 @@ full, and ask five one-line questions with tap options. File each answer where
 it teaches the system: the Prediction row, the People profile, the golden set.
 
 Never: ask what the record already answers, or ask before the full thread chain
-and every later reply are read; ask about today's work (the morning and midday
-cards are EXO's); overwrite, move or answer mail; close or change a Worklist
+and every later reply are read; ask about today's work (the morning card is
+EXO's); overwrite, move or answer mail; close or change a Worklist
 row; send or commit anything; treat silence as an answer.
 
 ## 2. Inputs by ID
@@ -71,7 +71,8 @@ row; send or commit anything; treat silence as an answer.
   closes on silence).
 - Lane rules, from the dev-session record of 2026-10-06, part 7 (turns 20 and
   21; Joe's decisions, dated 2026-10-01 in QUEUE_v4):
-  - Evening card = past questions; morning and midday cards = today. The 19:00
+  - Evening card = past questions; the morning card = today. The 13:00 EXO run
+    is off under the usage diet. The 19:00
     slot, America/Mexico_City, moves from EXO to this lane.
   - Five questions per evening, last 90 days first.
   - Order: recency, then open value (money, active vendors), then pattern
@@ -158,3 +159,7 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the evening card; today's
+work now has one 07:00 EXO card because 13:00 is off | Joe's temporary usage
+diet | PCOS QUEUE_v12 item QX35
