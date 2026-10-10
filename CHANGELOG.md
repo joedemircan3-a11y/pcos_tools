@@ -29,6 +29,10 @@ put it in Joe's Drafts or watch for the answer. Built by Codex from main 106d794
 - `tests/test_exo_task_distribution.py` uses mocked internal, external, sent and
   replied mail to pin the recipient filter, no-send approval, exact conversation
   identity and Answered/Overdue evidence rules.
+- Codex review, round 1: the EXO threaded reply is an explicit exception to the
+  generic Route 2 new-message rule after its recipients pass the internal-only
+  gate; Approve/Edit/Skip branch before the generic answer transition, so Skip
+  cannot mark a step Answered or queue dependent work.
 
 ## Unreleased - 2026-10-09: rules and clock v0.1
 

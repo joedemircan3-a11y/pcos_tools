@@ -114,6 +114,9 @@ def test_card_has_one_tap_approve_edit_skip_and_none_sends():
     assert "Approve means the checked reply draft stays in Drafts for Joe to send; it does not send" in card_build
     assert "Edit applies only Joe's stated edit" in filing
     assert "Skip leaves it unsent" in filing and "keeps the step open" in filing
+    assert "Do not set the step's Status to Answered" in filing
+    assert "do not queue the task's next step" in filing
+    assert filing.index("front-line instruction items") < filing.index("For every remaining item")
     assert "No action sends" in prompt
 
 
@@ -164,3 +167,12 @@ def test_card_routine_and_checker_all_carry_the_distribution_gate():
         assert "JOE BM" in text and "loop me only if" in text
     assert "Approve / Edit / Skip" in question_check
     assert "leaves the draft in Drafts for Joe to send and never sends it" in question_check
+
+
+def test_exo_threaded_reply_explicitly_overrides_generic_route_two_mail():
+    mail_check = flat(section(read(CHECKLISTS), "## mail-draft"))
+    route_two = "Route 2 is a new internal email"
+    exception = "follows its own form instead of items 1 to 4"
+    assert route_two in mail_check and exception in mail_check
+    assert "It is the Route 2 exception" in mail_check
+    assert "including an externally started conversation" in mail_check

@@ -67,7 +67,7 @@ Write each item:
   Approve means the checked reply draft stays in Drafts for Joe to send; it does
   not send. Edit applies Joe's exact change, re-runs the checker and updates the
   same draft. Skip leaves the draft unsent and the work open; it counts once
-  under section 5 and never means done or dropped.
+  under section 4 and never means done or dropped.
 - Self-contained: plain words, with the key facts and dates inside the item; no
   internal ID without its meaning (CAL standard P-19).
 - Tone: small and calm. Present the step as simple. Never show the total size,
@@ -85,7 +85,18 @@ step to Status Shown.
 
 Commitment items are filed into their [[COMMITMENTS]] row by the commitments
 skill sections 7 and 8 (its own skip rule included), never into [[STEPS]]. For
-every other item:
+front-line instruction items, use this separate branch before any generic
+answer transition:
+
+- Approve sets Distribution Approved and leaves the checked draft in
+  [[MAIL_DRAFTS]] for Joe; Edit applies only Joe's stated edit, checks it again
+  and updates that draft; Skip leaves it unsent, increments Skips and keeps the
+  step open. None of the three actions sends or proves that the owner has acted.
+- Do not set the step's Status to Answered and do not queue the task's next step
+  for Approve, Edit or Skip. Distribution Answered is set only by the later
+  owner-reply evidence in section 9.
+
+For every remaining item (neither a commitment nor a front-line instruction):
 
 - Write each answer verbatim into the step's Facts, with the date and the card
   ID. It is Confirmed, with the card ID as its source.
@@ -97,11 +108,6 @@ every other item:
   offer it as one approve item. After Joe approves, a draft goes to
   [[MAIL_DRAFTS]] and is never sent; a row change goes to the closeout owner as
   an [[INBOX]] row.
-- For a front-line instruction item: Approve sets Distribution Approved and
-  leaves the checked draft in [[MAIL_DRAFTS]] for Joe; Edit applies only Joe's
-  stated edit, checks it again and updates that draft; Skip leaves it unsent,
-  increments Skips and keeps the step open. None of the three actions sends or
-  proves that the owner has acted.
 
 ## 4. Skip rule
 

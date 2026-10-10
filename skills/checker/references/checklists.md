@@ -63,12 +63,14 @@ for a commitments-lane draft, its [[COMMITMENTS]] row.
     internal email, never a reply into an external chain, to the team member
     who owes it or to the front-line owner the owner map names. The commitment
     row it cites exists and is marked for the next card.
-11. An EXO front-line instruction follows exo skill section 8: it is a reply on
-    the exact source conversation, matched by conversation ID and source message
-    ID; To, Cc and Bcc contain only the intended internal owner addresses from
-    [[PEOPLE]] and [[RULES]], with every representative, customer, vendor and
-    other external address removed. If an internal-only recipient set cannot be
-    proved, the only passing result is no draft and a Blocked step.
+11. An EXO front-line instruction (exo skill section 8) follows its own form
+    instead of items 1 to 4. It is the Route 2 exception: a reply on the exact
+    source conversation, including an externally started conversation, matched
+    by conversation ID and source message ID; To, Cc and Bcc contain only the
+    intended internal owner addresses from [[PEOPLE]] and [[RULES]], with every
+    representative, customer, vendor and other external address removed. If an
+    internal-only recipient set cannot be proved, the only passing result is no
+    draft and a Blocked step.
 12. Its instruction body is one to three lines apart from the greeting and
     signature, and contains the outcome, the explicit deadline and the phrase
     "loop me only if" with a real exception. It greets the owner by person, uses
