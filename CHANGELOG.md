@@ -1,5 +1,48 @@
 # Changelog
 
+## Unreleased - 2026-10-10: EXO task distribution v0.1
+
+Why: PCOS queue item QX30 (QUEUE_v12; renamed from QC30 in QUEUE_v10), Joe's
+development-list request "task distribution by EXO". EXO already broke work
+into steps for Joe but did not turn a front-line owner's step into an instruction,
+put it in Joe's Drafts or watch for the answer. Built by Codex from main 106d794.
+
+- `skills/exo/SKILL.md` v0.3: every step assigned to a front-line owner becomes
+  a checked Outlook reply draft on the exact source conversation. The recipient
+  gate removes every representative, customer, vendor and other external address
+  from To, Cc and Bcc; an unprovably internal draft fails closed.
+- Instruction form: one to three body lines with the outcome, explicit deadline
+  and "loop me only if ..."; `[[EMAIL_RULES]]`, greeting by person, we/us voice,
+  item codes with plain descriptions, Outlook signature JOE BM and no typed
+  sign-off. EXO never sends.
+- The card gives the front-line instruction three one-tap actions: Approve keeps
+  the checked draft in Drafts for Joe to send; Edit checks and updates that same
+  draft; Skip leaves it unsent and the step open.
+- Distribution state waits for evidence: Approved until the exact message appears
+  in Sent, Awaiting owner after that, Answered only by a later reply from the
+  intended owner on the same conversation that answers the outcome, and Overdue
+  after the explicit deadline without one. Subject matches and silence prove
+  nothing; the Worklist task is not closed here.
+- `agents/exo.md` v0.5 and `routines/exo.md` v0.6 carry the same recipient, draft,
+  card and watch rules. The mail-draft and question-card checker lists enforce
+  them.
+- `tests/test_exo_task_distribution.py` uses mocked internal, external, sent and
+  replied mail to pin the recipient filter, no-send approval, exact conversation
+  identity and Answered/Overdue evidence rules.
+- Codex review, round 1: the EXO threaded reply is an explicit exception to the
+  generic Route 2 new-message rule after its recipients pass the internal-only
+  gate; Approve/Edit/Skip branch before the generic answer transition, so Skip
+  cannot mark a step Answered or queue dependent work.
+- Codex review, round 2: a qualifying owner reply now sets the step Status
+  Answered and queues its dependent step; Edit is transactional, so only a new
+  checker Accept replaces the existing Outlook draft and Fix/Reject leaves the
+  last accepted draft unchanged.
+- Codex final allowed review: an owner answer found before drafting now also
+  sets Status Answered and queues dependent work; the Steps write allowlist
+  includes the distribution fields; every Graph draft operation uses an
+  immutable ID that survives the move to Sent; a front-line step without an
+  Outlook source uses a checked new internal message instead of blocking.
+
 ## Unreleased - 2026-10-09: rules and clock v0.1
 
 Why: PCOS queue item QC28 (QUEUE_v10), from two requests on Joe's development list:
