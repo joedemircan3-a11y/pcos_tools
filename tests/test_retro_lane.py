@@ -377,6 +377,9 @@ def test_new_mail_dates_are_applied_before_direct_evening_ranking():
 
 
 def test_retro_persists_a_new_worklist_link_and_checks_its_closure_evidence():
+    skill = flat(read(RETRO_SKILL))
+    assert "refreshes evidence, due dates and Linked task on existing Commitments rows" in skill
+    assert "changes anything beyond filing his answers" not in skill
     allowed = flat(section(read(RETRO_CARD), "## 3. Tools allowed"))
     assert "Status, Due, Evidence, Linked task, Next check, Card and Skips only" in allowed
     build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))

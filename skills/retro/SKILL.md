@@ -14,8 +14,9 @@ metadata:
 
 The past is just remembering. Joe tells how a thread ended far more easily than
 he decides open work, so the evening card asks him about the past and the lane
-writes what he remembers into the record. The lane never decides, sends or
-changes anything beyond filing his answers.
+writes what he remembers into the record. It also refreshes evidence, due dates
+and Linked task on existing Commitments rows before selecting questions. The
+lane never decides, sends, creates a commitment or changes a Worklist row.
 
 Sources are named by key, written `[[KEY]]` (defined in `agents/INPUTS.md`, IDs
 in the private map named there).
