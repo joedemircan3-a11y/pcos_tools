@@ -46,3 +46,5 @@ Next: review and merge this PR; the authorized installer applies the new timezon
 QX40 | routine/card clocks changed and retro selects open rows directly | merge, then apply installed routine clocks and retro prompt | Confirmed for repository; Needs Source Check for installed timers
 
 Review round 1 fixes: the checker now accepts direct unmarked commitments only after source checks; retro reads and applies changed mail dates by commitments section 3 before ranking and may persist Linked task discovered in evidence refresh. Four plain-language clock references now name Matamoros. Regression checks cover each finding. No Worklist write or mail send is authorized.
+
+Review round 2 fixes: read closed Commitments rows with mail newer than closing evidence or card answers as refresh candidates as well as open rows. Only mail reopening the same deliverable reopens a row; still-closed rows remain excluded. Council dependency and loaders agree on skill v0.2. Both fixes have regression checks.

@@ -147,11 +147,17 @@ commitment off the card.
 2. Conflict items: the "Which version stands?" rows this lane opened in
    [[DECISIONS]] (section 6, step 5), each as one assumption item.
 3. Commitment items: at 18:53 America/Matamoros, read open [[COMMITMENTS]]
-   rows directly (not Done or Dropped). Do not require a Card mark or a prior
+   rows directly, plus Done or Dropped rows whose thread has mail newer
+   than their closing evidence or card answer. Refresh these rows before
+   filtering: commitments section 4 reopens a closed row only when newer mail
+   reopens the same deliverable, never on silence or a subject match. A still-closed
+   row stays excluded; a reopened row is ranked only after the current date,
+   suppression and skip checks below. Do not require a Card mark or a prior
    commitments run: selection works on weekends and if the 12:40 or 18:40
    commitments run did not run. Before selection, refresh evidence from the
    full thread chain through its terminal message, later replies and the
-   Linked task by commitments section 4. Apply later messages that change
+   Linked task by commitments section 4. On open or reopened rows, apply
+   later messages that change
    the due date by commitments section 3 before ranking: read the new phrase
    in the sender's time zone, keep the old date and phrase in Evidence, and
    persist the new Due and Moved status (or Next check for a vague date).
@@ -334,3 +340,5 @@ QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock referen
 v0.5 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows directly at 18:53, refreshes evidence and dates, applies eligibility and skips, and selects at most two within five items | no prior commitments run or Card mark required under Joe's QX40 instruction | QX40
 
 v0.5 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40
+
+QX40 review round 2 | 2026-10-11 | Codex | refresh closed commitments with newer mail before filtering; only evidence reopens them; council dependency agrees with v0.2 | resolve both round 2 findings with regression checks | QX40

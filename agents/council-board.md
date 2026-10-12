@@ -100,7 +100,7 @@ sources settle.
   reliability (three-day write test pending).
 - Escalation: Needs Joe only as in part 4.
 - Depends on: build day; [[COUNCIL]] and [[COUNCIL_REVIEWER_VIEW]] (exist); the
-  council-board skill (v0.1, written in Q08); a ChatGPT scheduled task that writes
+  council-board skill (v0.2; first written in Q08); a ChatGPT scheduled task that writes
   Notion on three days running.
 
 ## Change note
@@ -129,3 +129,5 @@ stages paused; restore times retained | Joe's temporary usage diet | PCOS
 QUEUE_v12 item QX35
 
 QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40
+
+QX40 review round 2 | 2026-10-11 | Codex | refresh closed commitments with newer mail before filtering; only evidence reopens them; council dependency agrees with v0.2 | resolve both round 2 findings with regression checks | QX40

@@ -140,3 +140,5 @@ The run has two halves, so a checker that fails everything cannot score well.
 ## Change note
 
 v0.3 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40
+
+QX40 review round 2 | 2026-10-11 | Codex | refresh closed commitments with newer mail before filtering; only evidence reopens them; council dependency agrees with v0.2 | resolve both round 2 findings with regression checks | QX40

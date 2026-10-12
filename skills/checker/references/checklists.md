@@ -149,7 +149,9 @@ Required: [[CAL_STANDARD]]; [[DECISIONS]]; Joe's replies in the chain and
 [[MAIL_SENT]]; for EXO, the [[STEPS]] rows shown; for a retro item, the whole
 thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]] when the gap has
 one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
-For a directly selected retro commitment: its [[COMMITMENTS]] row, the full
+For a directly selected retro commitment: its [[COMMITMENTS]] row, including
+a previously Done or Dropped row with mail newer than its closing evidence or
+card answer, the full
 thread through its terminal message and later replies, its Linked task's
 [[WORKLIST]] row (including a link discovered during this refresh),
 [[REGISTRY]] for named documents, and the prior cards, answers, approvals and
@@ -202,7 +204,10 @@ skips used to decide eligibility. Open these sources yourself.
    on weekdays or weekends. Verify the latest due-date phrase in the sender's
    time zone by commitments section 3, including a later message moving the
    date; old date and phrase stay in Evidence. Verify evidence and any newly
-   discovered Linked task by section 4, and the current status/date by section
+   discovered Linked task by section 4. A closed row with newer mail is
+   refreshed before filtering; reopen only when that mail reopens the same
+   deliverable, never on silence or a subject match. A row still Done or
+   Dropped after refresh is a FAIL. Then verify the current status/date by section
    5. The row is more than 14 days overdue by Due or Next check, selected
    oldest first with row ID ties, after section 6 suppression and section 8
    skips. A closed row, an Open or Moved row by date, an answer not yet filed,

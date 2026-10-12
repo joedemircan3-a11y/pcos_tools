@@ -95,7 +95,8 @@ row; send or commit anything; treat silence as an answer.
 - Card: five items; fewer when fewer gaps pass the gate; none when none do. The
   ledger's "What happened?" items first, in the ledger's format, then the open
   conflict items, then at most two commitment items selected directly from
-  open [[COMMITMENTS]] rows at 18:53 by retro skill section 5, in the
+  open [[COMMITMENTS]] rows at 18:53, with closed rows refreshed for later
+  reopening mail before filtering, by retro skill section 5, in the
   commitments skill's format. No Card mark or prior commitments run is required;
   evidence, dates, suppression and skip rules apply before selection. Each retro item is a one-line summary of the thread plus tap
   options: closed as quoted, closed differently, dropped, moved offline (phone,
@@ -173,3 +174,5 @@ v0.5 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows d
 QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40
 
 v0.5 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40
+
+QX40 review round 2 | 2026-10-11 | Codex | refresh closed commitments with newer mail before filtering; only evidence reopens them; council dependency agrees with v0.2 | resolve both round 2 findings with regression checks | QX40

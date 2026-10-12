@@ -323,7 +323,9 @@ def test_evening_commitments_are_selected_directly_without_an_earlier_run(path):
     selection = flat(section(text, "## 5. Build the card") if path == RETRO_SKILL
                      else routine_prompt(text))
     assert "18:53 America/Matamoros" in selection
-    assert "read open [[COMMITMENTS]] rows directly (not Done or Dropped)" in selection
+    assert "read open [[COMMITMENTS]] rows directly" in selection
+    assert "closing evidence or card answer" in selection
+    assert "not Done or Dropped" not in selection
     assert "Card mark or a prior commitments run" in selection
     assert "weekends and if the 12:40 or 18:40 commitments run did not run" in selection
     assert "at most two" in selection and "oldest Due or Next check first" in selection
@@ -367,7 +369,7 @@ def test_new_mail_dates_are_applied_before_direct_evening_ranking():
     assert "sections 3 to 8 of skills/commitments/SKILL.md" in prompt
     assert "apply later messages that change the due date by commitments section 3" in prompt
     build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
-    assert build.index("Apply later messages that change the due date") < build.index("Sort eligible rows")
+    assert build.index("apply later messages that change the due date") < build.index("Sort eligible rows")
     assert "in the sender's time zone" in build
     assert "keep the old date and phrase in Evidence" in build
     assert "persist the new Due and Moved status (or Next check for a vague date)" in build
@@ -388,3 +390,32 @@ def test_retro_persists_a_new_worklist_link_and_checks_its_closure_evidence():
     filing = flat(section(read(ROOT / "skills/commitments/SKILL.md"), "## 7. Card items and filing the answers"))
     assert "may also persist Linked task by section 4 step 5" in filing
     assert "read that Worklist row for closure evidence" in filing
+
+
+def test_closed_commitments_with_new_mail_are_refreshed_before_filtering():
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    prompt = flat(routine_prompt(read(ROUTINES / "retro.md")))
+    for policy in (build, prompt):
+        assert "Done or Dropped rows whose thread has mail newer than their closing evidence or card answer" in policy
+        assert "reopens the same deliverable, never on silence or a subject match" in policy
+        assert "open or reopened rows" in policy
+    assert build.index("Refresh these rows before filtering") < build.index("Sort eligible rows")
+    assert "A still-closed row stays excluded" in build
+    assert "Exclude rows still Done or Dropped after refresh" in prompt
+    checklist = flat(section(read(ROOT / "skills/checker/references/checklists.md"), "## question-card"))
+    assert "previously Done or Dropped row with mail newer than its closing evidence or card answer" in checklist
+    assert "reopen only when that mail reopens the same deliverable" in checklist
+    assert "A row still Done or Dropped after refresh is a FAIL" in checklist
+    assert "more than 14 days overdue" in checklist
+
+
+def test_council_dependency_version_matches_the_skill_and_loader():
+    fields, _ = parse_frontmatter(read(ROOT / "skills/council-board/SKILL.md"))
+    version = fields["metadata"]["version"]
+    current = read(ROOT / "agents/council-board.md").split("## Change note")[0]
+    assert f"[council-board v{version}]" in current
+    assert f"council-board skill (v{version};" in current
+    assert "council-board skill (v0.1" not in current
+    for name in ("council-board-draft", "council-board-review-2", "council-board-chair"):
+        current = read(ROUTINES / f"{name}.md").split("## Change note")[0]
+        assert f"[council-board v{version}]" in current
