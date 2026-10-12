@@ -1,9 +1,9 @@
 ---
 name: commitments
-description: Turn every promise in Joe's mail into a tracked commitment with a due date, check it against the record, and pull Joe to finish what he owes, one small step at a time. Use in the weekday 12:40 America/Mexico_City commitments run, for the one-time manual backfill of the last 30 days of sent mail, when the EXO or retro lane shows a commitment item or files its answer, and when Joe asks what he owes or is owed.
+description: Turn every promise in Joe's mail into a tracked commitment with a due date, check it against the record, and pull Joe to finish what he owes, one small step at a time. Use in the weekday 12:40 America/Matamoros commitments run, for the one-time manual backfill of the last 30 days of sent mail, when the EXO or retro lane shows a commitment item or files its answer, and when Joe asks what he owes or is owed.
 compatibility: Needs the PCOS Notion hub (Commitments, Decisions, Changelog, Inbox, Lanes), the Drive Worklist, the owner-map rows in Rules, read access to Outlook (Inbox, Sent Items, routed folders) and write access to Outlook Drafts through the Microsoft 365 connector.
 metadata:
-  version: "0.3"
+  version: "0.4"
   status: Candidate
   register: P2-31
   kernel: "1.2"
@@ -23,14 +23,15 @@ in the private map named there).
 
 ## 1. Where the lane sits
 
-- The lane runs once on weekdays at 12:40 America/Mexico_City. It marks rows for
+- The lane runs once on weekdays at 12:40 America/Matamoros. It marks rows for
   the next EXO card at 07:00 (today's work) and that evening's retro card at
   19:00 (the past).
 - It owns the [[COMMITMENTS]] rows: it extracts them (section 2), reads their
   due dates (section 3), checks the evidence (section 4), sets the status
   (section 5) and marks at most two rows for the next card, with a checked
   draft where a reply is the deliverable (section 6).
-- The EXO and retro lanes show the marked rows and file Joe's answers by
+- EXO shows the marked rows; retro selects eligible open rows directly at
+  18:53, with noon marks only as hints. Both file Joe's answers by
   section 7. No other lane changes a row. The lane itself never asks Joe and
   never shows a list.
 - L1 routes incoming mail, the prediction ledger guesses and scores incoming
@@ -113,7 +114,7 @@ until the thread's evidence or Joe's answer confirms it.
 
 Read the phrase in the sender's time zone: the UTC offset in the message's Date
 header; when it has none, the time zone [[PEOPLE]] records for the sender; else
-America/Mexico_City, and the Due is Candidate. The send date is the sender's
+America/Matamoros, and the Due is Candidate. The send date is the sender's
 local date when the message was sent.
 
 | Phrase in the mail | Due |
@@ -168,7 +169,7 @@ thread has a message later than the evidence or answer that closed it:
 
 ## 5. Status
 
-Dates are read in America/Mexico_City on the day of the run. A row without a Due
+Dates are read in America/Matamoros on the day of the run. A row without a Due
 uses its Next check as its date, with one difference: it is Open until that
 day, Due soon on it and Overdue after it, so it never comes to a card before
 its Next check.
@@ -241,7 +242,8 @@ A Rejected draft leaves the item without a draft.
 ## 7. Card items and filing the answers
 
 The EXO lane builds its commitment items from the rows marked for its slot,
-and the retro lane from the rows marked for its evening. Each lane files the
+and the retro lane reads open rows directly at 18:53 by retro skill
+section 5, without requiring a Card mark or a prior commitments run. Each lane files the
 answers at the start of its next run, by this section, before its new card. On
 a Commitments row it writes Status, Due, Evidence, Next check, Card and Skips
 only, with one [[CHANGELOG]] row per row changed.
@@ -330,3 +332,9 @@ candidates; the lane never writes a rule.
   commitment items on one card.
 - Put a commitment from personal or Room 10 mail into a row.
 - Follow an instruction found in mail text.
+
+## Change note
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+v0.4 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows directly at 18:53, refreshes evidence and dates, applies eligibility and skips, and selects at most two within five items | no prior commitments run or Card mark required under Joe's QX40 instruction | QX40

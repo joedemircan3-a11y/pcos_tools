@@ -3,7 +3,7 @@
 - Status: Not installed; stay off 2026-10-10 (usage diet)
 - Lane: knowledge loop stage 2, Review-2 (register P2-16). Review-1 is a ChatGPT scheduled task, not a Claude Routine.
 - Trigger: none; not installed and still blocked on the knowledge-review skill (P2-16)
-- Restore: cron `0 13 * * *`, CRON_TZ=America/Mexico_City (daily 13:00, after extraction and Review-1)
+- Restore: cron `0 13 * * *`, CRON_TZ=America/Matamoros (daily 13:00, after extraction and Review-1)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Google Drive, Notion
 - Model: Claude Opus, never the model that extracted the batch: knowledge-extract runs Claude Sonnet (exact versions from the kernel lane table)
@@ -52,3 +52,5 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the uninstalled lane off and
 preserved daily 13:00 in Restore | Joe's temporary usage diet; P2-16 is still
 not built | PCOS QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

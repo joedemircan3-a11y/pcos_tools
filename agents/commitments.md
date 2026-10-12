@@ -1,11 +1,11 @@
 # Card: commitments
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-31 (Commitments lane: every promise in email becomes a tracked item with a due date, closure only on evidence, follow-up through the EXO and retro cards)
 - Lane ID: pending
-- Skills: [commitments v0.3](../skills/commitments/SKILL.md); every draft checked with [checker v0.2](../skills/checker/SKILL.md) (job type mail-draft)
-- Date: 2026-10-10
+- Skills: [commitments v0.4](../skills/commitments/SKILL.md); every draft checked with [checker v0.2](../skills/checker/SKILL.md) (job type mail-draft)
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -123,7 +123,7 @@ late items; ask Joe anything outside the EXO and retro cards.
 
 ## 6. Trigger and owner model
 
-- Trigger: weekdays at 12:40 America/Mexico_City. It marks rows for the next
+- Trigger: weekdays at 12:40 America/Matamoros. It marks rows for the next
   EXO 07:00 card and that evening's retro 19:00 card. The 06:40 and 18:40 runs
   are off under the usage diet. The commitments-backfill Routine runs once by
   hand over the last 30 days of sent mail.
@@ -156,3 +156,5 @@ lane" and "one clock for every lane"
 v0.3 | 2026-10-10 | Codex, queue item QX35 | one weekday run at 12:40 marks the
 next 07:00 EXO and evening retro rows; backfill is manual | Joe's temporary
 usage diet | PCOS QUEUE_v12 item QX35
+
+v0.4 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

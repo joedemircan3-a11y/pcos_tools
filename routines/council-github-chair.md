@@ -3,7 +3,7 @@
 - Status: Paused 2026-10-10 (usage diet)
 - Lane: council-github chair (register P2-07: a Claude Code Routine on the PR event chairs and writes Notion)
 - Trigger: none while paused
-- Restore: GitHub events on joedemircan3-a11y/pcos_tools: pull request review submitted, and issue comment created on a pull request; plus a schedule, cron `0 */2 * * *`, CRON_TZ=America/Mexico_City (every 2 hours), for the missing-review fallback
+- Restore: GitHub events on joedemircan3-a11y/pcos_tools: pull request review submitted, and issue comment created on a pull request; plus a schedule, cron `0 */2 * * *`, CRON_TZ=America/Matamoros (every 2 hours), for the missing-review fallback
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion
 - Model: Claude Fable, or Claude Opus in a session separate from the draft (exact version from the kernel lane table)
@@ -128,3 +128,5 @@ v0.11 | 2026-10-10 | Codex, queue item QX35 | paused PR events and the two-hour
 fallback; preserved both in Restore | Codex review rounds create many PR
 comments, so Joe's temporary usage diet pauses this Claude chair | PCOS
 QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

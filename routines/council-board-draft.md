@@ -3,7 +3,7 @@
 - Status: Paused 2026-10-10 (usage diet)
 - Lane: board council, Draft stage (register P2-06)
 - Trigger: none while paused
-- Restore: cron `0 8 * * *`, CRON_TZ=America/Mexico_City (daily 08:00)
+- Restore: cron `0 8 * * *`, CRON_TZ=America/Matamoros (daily 08:00)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -47,3 +47,5 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 
 v0.3 | 2026-10-10 | Codex, queue item QX35 | paused; preserved daily 08:00 in
 Restore | Joe's temporary usage diet | PCOS QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

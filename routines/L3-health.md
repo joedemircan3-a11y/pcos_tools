@@ -3,7 +3,7 @@
 - Status: Paused 2026-10-10 (usage diet)
 - Lane: L3 PCOS Health (build plan section 2; replaces the daily Registry Audit)
 - Trigger: none while paused
-- Restore: cron `30 7 * * *`, CRON_TZ=America/Mexico_City (daily 07:30)
+- Restore: cron `30 7 * * *`, CRON_TZ=America/Matamoros (daily 07:30)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -66,3 +66,5 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 
 v0.5 | 2026-10-10 | Codex, queue item QX35 | paused; preserved daily 07:30 in
 Restore | Joe's temporary usage diet | PCOS QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

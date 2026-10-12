@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.test_agents_skills import PRIVATE, defined_keys, parse_frontmatter, section
+from tests.test_agents_skills import PRIVATE, defined_keys, parse_frontmatter, routine_prompt, section
 
 ROOT = Path(__file__).resolve().parent.parent
 RETRO_SKILL = ROOT / "skills" / "retro" / "SKILL.md"
@@ -127,9 +127,9 @@ def test_answers_are_filed_without_touching_the_mail():
 
 
 def test_the_evening_slot_moved_from_exo_to_retro():
-    assert cron("retro") == ("53", "18", "*", "America/Mexico_City")
+    assert cron("retro") == ("53", "18", "*", "America/Matamoros")
     minute, hour, weekday, zone = cron("exo")
-    assert (hour, weekday, zone) == ("7", "*", "America/Mexico_City")
+    assert (hour, weekday, zone) == ("7", "*", "America/Matamoros")
     for path in (EXO_CARD, EXO_SKILL):
         assert "07:00, 13:00 and 19:00" not in read(path)
 
@@ -157,7 +157,7 @@ def test_backtest_is_blind_capped_and_never_asks_joe():
 def test_backtest_runs_on_sunday_before_l4():
     minute, hour, weekday, zone = cron("ledger-backtest")
     l4_minute, l4_hour, l4_weekday, l4_zone = cron("L4-weekly")
-    assert weekday == l4_weekday == "0" and zone == l4_zone == "America/Mexico_City"
+    assert weekday == l4_weekday == "0" and zone == l4_zone == "America/Matamoros"
     assert int(hour) < int(l4_hour)
 
 
@@ -315,3 +315,32 @@ def test_the_backtest_sample_is_checked_by_its_own_scoring_rule():
         assert "job type prediction)" not in text
     assert "prediction-backtest checklist" in flat(read(BACKTEST_CARD))
 
+
+
+@pytest.mark.parametrize("path", [RETRO_SKILL, ROUTINES / "retro.md"])
+def test_evening_commitments_are_selected_directly_without_an_earlier_run(path):
+    text = read(path).split("## Change note")[0]
+    selection = flat(section(text, "## 5. Build the card") if path == RETRO_SKILL
+                     else routine_prompt(text))
+    assert "18:53 America/Matamoros" in selection
+    assert "read open [[COMMITMENTS]] rows directly (not Done or Dropped)" in selection
+    assert "Card mark or a prior commitments run" in selection
+    assert "weekends and if the 12:40 or 18:40 commitments run did not run" in selection
+    assert "at most two" in selection and "oldest Due or Next check first" in selection
+    assert "more than 14 days overdue" in selection
+    assert "suppression" in selection and "section 8 skips" in selection
+    assert "rows marked for this evening" not in selection
+    assert "sections 4 to 8 of skills/commitments/SKILL.md" in routine_prompt(read(ROUTINES / "retro.md"))
+
+
+def test_direct_commitment_selection_refreshes_evidence_and_reserves_card_room():
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    for required in ("full thread chain through its terminal message", "later replies",
+                     "recompute status and days overdue", "Open or Moved by date",
+                     "an answer not yet filed", "an approved draft or step still waiting",
+                     "rows set aside", "break ties by row ID", "inside the five-item card",
+                     "Read [[REGISTRY]]", "checker before it reaches Joe",
+                     "record the card ID only when shown"):
+        assert required in build
+    assert build.index("refresh evidence") < build.index("Sort eligible rows")
+    assert build.index("Sort eligible rows") < build.index("Select at most two")

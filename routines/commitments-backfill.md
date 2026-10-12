@@ -2,12 +2,12 @@
 
 - Status: Candidate. One-time manual run only under the 2026-10-10 usage diet; disable after a heartbeat says complete.
 - Lane: Commitments, one-time backfill (register P2-31)
-- Trigger: once by hand; no recurring schedule (a run cut short by a time-out resumes by hand from its last batch); disable after a heartbeat says complete
+- Trigger: once by hand; CRON_TZ=America/Matamoros (manual clock); no recurring schedule (a run cut short by a time-out resumes by hand from its last batch); disable after a heartbeat says complete
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Microsoft 365, Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [commitments](../agents/commitments.md)
-- Skills: [commitments v0.3](../skills/commitments/SKILL.md) sections 2 to 5 and 9
+- Skills: [commitments v0.4](../skills/commitments/SKILL.md) sections 2 to 5 and 9
 - Needs first: [[COMMITMENTS]] exists; the commitments Routine is installed and has run once
 
 ## Prompt

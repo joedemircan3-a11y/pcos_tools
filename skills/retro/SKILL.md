@@ -1,9 +1,9 @@
 ---
 name: retro
-description: Close gaps in the PCOS historical record by asking Joe about the past, which he answers easily ("past is just remembering"). Use for the evening card at 19:00 America/Mexico_City, when Joe says "retro", and when filing retro answers. Finds threads and Worklist items of the last 90 days with no closure evidence, reads every thread in full before asking, asks five one-line questions with fixed tap options, and files the answers into Prediction rows, People candidates, golden-set candidates and Decision rows. Also carries the commitments lane's past questions (commitments more than 14 days overdue).
+description: Close gaps in the PCOS historical record by asking Joe about the past, which he answers easily ("past is just remembering"). Use for the evening card at 19:00 America/Matamoros, when Joe says "retro", and when filing retro answers. Finds threads and Worklist items of the last 90 days with no closure evidence, reads every thread in full before asking, asks five one-line questions with fixed tap options, and files the answers into Prediction rows, People candidates, golden-set candidates and Decision rows. Also carries the commitments lane's past questions (commitments more than 14 days overdue).
 compatibility: Needs the PCOS Notion hub (Prediction, Decisions, Corrections, Changelog, Inbox, Lanes, Steps, Commitments), the Drive Worklist, mail-mining outputs and people profiles, the CAL card template, and read access to Outlook through the Microsoft 365 connector.
 metadata:
-  version: "0.4"
+  version: "0.5"
   status: Candidate
   register: P2-30
   kernel: "1.1"
@@ -23,7 +23,7 @@ in the private map named there).
 ## 1. Where the lane sits
 
 - The morning card (EXO, 07:00) is about today; its 13:00 run is off under the
-  usage diet. The evening card (19:00 America/Mexico_City) is about the past,
+  usage diet. The evening card (19:00 America/Matamoros) is about the past,
   and it is this lane's.
 - The evening card is the only place for past questions. It carries the
   prediction-ledger lane's queued "What happened?" questions first, then this
@@ -135,7 +135,7 @@ becomes a question:
 ## 5. Build the card
 
 Five items, never more, in this order. The card keeps room for the
-commitment rows marked for this evening (at most two): ledger and conflict
+commitment rows selected directly for this evening (at most two): ledger and conflict
 items fill only the other places, so a backlog of them never keeps a
 commitment off the card.
 
@@ -145,9 +145,22 @@ commitment off the card.
    evening; waiting is not a skip.
 2. Conflict items: the "Which version stands?" rows this lane opened in
    [[DECISIONS]] (section 6, step 5), each as one assumption item.
-3. Commitment items: the [[COMMITMENTS]] rows the commitments lane marked for
-   this evening, at most two, each written with the options of the
-   commitments skill section 7.
+3. Commitment items: at 18:53 America/Matamoros, read open [[COMMITMENTS]]
+   rows directly (not Done or Dropped). Do not require a Card mark or a prior
+   commitments run: selection works on weekends and if the 12:40 or 18:40
+   commitments run did not run. Before selection, refresh evidence from the
+   full thread chain through its terminal message, later replies and the
+   Linked task by commitments section 4, and recompute status and days overdue
+   from Due or Next check in America/Matamoros by section 5. Exclude anything
+   closed by evidence, Open or Moved by date, or not more than 14 days overdue.
+   Apply section 6 suppression rules (an answer not yet filed, an approved
+   draft or step still waiting) and section 8 skips, including rows set aside
+   until new mail or Joe reopens them. Sort eligible rows by the oldest Due
+   or Next check first; break ties by row ID. Select at most two, reserve
+   their places inside the five-item card, and write each with the past-question
+   options of commitments section 7. Read [[REGISTRY]] and send each item to
+   the checker before it reaches Joe; record the card ID only when shown.
+   A noon mark is a hint, never a requirement or evidence of eligibility.
 4. Retro items, in the order of section 3, until the card holds five.
 
 Write each retro item:
@@ -299,7 +312,7 @@ candidates; the lane never writes a rule.
   [[PREDICTION]] row, except by carrying the ledger's own queued question; ask
   about a Parked row.
 - Ask about a thread that has a [[COMMITMENTS]] row, except by carrying the
-  commitments lane's own marked item.
+  eligible commitment item selected directly by section 5.
 - Overwrite, move, delete, forward or reply to mail; send or draft anything.
 - Close, drop or change a Worklist row; mint a Task ID.
 - Ask about today's work: that is the morning card's job.
@@ -307,3 +320,9 @@ candidates; the lane never writes a rule.
 - Put a people line where the team can see it, or personal or Room 10 material
   on a card.
 - Treat silence as an answer.
+
+## Change note
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+v0.5 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows directly at 18:53, refreshes evidence and dates, applies eligibility and skips, and selects at most two within five items | no prior commitments run or Card mark required under Joe's QX40 instruction | QX40

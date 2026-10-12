@@ -2,7 +2,7 @@
 
 - Status: Candidate. Kept 2026-10-10 (usage diet).
 - Lane: L1 PCOS Brief (build plan section 2; kernel lane table)
-- Trigger: cron `30 6 * * 1-5`, CRON_TZ=America/Mexico_City (weekdays 06:30)
+- Trigger: cron `30 6 * * 1-5`, CRON_TZ=America/Matamoros (weekdays 06:30)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Microsoft 365, Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -81,3 +81,5 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 v0.6 | 2026-10-10 | Codex, queue item QX35 | kept the weekday 06:30 trigger under
 the temporary usage diet | Joe's usage-routing rule reduces Claude runs without
 changing the brief slot | PCOS QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

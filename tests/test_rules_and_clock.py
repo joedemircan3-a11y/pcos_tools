@@ -7,8 +7,7 @@ every Routine prompt carries them as its TEXT RULES paragraph, and the checker
 checks them as common check C5. An output template never shows an item code
 without a description slot.
 
-One clock: every Routine runs on the time zone of Joe's Outlook calendar,
-America/Mexico_City. A Routine whose schedule names another zone, or none, fails.
+One clock: every Routine runs on Joe's America/Matamoros clock (QX40). A Routine whose schedule names another zone, or none, fails.
 """
 import re
 from pathlib import Path
@@ -24,9 +23,8 @@ ROUTINES = ROOT / "routines"
 TEMPLATE = AGENTS / "CARD_TEMPLATE.md"
 CHECKLISTS = SKILLS / "checker" / "references" / "checklists.md"
 
-# The time zone of Joe's Outlook calendar ("Central Standard Time (Mexico)"), read
-# through the Microsoft 365 connector on 2026-10-09 by queue item QC28.
-ONE_CLOCK = "America/Mexico_City"
+# Joe's QX40 instruction of 2026-10-11 supersedes QC28's calendar-based clock.
+ONE_CLOCK = "America/Matamoros"
 
 # What every statement of the four rules must name: (a) the description, (b) the
 # Drive recorder path, (c) the email rules key, (d) the people key.
@@ -54,7 +52,8 @@ def flat(text):
 
 def without_change_notes(text):
     """The file without its change note, which records history (old times included)."""
-    return re.split(r"^## Change note\s*$", text, maxsplit=1, flags=re.M)[0]
+    # CARD_TEMPLATE has an example heading inside a fence before its live rules.
+    return text.rsplit("\n## Change note\n", maxsplit=1)[0]
 
 
 def bare_item_codes(text):
@@ -218,11 +217,11 @@ def test_no_card_skill_or_routine_names_another_time_zone(path):
 def test_routines_index_states_the_one_clock():
     index = flat(read(ROUTINES / "_INDEX.md"))
     assert f"One clock: every Routine runs on {ONE_CLOCK}" in index
-    assert not re.search(r"\bUTC\b|Matamoros", index)
+    assert not re.search(r"\bUTC\b|America/Mexico_City", index)
 
 
 @pytest.mark.parametrize("trigger", [
-    "cron `0 7,13 * * *`, CRON_TZ=America/Matamoros (07:00 and 13:00 daily)",
+    "cron `0 7,13 * * *`, CRON_TZ=America/Mexico_City (07:00 and 13:00 daily)",
     "cron `0 15 * * 0` (Sunday 15:00 UTC)",
     "cron `0 */2 * * *` (every 2 hours)",
     f"cron `0 9 * * 0`, CRON_TZ={ONE_CLOCK} (Sunday 09:00, card at 19:00 Europe/Istanbul)",

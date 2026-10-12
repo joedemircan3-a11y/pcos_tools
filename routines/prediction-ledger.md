@@ -3,7 +3,7 @@
 - Status: Paused 2026-10-10 (usage diet)
 - Lane: prediction ledger (register P2-01)
 - Trigger: none while paused
-- Restore: cron `45 7 * * 1-5`, CRON_TZ=America/Mexico_City (weekdays 07:45, after L1 and L2)
+- Restore: cron `45 7 * * 1-5`, CRON_TZ=America/Matamoros (weekdays 07:45, after L1 and L2)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -59,3 +59,5 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 
 v0.5 | 2026-10-10 | Codex, queue item QX35 | paused; preserved weekdays 07:45
 in Restore | Joe's temporary usage diet | PCOS QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

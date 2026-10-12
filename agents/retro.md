@@ -1,11 +1,11 @@
 # Card: retro
 
-- Version: v0.4
+- Version: v0.5
 - Status: Candidate
 - Register: P2-30 (Retro lane: evening card of five past-closure questions, last 90 days first; answers feed the ledger, the People profiles and the golden set)
 - Lane ID: pending
-- Skills: [retro v0.4](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.3](../skills/commitments/SKILL.md) sections 7 and 8; every item checked with [checker v0.2](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
-- Date: 2026-10-10
+- Skills: [retro v0.5](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.4](../skills/commitments/SKILL.md) sections 4 to 8; every item checked with [checker v0.2](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -30,7 +30,7 @@ row; send or commit anything; treat silence as an answer.
   questions ride on this card); [[WORKLIST]] rows updated in the window;
   [[STEPS]] rows Queued, Shown or Reshaped (EXO works those tasks);
   [[COMMITMENTS]] rows (their threads and Linked tasks are never gaps; the
-  rows marked for the evening ride on the card).
+  open rows read directly at 18:53 supply at most two eligible items).
 - L2, gap query and gate, per candidate: the whole thread in [[MAIL_INBOX]],
   [[MAIL_SENT]] and [[MAIL_ROUTED]]; later threads with the same counterpart or
   Task ID; [[CHANGELOG]] rows about it; the measured closure habits in
@@ -53,7 +53,7 @@ row; send or commit anything; treat silence as an answer.
   golden-set candidates; [[INBOX]] rows for the closeout owner (row changes,
   open items, people lines); [[CHANGELOG]] rows; one heartbeat in [[LANES]];
   on [[COMMITMENTS]] rows, Status, Due, Evidence, Next check, Card and Skips
-  only, by the commitments skill section 7.
+  only, by the commitments skill sections 4 to 8 (evidence, answers and skips).
 - Card page: publish the card from [[CAL_TEMPLATE]] (in Claude: an Artifact
   with the database capability) and read the answers back.
 - Not allowed: send, draft, reply to, forward, move or delete mail; write
@@ -73,7 +73,7 @@ row; send or commit anything; treat silence as an answer.
   21; Joe's decisions, dated 2026-10-01 in QUEUE_v4):
   - Evening card = past questions; the morning card = today. The 13:00 EXO run
     is off under the usage diet. The 19:00
-    slot, America/Mexico_City, moves from EXO to this lane.
+    slot, America/Matamoros, moves from EXO to this lane.
   - Five questions per evening, last 90 days first.
   - Order: recency, then open value (money, active vendors), then pattern
     class (one answer that closes many).
@@ -94,8 +94,10 @@ row; send or commit anything; treat silence as an answer.
 
 - Card: five items; fewer when fewer gaps pass the gate; none when none do. The
   ledger's "What happened?" items first, in the ledger's format, then the open
-  conflict items, then at most two commitment items in the commitments
-  skill's format. Each retro item is a one-line summary of the thread plus tap
+  conflict items, then at most two commitment items selected directly from
+  open [[COMMITMENTS]] rows at 18:53 by retro skill section 5, in the
+  commitments skill's format. No Card mark or prior commitments run is required;
+  evidence, dates, suppression and skip rules apply before selection. Each retro item is a one-line summary of the thread plus tap
   options: closed as quoted, closed differently, dropped, moved offline (phone,
   WhatsApp, in person), still open, and unrelated, which is the CAL template's
   own "Not needed / wrong direction" option and is never added twice; free
@@ -123,7 +125,7 @@ row; send or commit anything; treat silence as an answer.
 
 ## 6. Trigger and owner model
 
-- Trigger: daily, card at 19:00 America/Mexico_City (the Routine fires at 18:53).
+- Trigger: daily, card at 19:00 America/Matamoros (the Routine fires at 18:53).
   On demand when Joe says "retro".
 - Runs on: Claude Code Routine (Notion, Microsoft 365 and Drive connectors).
   The card is published as an Artifact page.
@@ -133,7 +135,7 @@ row; send or commit anything; treat silence as an answer.
 - Escalation: none outside the card. A conflict between Joe's memory and the
   record becomes one Decision row, asked on the next retro card as an
   assumption item.
-- Depends on: [[PREDICTION]], [[DECISIONS]] and [[CORRECTIONS]] (exist); the
+- Depends on: [[PREDICTION]], [[DECISIONS]], [[CORRECTIONS]] and [[COMMITMENTS]] (exist); the
   EXO Routine without its 18:53 run; the prediction-ledger lane queuing its
   questions to this card.
 
@@ -163,3 +165,7 @@ lane" and "one clock for every lane"
 v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the evening card; today's
 work now has one 07:00 EXO card because 13:00 is off | Joe's temporary usage
 diet | PCOS QUEUE_v12 item QX35
+
+v0.5 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+v0.5 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows directly at 18:53, refreshes evidence and dates, applies eligibility and skips, and selects at most two within five items | no prior commitments run or Card mark required under Joe's QX40 instruction | QX40
