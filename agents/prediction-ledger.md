@@ -4,7 +4,7 @@
 - Status: Candidate
 - Register: P2-01 (prediction ledger: Prediction database, evidence check in the daily run, "What happened?" card, calibration block in the weekly pass)
 - Lane ID: pending
-- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md); outputs checked with [checker v0.2](../skills/checker/SKILL.md); the [ledger-backtest](ledger-backtest.md) lane runs the same predictor over settled mail history
+- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md); outputs checked with [checker v0.3](../skills/checker/SKILL.md); the [ledger-backtest](ledger-backtest.md) lane runs the same predictor over settled mail history
 - Date: 2026-10-11
 
 ## 1. Mission
@@ -115,7 +115,7 @@ an answer.
 
 - Trigger: paused 2026-10-10 (usage diet). While paused, L4 explicitly skips
   calibration and does not read Prediction rows. Restore weekdays about 07:45
-  Mexico City after the brief lane; the 30-minute calibration pass restores in
+  America/Matamoros after the brief lane; the 30-minute calibration pass restores in
   the weekly-evolve lane (Sunday 09:00 America/Matamoros). The
   [ledger-backtest](ledger-backtest.md) lane scores the same predictor against
   settled mail history on Sundays before the calibration pass.
@@ -175,3 +175,5 @@ prediction lane is paused | Codex correctness review of PR 10 | PCOS QUEUE_v12
 item QX35
 
 v0.9 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

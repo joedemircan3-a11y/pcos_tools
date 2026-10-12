@@ -7,7 +7,7 @@
 - Connectors: Microsoft 365, Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [commitments](../agents/commitments.md)
-- Skills: [commitments v0.4](../skills/commitments/SKILL.md); [checker v0.2](../skills/checker/SKILL.md) on every draft
+- Skills: [commitments v0.4](../skills/commitments/SKILL.md); [checker v0.3](../skills/checker/SKILL.md) on every draft
 - Needs first: [[COMMITMENTS]] (QW21 creates it, fields as in skill section 2); [[LANES]], [[INBOX]] and [[CHANGELOG]] exist; the EXO and retro Routines load the commitments skill
 
 The lane reads mail itself and does not use L1's rows, so it does not depend on
@@ -60,3 +60,5 @@ v0.3 | 2026-10-10 | Codex, queue item QX35 | changed weekdays 06:40, 12:40 and
 temporary usage diet | PCOS QUEUE_v12 item QX35
 
 QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

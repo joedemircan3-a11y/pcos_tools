@@ -330,13 +330,13 @@ def test_evening_commitments_are_selected_directly_without_an_earlier_run(path):
     assert "more than 14 days overdue" in selection
     assert "suppression" in selection and "section 8 skips" in selection
     assert "rows marked for this evening" not in selection
-    assert "sections 4 to 8 of skills/commitments/SKILL.md" in routine_prompt(read(ROUTINES / "retro.md"))
+    assert "sections 3 to 8 of skills/commitments/SKILL.md" in routine_prompt(read(ROUTINES / "retro.md"))
 
 
 def test_direct_commitment_selection_refreshes_evidence_and_reserves_card_room():
     build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
     for required in ("full thread chain through its terminal message", "later replies",
-                     "recompute status and days overdue", "Open or Moved by date",
+                     "Recompute status and days overdue", "Open or Moved by date",
                      "an answer not yet filed", "an approved draft or step still waiting",
                      "rows set aside", "break ties by row ID", "inside the five-item card",
                      "Read [[REGISTRY]]", "checker before it reaches Joe",
@@ -344,3 +344,44 @@ def test_direct_commitment_selection_refreshes_evidence_and_reserves_card_room()
         assert required in build
     assert build.index("refresh evidence") < build.index("Sort eligible rows")
     assert build.index("Sort eligible rows") < build.index("Select at most two")
+
+
+def test_checker_accepts_direct_unmarked_commitments_and_checks_their_sources():
+    checklist = flat(section(read(ROOT / "skills/checker/references/checklists.md"), "## question-card"))
+    assert "commitments lane's own marked item" not in checklist
+    assert "directly selected retro commitment validated by item 9" in checklist
+    assert "no Card mark or prior commitments run is required, on weekdays or weekends" in checklist
+    for source in ("its [[COMMITMENTS]] row", "terminal message and later replies",
+                   "[[WORKLIST]] row", "[[REGISTRY]]", "prior cards, answers, approvals and skips"):
+        assert source in checklist
+    assert "missing prior mark alone never fails it" in checklist
+    for forbidden in ("A closed row", "an Open or Moved row by date", "an answer not yet filed",
+                      "an approved draft or step still waiting", "a row set aside by the skip rule"):
+        assert forbidden in checklist
+    assert "is a FAIL" in checklist
+    assert "No more than two commitment items within five total items" in checklist
+
+
+def test_new_mail_dates_are_applied_before_direct_evening_ranking():
+    prompt = flat(routine_prompt(read(ROUTINES / "retro.md")))
+    assert "sections 3 to 8 of skills/commitments/SKILL.md" in prompt
+    assert "apply later messages that change the due date by commitments section 3" in prompt
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    assert build.index("Apply later messages that change the due date") < build.index("Sort eligible rows")
+    assert "in the sender's time zone" in build
+    assert "keep the old date and phrase in Evidence" in build
+    assert "persist the new Due and Moved status (or Next check for a vague date)" in build
+    assert "Open or Moved by date" in build
+    checker = flat(section(read(ROOT / "skills/checker/references/checklists.md"), "## question-card"))
+    assert "including a later message moving the date" in checker
+
+
+def test_retro_persists_a_new_worklist_link_and_checks_its_closure_evidence():
+    allowed = flat(section(read(RETRO_CARD), "## 3. Tools allowed"))
+    assert "Status, Due, Evidence, Linked task, Next check, Card and Skips only" in allowed
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    assert "Persist a newly discovered Linked task by section 4 step 5" in build
+    assert "check its closure evidence before selecting" in build
+    filing = flat(section(read(ROOT / "skills/commitments/SKILL.md"), "## 7. Card items and filing the answers"))
+    assert "may also persist Linked task by section 4 step 5" in filing
+    assert "read that Worklist row for closure evidence" in filing

@@ -4,7 +4,7 @@
 - Status: Candidate
 - Register: P2-31 (Commitments lane: every promise in email becomes a tracked item with a due date, closure only on evidence, follow-up through the EXO and retro cards)
 - Lane ID: pending
-- Skills: [commitments v0.4](../skills/commitments/SKILL.md); every draft checked with [checker v0.2](../skills/checker/SKILL.md) (job type mail-draft)
+- Skills: [commitments v0.4](../skills/commitments/SKILL.md); every draft checked with [checker v0.3](../skills/checker/SKILL.md) (job type mail-draft)
 - Date: 2026-10-11
 
 ## 1. Mission
@@ -158,3 +158,5 @@ next 07:00 EXO and evening retro rows; backfill is manual | Joe's temporary
 usage diet | PCOS QUEUE_v12 item QX35
 
 v0.4 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

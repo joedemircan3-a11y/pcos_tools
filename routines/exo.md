@@ -7,7 +7,7 @@
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [exo](../agents/exo.md)
-- Skills: [exo v0.5](../skills/exo/SKILL.md); [commitments v0.4](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.2](../skills/checker/SKILL.md) on front-line instructions and finished outputs
+- Skills: [exo v0.5](../skills/exo/SKILL.md); [commitments v0.4](../skills/commitments/SKILL.md) sections 7 and 8 for commitment items; [checker v0.3](../skills/checker/SKILL.md) on front-line instructions and finished outputs
 - Needs first: build day ([[LANES]], [[INBOX]], [[TODAY]]); [[STEPS]] and [[CAPTURE]] exist
 
 ## Prompt
@@ -83,3 +83,5 @@ loads exo v0.5 and commitments v0.3 | Joe's temporary usage diet | PCOS
 QUEUE_v12 item QX35
 
 QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

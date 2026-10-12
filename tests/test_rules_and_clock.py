@@ -80,6 +80,8 @@ def zone_problems(trigger):
     problems += [f"zone {zone}" for zone in ZONE.findall(trigger) if zone != ONE_CLOCK]
     problems += [f"CRON_TZ={zone}" for zone in re.findall(r"CRON_TZ=(\S+?)[,)\s]", trigger + " ")
                  if zone != ONE_CLOCK]
+    if re.search(r"\bMexico City\b", trigger, re.I):
+        problems.append("the former Mexico City clock")
     if re.search(r"\bUTC\b|\bGMT\b", trigger):
         problems.append("a time in UTC")
     return problems
@@ -210,7 +212,9 @@ def test_every_card_trigger_names_only_the_one_clock(card):
 
 @pytest.mark.parametrize("path", template_files(), ids=lambda p: str(p.relative_to(ROOT)))
 def test_no_card_skill_or_routine_names_another_time_zone(path):
-    others = {zone for zone in ZONE.findall(without_change_notes(read(path))) if zone != ONE_CLOCK}
+    current = without_change_notes(read(path))
+    assert not re.search(r"\bMexico City\b", current, re.I), f"{path.relative_to(ROOT)} names the former clock"
+    others = {zone for zone in ZONE.findall(current) if zone != ONE_CLOCK}
     assert not others, f"{path.relative_to(ROOT)} names {sorted(others)}"
 
 
@@ -223,6 +227,7 @@ def test_routines_index_states_the_one_clock():
 @pytest.mark.parametrize("trigger", [
     "cron `0 7,13 * * *`, CRON_TZ=America/Mexico_City (07:00 and 13:00 daily)",
     "cron `0 15 * * 0` (Sunday 15:00 UTC)",
+    f"cron `0 7 * * *`, CRON_TZ={ONE_CLOCK} (07:00 Mexico City)",
     "cron `0 */2 * * *` (every 2 hours)",
     f"cron `0 9 * * 0`, CRON_TZ={ONE_CLOCK} (Sunday 09:00, card at 19:00 Europe/Istanbul)",
 ])

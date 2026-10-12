@@ -4,7 +4,7 @@
 - Status: Candidate
 - Register: P2-30 (Retro lane: evening card of five past-closure questions, last 90 days first; answers feed the ledger, the People profiles and the golden set)
 - Lane ID: pending
-- Skills: [retro v0.5](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.4](../skills/commitments/SKILL.md) sections 4 to 8; every item checked with [checker v0.2](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
+- Skills: [retro v0.5](../skills/retro/SKILL.md); commitment items shown and filed by [commitments v0.4](../skills/commitments/SKILL.md) sections 3 to 8; every item checked with [checker v0.3](../skills/checker/SKILL.md) (job type question-card); ledger items filed by [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 3
 - Date: 2026-10-11
 
 ## 1. Mission
@@ -52,8 +52,8 @@ row; send or commit anything; treat silence as an answer.
   record, with Joe's answer written into its Answer; [[CORRECTIONS]] rows for
   golden-set candidates; [[INBOX]] rows for the closeout owner (row changes,
   open items, people lines); [[CHANGELOG]] rows; one heartbeat in [[LANES]];
-  on [[COMMITMENTS]] rows, Status, Due, Evidence, Next check, Card and Skips
-  only, by the commitments skill sections 4 to 8 (evidence, answers and skips).
+  on [[COMMITMENTS]] rows, Status, Due, Evidence, Linked task, Next check, Card
+  and Skips only, by the commitments skill sections 3 to 8 (evidence, answers and skips).
 - Card page: publish the card from [[CAL_TEMPLATE]] (in Claude: an Artifact
   with the database capability) and read the answers back.
 - Not allowed: send, draft, reply to, forward, move or delete mail; write
@@ -169,3 +169,7 @@ diet | PCOS QUEUE_v12 item QX35
 v0.5 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
 
 v0.5 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows directly at 18:53, refreshes evidence and dates, applies eligibility and skips, and selects at most two within five items | no prior commitments run or Card mark required under Joe's QX40 instruction | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40
+
+v0.5 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40

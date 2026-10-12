@@ -1,11 +1,11 @@
 # Card: council-board
 
-- Version: v0.5
+- Version: v0.6
 - Status: Candidate
 - Register: P2-06 (board council on Notion: Draft, Review-1, Review-2, Final, Dissent; plan round before execution; chair)
 - Lane ID: pending
-- Skills: [council-board v0.1](../skills/council-board/SKILL.md); the chair's Final is checked with [checker v0.2](../skills/checker/SKILL.md)
-- Date: 2026-10-10
+- Skills: [council-board v0.2](../skills/council-board/SKILL.md); the chair's Final is checked with [checker v0.3](../skills/checker/SKILL.md)
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -88,7 +88,7 @@ sources settle.
 ## 6. Trigger and owner model
 
 - Trigger: the Claude Draft, Review-2 and Chair stages are paused 2026-10-10
-  (usage diet). Restore in Mexico City time: 08:00 Draft, 09:30 Review-2 and
+  (usage diet). Restore in America/Matamoros time: 08:00 Draft, 09:30 Review-2 and
   10:00 Chair. Review-1 is the separate ChatGPT task at 09:00. On demand,
   "council row X" waits for a restored cycle.
 - Runs on: Claude scheduled tasks (Draft, Review-2, Chair) and a ChatGPT
@@ -127,3 +127,5 @@ lane" and "one clock for every lane"
 v0.5 | 2026-10-10 | Codex, queue item QX35 | Claude Draft, Review-2 and Chair
 stages paused; restore times retained | Joe's temporary usage diet | PCOS
 QUEUE_v12 item QX35
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

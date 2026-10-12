@@ -44,3 +44,5 @@ Validation: clock and usage-diet tests pin Matamoros, reject Mexico City, and re
 Next: review and merge this PR; the authorized installer applies the new timezone and retro prompt to installed routines, including paused Restore schedules. Installed timers and private kernel/Lanes records were not edited by this code task.
 
 QX40 | routine/card clocks changed and retro selects open rows directly | merge, then apply installed routine clocks and retro prompt | Confirmed for repository; Needs Source Check for installed timers
+
+Review round 1 fixes: the checker now accepts direct unmarked commitments only after source checks; retro reads and applies changed mail dates by commitments section 3 before ranking and may persist Linked task discovered in evidence refresh. Four plain-language clock references now name Matamoros. Regression checks cover each finding. No Worklist write or mail send is authorized.

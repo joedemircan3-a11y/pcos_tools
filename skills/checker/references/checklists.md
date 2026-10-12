@@ -149,6 +149,11 @@ Required: [[CAL_STANDARD]]; [[DECISIONS]]; Joe's replies in the chain and
 [[MAIL_SENT]]; for EXO, the [[STEPS]] rows shown; for a retro item, the whole
 thread in [[MAIL_INBOX]], [[MAIL_SENT]] and [[MAIL_ROUTED]] when the gap has
 one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
+For a directly selected retro commitment: its [[COMMITMENTS]] row, the full
+thread through its terminal message and later replies, its Linked task's
+[[WORKLIST]] row (including a link discovered during this refresh),
+[[REGISTRY]] for named documents, and the prior cards, answers, approvals and
+skips used to decide eligibility. Open these sources yourself.
 
 1. Every question passes CAL-R5: it is not already answered in Decisions, in
    Joe's replies or in a later reply.
@@ -191,8 +196,21 @@ one, and the [[WORKLIST]], [[CHANGELOG]] and [[PREDICTION]] rows about it.
    conversation ID, and the Task ID of a linked Worklist row) in Source, unless
    the item is the ledger's own queued question; no [[COMMITMENTS]] row has the
    thread as Thread or the Worklist row as Linked task, unless the item is the
-   commitments lane's own marked item. Matching is by identity, never by
-   subject.
+   directly selected retro commitment validated by item 9. Matching is by
+   identity, never by subject.
+9. Direct retro commitment: no Card mark or prior commitments run is required,
+   on weekdays or weekends. Verify the latest due-date phrase in the sender's
+   time zone by commitments section 3, including a later message moving the
+   date; old date and phrase stay in Evidence. Verify evidence and any newly
+   discovered Linked task by section 4, and the current status/date by section
+   5. The row is more than 14 days overdue by Due or Next check, selected
+   oldest first with row ID ties, after section 6 suppression and section 8
+   skips. A closed row, an Open or Moved row by date, an answer not yet filed,
+   an approved draft or step still waiting, or a row set aside by the skip
+   rule is a FAIL. No more than two commitment items within five total items;
+   the card reserves their places. The item uses commitments section 7 past
+   options, or section 8's last-chance options when due. Record its card ID
+   only when shown; a missing prior mark alone never fails it.
 
 ## prediction
 

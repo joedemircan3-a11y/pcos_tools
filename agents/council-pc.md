@@ -1,11 +1,11 @@
 # Card: council-pc
 
-- Version: v0.3
+- Version: v0.4
 - Status: Candidate
 - Register: P2-08 (PC CLI council: "codex exec" and "gemini -p" on Joe's PC, anonymized cross-rank, chair)
 - Lane ID: pending
-- Skills: [council-pc v0.2](../skills/council-pc/SKILL.md), which runs [scripts/council_pc.py](../scripts/council_pc.py); the chair follows [council-board v0.1](../skills/council-board/SKILL.md) section 5; the Final is checked with [checker v0.2](../skills/checker/SKILL.md) (job type council-final)
-- Date: 2026-10-09
+- Skills: [council-pc v0.2](../skills/council-pc/SKILL.md), which runs [scripts/council_pc.py](../scripts/council_pc.py); the chair follows [council-board v0.2](../skills/council-board/SKILL.md) section 5; the Final is checked with [checker v0.3](../skills/checker/SKILL.md) (job type council-final)
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -142,3 +142,5 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

@@ -1,11 +1,11 @@
 # Card: checker
 
-- Version: v0.4
+- Version: v0.5
 - Status: Candidate
 - Register: P2-03 (L7 checker lane: generator/checker split, Claude-internal council, checklist per job type); runs the P2-04 golden-set eval
 - Lane ID: L7 (planned)
-- Skills: [checker v0.2](../skills/checker/SKILL.md)
-- Date: 2026-10-09
+- Skills: [checker v0.3](../skills/checker/SKILL.md)
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -134,3 +134,5 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

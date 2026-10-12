@@ -246,7 +246,9 @@ and the retro lane reads open rows directly at 18:53 by retro skill
 section 5, without requiring a Card mark or a prior commitments run. Each lane files the
 answers at the start of its next run, by this section, before its new card. On
 a Commitments row it writes Status, Due, Evidence, Next check, Card and Skips
-only, with one [[CHANGELOG]] row per row changed.
+only, with one [[CHANGELOG]] row per row changed. During retro's evidence
+refresh, it may also persist Linked task by section 4 step 5, then read that
+Worklist row for closure evidence. No other fields are permitted.
 
 Write each item as one self-contained line in plain words: what was promised,
 to or by whom (role, never an internal ID without its meaning), since when, and
@@ -338,3 +340,5 @@ candidates; the lane never writes a rule.
 QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
 
 v0.4 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows directly at 18:53, refreshes evidence and dates, applies eligibility and skips, and selects at most two within five items | no prior commitments run or Card mark required under Joe's QX40 instruction | QX40
+
+v0.4 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40

@@ -8,7 +8,7 @@
 - Connectors: Google Drive, Notion
 - Model: Claude Sonnet, fixed (card v0.2): never the Claude Opus of knowledge-review Review-2
 - Card: [knowledge-extract](../agents/knowledge-extract.md)
-- Skills: knowledge-extract (planned, P2-16); [checker v0.2](../skills/checker/SKILL.md) (job type knowledge-claim)
+- Skills: knowledge-extract (planned, P2-16); [checker v0.3](../skills/checker/SKILL.md) (job type knowledge-claim)
 - Needs first: the skill above; Q02 index files; build day ([[LANES]], [[INBOX]]); [[KNOWLEDGE]] exists
 
 ## Prompt
@@ -56,3 +56,5 @@ preserved its backlog and weekly schedules in Restore | Joe's temporary usage
 diet; P2-16 is still not built | PCOS QUEUE_v12 item QX35
 
 QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

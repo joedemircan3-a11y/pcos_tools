@@ -4,7 +4,7 @@
 - Status: Candidate
 - Register: P2-01 (prediction ledger) and P2-30 (the backtest loop of the retro design)
 - Lane ID: pending
-- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1, 2 and 4 with [references/backtest.md](../skills/prediction-ledger/references/backtest.md); a sample checked with [checker v0.2](../skills/checker/SKILL.md)
+- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1, 2 and 4 with [references/backtest.md](../skills/prediction-ledger/references/backtest.md); a sample checked with [checker v0.3](../skills/checker/SKILL.md)
 - Date: 2026-10-11
 
 ## 1. Mission
@@ -119,3 +119,5 @@ first run and Sunday restore time retained | Joe's temporary usage diet | PCOS
 QUEUE_v12 item QX35
 
 v0.4 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

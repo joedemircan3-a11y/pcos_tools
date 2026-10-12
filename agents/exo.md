@@ -4,7 +4,7 @@
 - Status: Candidate
 - Register: P2-02 (EXO lane: Steps database, breakdown, one card at 07:00 under the usage diet (the 13:00 run is off; the 19:00 card went to the retro lane, P2-30), skip logic 2/3, interpretation cards, progress line, voice-dump parsing)
 - Lane ID: pending
-- Skills: [exo v0.5](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.4](../skills/commitments/SKILL.md) sections 7 and 8; front-line instructions and finished outputs checked with [checker v0.2](../skills/checker/SKILL.md)
+- Skills: [exo v0.5](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.4](../skills/commitments/SKILL.md) sections 7 and 8; front-line instructions and finished outputs checked with [checker v0.3](../skills/checker/SKILL.md)
 - Date: 2026-10-11
 
 ## 1. Mission
@@ -220,3 +220,5 @@ off; loader versions follow EXO v0.5 and commitments v0.3 | Joe's temporary
 usage diet | PCOS QUEUE_v12 item QX35
 
 v0.8 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

@@ -150,7 +150,12 @@ commitment off the card.
    commitments run: selection works on weekends and if the 12:40 or 18:40
    commitments run did not run. Before selection, refresh evidence from the
    full thread chain through its terminal message, later replies and the
-   Linked task by commitments section 4, and recompute status and days overdue
+   Linked task by commitments section 4. Apply later messages that change
+   the due date by commitments section 3 before ranking: read the new phrase
+   in the sender's time zone, keep the old date and phrase in Evidence, and
+   persist the new Due and Moved status (or Next check for a vague date).
+   Persist a newly discovered Linked task by section 4 step 5, then check
+   its closure evidence before selecting. Recompute status and days overdue
    from Due or Next check in America/Matamoros by section 5. Exclude anything
    closed by evidence, Open or Moved by date, or not more than 14 days overdue.
    Apply section 6 suppression rules (an answer not yet filed, an approved
@@ -326,3 +331,5 @@ candidates; the lane never writes a rule.
 QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
 
 v0.5 | 2026-10-11 | Codex, queue item QX40 | retro reads open Commitments rows directly at 18:53, refreshes evidence and dates, applies eligibility and skips, and selects at most two within five items | no prior commitments run or Card mark required under Joe's QX40 instruction | QX40
+
+v0.5 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40

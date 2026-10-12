@@ -8,7 +8,7 @@
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [prediction-ledger](../agents/prediction-ledger.md)
-- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1 to 4 (section 5 runs inside [L4-weekly](L4-weekly.md)); [checker v0.2](../skills/checker/SKILL.md)
+- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1 to 4 (section 5 runs inside [L4-weekly](L4-weekly.md)); [checker v0.3](../skills/checker/SKILL.md)
 - Needs first: build day ([[INBOX]], [[LANES]]); L1 writing Inbox rows; [[PREDICTION]] exists
 
 ## Prompt
@@ -61,3 +61,5 @@ v0.5 | 2026-10-10 | Codex, queue item QX35 | paused; preserved weekdays 07:45
 in Restore | Joe's temporary usage diet | PCOS QUEUE_v12 item QX35
 
 QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

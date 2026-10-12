@@ -1,11 +1,11 @@
 # Card: council-github
 
-- Version: v0.6
+- Version: v0.7
 - Status: Candidate
 - Register: P2-07 (on-demand council through a GitHub pull request: "@codex review", Gemini CLI Action on a free API key, a Claude Code Routine on the PR event chairs and writes Notion)
 - Lane ID: pending
-- Skills: none of its own yet; the chair uses [council-board v0.1](../skills/council-board/SKILL.md). The PC council skill is P2-08.
-- Date: 2026-10-10
+- Skills: none of its own yet; the chair uses [council-board v0.2](../skills/council-board/SKILL.md). The PC council skill is P2-08.
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -146,3 +146,5 @@ lane" and "one clock for every lane"
 v0.6 | 2026-10-10 | Codex, queue item QX35 | chair events and the two-hour
 fallback paused; on-demand PR preparation remains explicit | Joe's temporary
 usage diet | PCOS QUEUE_v12 item QX35
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

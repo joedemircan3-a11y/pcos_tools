@@ -8,7 +8,7 @@
 - Connectors: Notion
 - Model: Claude Fable, or Claude Opus in a session separate from the draft (exact version from the kernel lane table)
 - Card: [council-github](../agents/council-github.md)
-- Skills: [council-board v0.1](../skills/council-board/SKILL.md) (the chair rules in section 5; the chair prompt in its `references/prompts.md`); [checker v0.2](../skills/checker/SKILL.md) on every Final (job type council-final)
+- Skills: [council-board v0.2](../skills/council-board/SKILL.md) (the chair rules in section 5; the chair prompt in its `references/prompts.md`); [checker v0.3](../skills/checker/SKILL.md) on every Final (job type council-final)
 - Needs first: PC-1 step 3 (Codex cloud connected to this repository, GEMINI_API_KEY secret, the Gemini CLI Action); PC-1 step 4 (GitHub app connected to Claude Code on the web); build day ([[LANES]]); [[COUNCIL]] exists
 
 ## Which pull requests it chairs
@@ -130,3 +130,5 @@ comments, so Joe's temporary usage diet pauses this Claude chair | PCOS
 QUEUE_v12 item QX35
 
 QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40
