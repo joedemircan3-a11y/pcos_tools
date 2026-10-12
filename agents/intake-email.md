@@ -1,11 +1,11 @@
 # Card: intake-email
 
-- Version: v0.4
+- Version: v0.5
 - Status: Candidate
 - Register: P2-09 (team access Door 1: Outlook intake, hourly lane, allowlist, reply with Joe in cc, Needs Joe outside the allowlist or on pricing, payment or vendors)
 - Lane ID: pending
-- Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); every reply checked with [checker v0.2](../skills/checker/SKILL.md)
-- Date: 2026-10-09
+- Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); every reply checked with [checker v0.3](../skills/checker/SKILL.md)
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -93,7 +93,7 @@ source.
 
 ## 6. Trigger and owner model
 
-- Trigger: hourly on weekdays during working hours, Mexico City.
+- Trigger: hourly on weekdays during working hours, America/Matamoros.
 - Runs on: Claude scheduled task or a Claude Code Routine on a schedule
   (Microsoft 365 and Notion connectors).
 - Model: Claude Opus answers and drafts. The checker lane checks every reply on
@@ -127,3 +127,5 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

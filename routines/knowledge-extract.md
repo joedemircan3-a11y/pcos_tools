@@ -3,12 +3,12 @@
 - Status: Not installed; stay off 2026-10-10 (usage diet)
 - Lane: knowledge loop stage 1 (register P2-16)
 - Trigger: none; not installed and still blocked on the knowledge-extract skill (P2-16)
-- Restore: cron `0 11 * * *`, CRON_TZ=America/Mexico_City (daily 11:00, after the daily lanes) during the backlog pass; then cron `0 11 * * 1`, CRON_TZ=America/Mexico_City (Monday 11:00)
+- Restore: cron `0 11 * * *`, CRON_TZ=America/Matamoros (daily 11:00, after the daily lanes) during the backlog pass; then cron `0 11 * * 1`, CRON_TZ=America/Matamoros (Monday 11:00)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Google Drive, Notion
 - Model: Claude Sonnet, fixed (card v0.2): never the Claude Opus of knowledge-review Review-2
 - Card: [knowledge-extract](../agents/knowledge-extract.md)
-- Skills: knowledge-extract (planned, P2-16); [checker v0.2](../skills/checker/SKILL.md) (job type knowledge-claim)
+- Skills: knowledge-extract (planned, P2-16); [checker v0.3](../skills/checker/SKILL.md) (job type knowledge-claim)
 - Needs first: the skill above; Q02 index files; build day ([[LANES]], [[INBOX]]); [[KNOWLEDGE]] exists
 
 ## Prompt
@@ -54,3 +54,7 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the uninstalled lane off and
 preserved its backlog and weekly schedules in Restore | Joe's temporary usage
 diet; P2-16 is still not built | PCOS QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

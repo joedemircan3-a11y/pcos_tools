@@ -13,7 +13,7 @@ from pathlib import Path
 
 import pytest
 
-from tests.test_agents_skills import PRIVATE, defined_keys, parse_frontmatter, section
+from tests.test_agents_skills import PRIVATE, defined_keys, parse_frontmatter, routine_prompt, section
 
 ROOT = Path(__file__).resolve().parent.parent
 RETRO_SKILL = ROOT / "skills" / "retro" / "SKILL.md"
@@ -127,9 +127,9 @@ def test_answers_are_filed_without_touching_the_mail():
 
 
 def test_the_evening_slot_moved_from_exo_to_retro():
-    assert cron("retro") == ("53", "18", "*", "America/Mexico_City")
+    assert cron("retro") == ("53", "18", "*", "America/Matamoros")
     minute, hour, weekday, zone = cron("exo")
-    assert (hour, weekday, zone) == ("7", "*", "America/Mexico_City")
+    assert (hour, weekday, zone) == ("7", "*", "America/Matamoros")
     for path in (EXO_CARD, EXO_SKILL):
         assert "07:00, 13:00 and 19:00" not in read(path)
 
@@ -157,7 +157,7 @@ def test_backtest_is_blind_capped_and_never_asks_joe():
 def test_backtest_runs_on_sunday_before_l4():
     minute, hour, weekday, zone = cron("ledger-backtest")
     l4_minute, l4_hour, l4_weekday, l4_zone = cron("L4-weekly")
-    assert weekday == l4_weekday == "0" and zone == l4_zone == "America/Mexico_City"
+    assert weekday == l4_weekday == "0" and zone == l4_zone == "America/Matamoros"
     assert int(hour) < int(l4_hour)
 
 
@@ -315,3 +315,107 @@ def test_the_backtest_sample_is_checked_by_its_own_scoring_rule():
         assert "job type prediction)" not in text
     assert "prediction-backtest checklist" in flat(read(BACKTEST_CARD))
 
+
+
+@pytest.mark.parametrize("path", [RETRO_SKILL, ROUTINES / "retro.md"])
+def test_evening_commitments_are_selected_directly_without_an_earlier_run(path):
+    text = read(path).split("## Change note")[0]
+    selection = flat(section(text, "## 5. Build the card") if path == RETRO_SKILL
+                     else routine_prompt(text))
+    assert "18:53 America/Matamoros" in selection
+    assert "read open [[COMMITMENTS]] rows directly" in selection
+    assert "closing evidence or card answer" in selection
+    assert "not Done or Dropped" not in selection
+    assert "Card mark or a prior commitments run" in selection
+    assert "weekends and if the 12:40 or 18:40 commitments run did not run" in selection
+    assert "at most two" in selection and "oldest Due or Next check first" in selection
+    assert "more than 14 days overdue" in selection
+    assert "suppression" in selection and "section 8 skips" in selection
+    assert "rows marked for this evening" not in selection
+    assert "sections 3 to 8 of skills/commitments/SKILL.md" in routine_prompt(read(ROUTINES / "retro.md"))
+
+
+def test_direct_commitment_selection_refreshes_evidence_and_reserves_card_room():
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    for required in ("full thread chain through its terminal message", "later replies",
+                     "Recompute status and days overdue", "Open or Moved by date",
+                     "an answer not yet filed", "an approved draft or step still waiting",
+                     "rows set aside", "break ties by row ID", "inside the five-item card",
+                     "Read [[REGISTRY]]", "checker before it reaches Joe",
+                     "record the card ID only when shown"):
+        assert required in build
+    assert build.index("refresh evidence") < build.index("Sort eligible rows")
+    assert build.index("Sort eligible rows") < build.index("Select at most two")
+
+
+def test_checker_accepts_direct_unmarked_commitments_and_checks_their_sources():
+    checklist = flat(section(read(ROOT / "skills/checker/references/checklists.md"), "## question-card"))
+    assert "commitments lane's own marked item" not in checklist
+    assert "directly selected retro commitment validated by item 9" in checklist
+    assert "no Card mark or prior commitments run is required, on weekdays or weekends" in checklist
+    for source in ("its [[COMMITMENTS]] row", "terminal message and later replies",
+                   "[[WORKLIST]] row", "[[REGISTRY]]", "prior cards, answers, approvals and skips"):
+        assert source in checklist
+    assert "missing prior mark alone never fails it" in checklist
+    for forbidden in ("A closed row", "an Open or Moved row by date", "an answer not yet filed",
+                      "an approved draft or step still waiting", "a row set aside by the skip rule"):
+        assert forbidden in checklist
+    assert "is a FAIL" in checklist
+    assert "No more than two commitment items within five total items" in checklist
+
+
+def test_new_mail_dates_are_applied_before_direct_evening_ranking():
+    prompt = flat(routine_prompt(read(ROUTINES / "retro.md")))
+    assert "sections 3 to 8 of skills/commitments/SKILL.md" in prompt
+    assert "apply later messages that change the due date by commitments section 3" in prompt
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    assert build.index("apply later messages that change the due date") < build.index("Sort eligible rows")
+    assert "in the sender's time zone" in build
+    assert "keep the old date and phrase in Evidence" in build
+    assert "persist the new Due and Moved status (or Next check for a vague date)" in build
+    assert "Open or Moved by date" in build
+    checker = flat(section(read(ROOT / "skills/checker/references/checklists.md"), "## question-card"))
+    assert "including a later message moving the date" in checker
+
+
+def test_retro_persists_a_new_worklist_link_and_checks_its_closure_evidence():
+    skill = flat(read(RETRO_SKILL))
+    assert "refreshes evidence, due dates and Linked task on existing Commitments rows" in skill
+    assert "changes anything beyond filing his answers" not in skill
+    allowed = flat(section(read(RETRO_CARD), "## 3. Tools allowed"))
+    assert "Status, Due, Evidence, Linked task, Next check, Card and Skips only" in allowed
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    assert "Persist a newly discovered Linked task by section 4 step 5" in build
+    assert "check its closure evidence before selecting" in build
+    filing = flat(section(read(ROOT / "skills/commitments/SKILL.md"), "## 7. Card items and filing the answers"))
+    assert "may also persist Linked task by section 4 step 5" in filing
+    assert "read that Worklist row for closure evidence" in filing
+
+
+def test_closed_commitments_with_new_mail_are_refreshed_before_filtering():
+    build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
+    prompt = flat(routine_prompt(read(ROUTINES / "retro.md")))
+    for policy in (build, prompt):
+        assert "Done or Dropped rows whose thread has mail newer than their closing evidence or card answer" in policy
+        assert "reopens the same deliverable, never on silence or a subject match" in policy
+        assert "open or reopened rows" in policy
+    assert build.index("Refresh these rows before filtering") < build.index("Sort eligible rows")
+    assert "A still-closed row stays excluded" in build
+    assert "Exclude rows still Done or Dropped after refresh" in prompt
+    checklist = flat(section(read(ROOT / "skills/checker/references/checklists.md"), "## question-card"))
+    assert "previously Done or Dropped row with mail newer than its closing evidence or card answer" in checklist
+    assert "reopen only when that mail reopens the same deliverable" in checklist
+    assert "A row still Done or Dropped after refresh is a FAIL" in checklist
+    assert "more than 14 days overdue" in checklist
+
+
+def test_council_dependency_version_matches_the_skill_and_loader():
+    fields, _ = parse_frontmatter(read(ROOT / "skills/council-board/SKILL.md"))
+    version = fields["metadata"]["version"]
+    current = read(ROOT / "agents/council-board.md").split("## Change note")[0]
+    assert f"[council-board v{version}]" in current
+    assert f"council-board skill (v{version};" in current
+    assert "council-board skill (v0.1" not in current
+    for name in ("council-board-draft", "council-board-review-2", "council-board-chair"):
+        current = read(ROUTINES / f"{name}.md").split("## Change note")[0]
+        assert f"[council-board v{version}]" in current

@@ -3,12 +3,12 @@
 - Status: Paused 2026-10-10 (usage diet)
 - Lane: ledger backtest (register P2-01; the backtest loop of P2-30)
 - Trigger: none while paused
-- Restore: once by hand at install, then cron `0 7 * * 0`, CRON_TZ=America/Mexico_City (Sunday 07:00, two hours before L4)
+- Restore: once by hand at install, then cron `0 7 * * 0`, CRON_TZ=America/Matamoros (Sunday 07:00, two hours before L4)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Microsoft 365, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [ledger-backtest](../agents/ledger-backtest.md)
-- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1, 2 and 4 with [references/backtest.md](../skills/prediction-ledger/references/backtest.md); [checker v0.2](../skills/checker/SKILL.md) on a sample
+- Skills: [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) sections 1, 2 and 4 with [references/backtest.md](../skills/prediction-ledger/references/backtest.md); [checker v0.3](../skills/checker/SKILL.md) on a sample
 - Needs first: [[PREDICTION]], [[ARCHIVE]] and [[LANES]] exist; Outlook read access
 
 ## Prompt
@@ -54,3 +54,7 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 v0.3 | 2026-10-10 | Codex, queue item QX35 | paused; preserved the manual first
 run and Sunday 07:00 in Restore | Joe's temporary usage diet | PCOS QUEUE_v12
 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

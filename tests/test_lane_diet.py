@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 ROUTINES = ROOT / "routines"
 AGENTS = ROOT / "agents"
-ONE_CLOCK = "America/Mexico_City"
+ONE_CLOCK = "America/Matamoros"
 
 PAUSED = {
     "L3-health": "cron `30 7 * * *`",
@@ -84,9 +84,9 @@ def test_cards_state_the_reduced_or_paused_lane_schedule():
     exo = read(AGENTS / "exo.md")
     commitments = read(AGENTS / "commitments.md")
     retro = read(AGENTS / "retro.md")
-    assert "Trigger: 07:00, America/Mexico_City" in exo
+    assert "Trigger: 07:00, America/Matamoros" in exo
     assert "13:00 run is off" in exo
-    assert "Trigger: weekdays at 12:40 America/Mexico_City" in commitments
+    assert "Trigger: weekdays at 12:40 America/Matamoros" in commitments
     assert "06:40 and 18:40 runs" in commitments
     assert "Routine fires at 18:53" in retro
     for name in ("council-board", "council-github", "prediction-ledger",

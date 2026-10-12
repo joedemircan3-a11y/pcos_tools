@@ -3,12 +3,12 @@
 - Status: Not installed; stay off 2026-10-10 (usage diet)
 - Lane: team access Door 1 (register P2-09)
 - Trigger: none; not installed
-- Restore: cron `5 8-18 * * 1-5`, CRON_TZ=America/Mexico_City (hourly at :05 on weekdays, 08:05 to 18:05)
+- Restore: cron `5 8-18 * * 1-5`, CRON_TZ=America/Matamoros (hourly at :05 on weekdays, 08:05 to 18:05)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Microsoft 365, Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
 - Card: [intake-email](../agents/intake-email.md)
-- Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); [checker v0.2](../skills/checker/SKILL.md) on every reply (job type mail-draft)
+- Skills: [intake-email v0.1](../skills/intake-email/SKILL.md); [checker v0.3](../skills/checker/SKILL.md) on every reply (job type mail-draft)
 - Needs first: PC-2 ([[PCOS_INTAKE]]); build day ([[INBOX]], [[LANES]]); the allowlist rule row in [[RULES]] (empty until Joe names the five addresses, so every request becomes Needs Joe)
 
 ## Prompt
@@ -57,3 +57,7 @@ the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
 v0.4 | 2026-10-10 | Codex, queue item QX35 | kept the uninstalled lane off and
 preserved its hourly schedule in Restore | Joe's temporary usage diet | PCOS
 QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

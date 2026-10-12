@@ -2,7 +2,7 @@
 
 - Status: Candidate. Create on build day.
 - Lane: L2 PCOS Render (build plan section 2; kernel lane table)
-- Trigger: cron `15 7 * * *`, CRON_TZ=America/Mexico_City (daily 07:15)
+- Trigger: cron `15 7 * * *`, CRON_TZ=America/Matamoros (daily 07:15)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Google Drive
 - Model: Claude Opus (exact version from the kernel lane table)
@@ -77,3 +77,5 @@ each mirror in one file through the Drive recorder instead of new copies, under 
 the queued rows; an open row for a mirror is replaced with the newest text, never
 duplicated (Codex review of PR 7). | four live Rules rows bound only the EXO lane, and
 the lanes ran on two clocks | PCOS QUEUE_v10 item QC28
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40

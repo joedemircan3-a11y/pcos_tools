@@ -7,9 +7,9 @@ resolves source keys through the kernel's "Where things are" table. Until the ke
 holds that table, keys resolve through the private Drive map. Lane logic lives in
 the cards and skills, so a Routine prompt rarely changes.
 
-One clock: every Routine runs on America/Mexico_City, the time zone of Joe's Outlook
-calendar ("Central Standard Time (Mexico)", read through the Microsoft 365 connector on
-2026-10-09, queue item QC28); every cron line names it as CRON_TZ, and
+One clock: every Routine runs on America/Matamoros, Joe's clock selected in QX40
+(2026-10-11), superseding the QC28 calendar-based clock. Every cron line, including
+a paused lane's Restore schedule, names it as CRON_TZ, and
 `tests/test_rules_and_clock.py` fails on any other zone. Every prompt carries the TEXT
 RULES paragraph, the live rules for text Joe reads (`agents/CARD_TEMPLATE.md`).
 

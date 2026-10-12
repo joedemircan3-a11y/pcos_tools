@@ -3,7 +3,7 @@ name: council-board
 description: Run a PCOS board council on a Notion Council row, with a draft, two anonymous reviews and a chair, and a plan round before execution. Use for judgment work (pricing assumptions, rule proposals, vendor terms, readings of a hard instruction, plans), when Joe says "council row X", when EXO interpretation readings conflict on a fact, and when weekly-evolve sends a disputed proposal. Not for routine lane outputs (the checker covers those) or urgent work (council-github).
 compatibility: Needs the PCOS Notion hub (Council database and its Reviewer view, Rules, Decisions, Changelog). Review-1 runs as a ChatGPT scheduled task with the reviewer prompt in references/prompts.md.
 metadata:
-  version: "0.1"
+  version: "0.2"
   status: Candidate
   register: P2-06
   kernel: "1.0"
@@ -37,7 +37,7 @@ question, sources, method.
 Deadline: the chair time of the cycle the row should finish in. The default is
 the next cycle.
 
-## 2. Stages (daily cycle, Mexico City time)
+## 2. Stages (daily cycle, America/Matamoros time)
 
 | Time | Stage | Writes | Status after |
 | --- | --- | --- | --- |
@@ -106,3 +106,7 @@ heartbeat in [[LANES]]. "Council row X" puts a row into the next cycle.
 - Ask Joe about judgment calls, or about facts that the kernel or the sources
   settle.
 - Send, pay, commit a price or agree a vendor term from a council row.
+
+## Change note
+
+v0.2 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40

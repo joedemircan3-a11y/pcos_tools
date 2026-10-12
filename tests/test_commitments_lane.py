@@ -176,10 +176,10 @@ def test_skip_rule_is_the_exo_rule():
 
 
 def test_routines_run_on_weekdays_ahead_of_the_cards_they_feed():
-    assert cron("commitments") == ("40", "12", "1-5", "America/Mexico_City")
+    assert cron("commitments") == ("40", "12", "1-5", "America/Matamoros")
     _, exo_hours, _, exo_zone = cron("exo")
     retro_minute, retro_hour, _, retro_zone = cron("retro")
-    assert exo_zone == retro_zone == "America/Mexico_City"
+    assert exo_zone == retro_zone == "America/Matamoros"
     assert [int(h) for h in exo_hours.split(",")] == [7]
     assert (12, 40) < (int(retro_hour), int(retro_minute))
 
@@ -244,9 +244,9 @@ def test_an_approved_item_waits_for_its_date_without_inventing_one():
     assert "an Overdue row until two business days after the approval" in prepare
 
 
-def test_the_retro_card_keeps_room_for_marked_commitments():
+def test_the_retro_card_keeps_room_for_selected_commitments():
     build = flat(section(read(RETRO_SKILL), "## 5. Build the card"))
-    assert "The card keeps room for the commitment rows marked for this evening" in build
+    assert "The card keeps room for the commitment rows selected directly for this evening" in build
     assert "ledger and conflict items fill only the other places" in build
 
 

@@ -1,11 +1,11 @@
 # Card: weekly-evolve
 
-- Version: v0.4
+- Version: v0.5
 - Status: Candidate
 - Register: P2-05 (L4 Weekly Evolve rewrite: output = versioned kernel and rule candidates with reason and source, not reports); runs the P2-04 gate; later carries P2-17 (method loop)
 - Lane ID: L4 (planned)
-- Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md); evals run with [checker v0.2](../skills/checker/SKILL.md)
-- Date: 2026-10-09
+- Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md); evals run with [checker v0.3](../skills/checker/SKILL.md)
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -94,7 +94,7 @@ candidate belongs.
 
 ## 6. Trigger and owner model
 
-- Trigger: Sunday 09:00 America/Mexico_City (L4 slot). On demand: "run weekly-evolve".
+- Trigger: Sunday 09:00 America/Matamoros (L4 slot). On demand: "run weekly-evolve".
 - Runs on: Claude scheduled task (Notion and Drive connectors); GitHub through
   Claude Code on the web for card and skill pull requests.
 - Model: Claude Fable chairs and writes the candidates. The checker lane scores
@@ -125,3 +125,7 @@ the email rules, person names); times on the one clock, America/Mexico_City | fo
 live Rules rows bound only the EXO lane, and the lanes ran on two clocks | PCOS
 QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into the kernel and every
 lane" and "one clock for every lane"
+
+v0.5 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

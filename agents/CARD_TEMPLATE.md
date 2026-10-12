@@ -1,6 +1,6 @@
 # Agent card template
 
-Version v0.2, 2026-10-09. Register P2-19: every lane needs a card before it gets a
+Version v0.3, 2026-10-11. Register P2-19: every lane needs a card before it gets a
 Lanes row.
 
 An agent is a model plus this card. The card gives it one mission, a restricted
@@ -89,7 +89,7 @@ Never: the actions outside the mission.
   (this template); an item code in a template is written TASK-ID (DESCRIPTION).
 
 ## 6. Trigger and owner model
-- Trigger: schedule in America/Mexico_City (the one clock), events, on-demand
+- Trigger: schedule in America/Matamoros (the one clock), events, on-demand
   phrase.
 - Runs on: the surface (Claude scheduled task, Claude Code Routine, ChatGPT
   scheduled task, Notion agent, PC session).
@@ -150,8 +150,8 @@ These apply to every lane, so cards do not repeat them in full:
   its reason. Nothing closes on silence.
 - Personal and Room 10 material never enters a business row or file.
 - The live rules for text Joe reads (above), stated in part 4 of every card.
-- One clock: every schedule runs on America/Mexico_City, the time zone of Joe's
-  Outlook calendar. A card's trigger names no other time zone.
+- One clock: every schedule runs on America/Matamoros, Joe's clock selected in
+  QX40 (2026-10-11). A card's trigger names no other time zone.
 - A connector failure is retried once. After that the run writes a Blocked row
   that holds the full content and stops. It does not work around the failure.
 
@@ -169,3 +169,5 @@ person names), stated in part 4 of every card; one clock, America/Mexico_City | 
 live Rules rows bound only the EXO lane; the lanes ran on two clocks one hour apart
 until 2026-11-01 | PCOS QUEUE_v10 item QC28; PCOS_JOE_DEV_LIST requests "new rules into
 the kernel and every lane" and "one clock for every lane"
+
+v0.3 | 2026-10-11 | Codex, queue item QX40 | all current schedules use America/Matamoros | Joe's QX40 instruction supersedes the QC28 clock | QX40

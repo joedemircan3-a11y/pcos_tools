@@ -2,12 +2,12 @@
 
 - Status: Candidate. Create on build day.
 - Lane: L4 PCOS Weekly, rewritten as weekly-evolve (P2-05). The Sunday slot runs the golden-set eval (P2-04) and, once P2-16 is live, the knowledge chair. Its prediction calibration (P2-01) is paused under the usage diet; the restore instruction is in RUN step 4.
-- Trigger: cron `0 9 * * 0`, CRON_TZ=America/Mexico_City (Sunday 09:00)
+- Trigger: cron `0 9 * * 0`, CRON_TZ=America/Matamoros (Sunday 09:00)
 - Repository: joedemircan3-a11y/pcos_tools
 - Connectors: Notion, Google Drive
 - Model: Claude Fable (exact version from the kernel lane table)
 - Card: [weekly-evolve](../agents/weekly-evolve.md), [prediction-ledger](../agents/prediction-ledger.md), [checker](../agents/checker.md), [knowledge-chair](../agents/knowledge-chair.md)
-- Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md), [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 5 only after calibration is restored, [checker v0.2](../skills/checker/SKILL.md) golden-set run
+- Skills: [weekly-evolve v0.1](../skills/weekly-evolve/SKILL.md), [prediction-ledger v0.1](../skills/prediction-ledger/SKILL.md) section 5 only after calibration is restored, [checker v0.3](../skills/checker/SKILL.md) golden-set run
 - Needs first: build day (kernel page, [[LANES]], [[TODAY]], rules as rows); [[GOLDEN_SET]] and [[CORRECTIONS]] exist
 
 Replaces the Weekly Evolve prompt of PCOS_SCHEDULED_TASKS v3.2. The output is now
@@ -64,3 +64,7 @@ v0.4 | 2026-10-10 | Codex, queue item QX35 review fix | L4 stays active but does
 not load the prediction card or run calibration while that lane is paused; the
 Sunday restore instruction remains in RUN step 4 | Codex correctness review of
 PR 10 | PCOS QUEUE_v12 item QX35
+
+QX40 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40

@@ -3,7 +3,7 @@ name: checker
 description: Check a PCOS lane output before its row closes or it reaches Joe. Use when a lane hands over a mail draft, routing decision, row change, DELTA, question card, prediction, pricing preparation, research file, knowledge claim, council Final, rule candidate or repository change, or when asked to check one. Opens the sources the job type requires, applies its rules, verifies every evidence label and returns Accept, Fix or Reject with one finding per line.
 compatibility: Needs read access to the sources the generating lane used (Google Drive, the PCOS Notion hub, Outlook through the Microsoft 365 connector) and must run on a different model from the generator.
 metadata:
-  version: "0.2"
+  version: "0.3"
   status: Candidate
   register: P2-03
   kernel: "1.0"
@@ -136,3 +136,9 @@ The run has two halves, so a checker that fails everything cannot score well.
 - Rewrite the output. Findings only; the generator fixes.
 - Accept on the generator's word. Open the sources yourself.
 - Open sources outside the generator card's knowledge scope.
+
+## Change note
+
+v0.3 | 2026-10-11 | Codex, QX40 review round 1 | checker accepts eligible direct unmarked commitments, checks updated mail dates and linked Worklist evidence; retro can persist Linked task; plain-language clocks corrected | fixes bot findings and separate review findings with regression checks | QX40
+
+QX40 review round 2 | 2026-10-11 | Codex | refresh closed commitments with newer mail before filtering; only evidence reopens them; council dependency agrees with v0.2 | resolve both round 2 findings with regression checks | QX40

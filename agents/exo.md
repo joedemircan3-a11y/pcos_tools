@@ -1,11 +1,11 @@
 # Card: exo
 
-- Version: v0.7
+- Version: v0.8
 - Status: Candidate
 - Register: P2-02 (EXO lane: Steps database, breakdown, one card at 07:00 under the usage diet (the 13:00 run is off; the 19:00 card went to the retro lane, P2-30), skip logic 2/3, interpretation cards, progress line, voice-dump parsing)
 - Lane ID: pending
-- Skills: [exo v0.5](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.3](../skills/commitments/SKILL.md) sections 7 and 8; front-line instructions and finished outputs checked with [checker v0.2](../skills/checker/SKILL.md)
-- Date: 2026-10-10
+- Skills: [exo v0.5](../skills/exo/SKILL.md); commitment items shown and filed by [commitments v0.4](../skills/commitments/SKILL.md) sections 7 and 8; front-line instructions and finished outputs checked with [checker v0.3](../skills/checker/SKILL.md)
+- Date: 2026-10-11
 
 ## 1. Mission
 
@@ -84,7 +84,7 @@ answered; close, drop or expire a task on silence; send or commit anything.
   5 and 7, accepted by default by Joe):
   - One step visible. Assumptions, not questions. 2 to 4 items per card, about
     30 seconds to answer.
-  - One card at 07:00, America/Mexico_City (the one clock); the 13:00 run is off under the usage diet. The design had a 19:00 card
+  - One card at 07:00, America/Matamoros (the one clock); the 13:00 run is off under the usage diet. The design had a 19:00 card
     too; it went to the retro lane (next rule).
   - Skip rule: 2 skips, reshape the step; 3 skips, park it and ask once whether
     to drop it. Parked is the default; nothing closes on silence.
@@ -165,7 +165,7 @@ answered; close, drop or expire a task on silence; send or commit anything.
 
 ## 6. Trigger and owner model
 
-- Trigger: 07:00, America/Mexico_City (the 13:00 run is off under the usage
+- Trigger: 07:00, America/Matamoros (the 13:00 run is off under the usage
   diet; the 19:00 slot is the retro lane's). A new [[CAPTURE]] row is parsed in the next slot. On demand when Joe
   says "exo" or "next step".
 - Runs on: Claude scheduled task (Notion, Microsoft 365 and Drive connectors).
@@ -218,3 +218,7 @@ correctness review of PR 9 | PCOS QUEUE_v12 item QX30
 v0.7 | 2026-10-10 | Codex, queue item QX35 | one 07:00 card; the 13:00 run is
 off; loader versions follow EXO v0.5 and commitments v0.3 | Joe's temporary
 usage diet | PCOS QUEUE_v12 item QX35
+
+v0.8 | 2026-10-11 | Codex, queue item QX40 | current schedules and clock references use America/Matamoros; usage-diet states and wall times retained | Joe's QX40 instruction supersedes the QC28 clock | QX40
+
+QX40 review round 1 | 2026-10-11 | Codex | checker v0.3 and current Matamoros clock references aligned | resolve review findings without a prior Card mark or stale clock | QX40
